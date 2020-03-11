@@ -76,20 +76,20 @@
 		3AF9A7302418FCA2006C52B7 /* Contoroller */ = {
 			isa = PBXGroup;
 			children = (
-				3AF9A7332418FE9F006C52B7 /* Mains */,
-				3AF9A7342418FEBB006C52B7 /* FeedController.swift */,
+				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
+				3AF9A7332418FE9F006C52B7 /* Feed */,
 			);
 			path = Contoroller;
 			sourceTree = "<group>";
 		};
-		3AF9A7332418FE9F006C52B7 /* Mains */ = {
+		3AF9A7332418FE9F006C52B7 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
 				3AF9A73924190702006C52B7 /* ContainerController.swift */,
 				3AF9A73B24190A4A006C52B7 /* SideMenuController.swift */,
+				3AF9A7342418FEBB006C52B7 /* FeedController.swift */,
 			);
-			path = Mains;
+			path = Feed;
 			sourceTree = "<group>";
 		};
 		3AF9A73624190378006C52B7 /* Extensions */ = {
