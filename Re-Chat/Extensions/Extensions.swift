@@ -39,6 +39,38 @@ extension UIView {
         }
     }
     
+    // center sec
+    
+    func centerX(inView view : UIView, topAnchor : NSLayoutYAxisAnchor? = nil, paddingTop : CGFloat? = 0) {
+        translatesAutoresizingMaskIntoConstraints = false
+        centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        if let topAnchor = topAnchor {
+            self.topAnchor.constraint(equalTo: topAnchor, constant: paddingTop!).isActive = true
+        }
+    }
+    
+    func centerY(inView view : UIView, leftAnchor : NSLayoutXAxisAnchor? = nil, paddingLeft : CGFloat? = nil, constant : CGFloat? = 0) {
+        translatesAutoresizingMaskIntoConstraints = false
+        centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: constant!).isActive = true
+        
+        if let leftAnchor = leftAnchor, let padding = paddingLeft {
+            self.leftAnchor.constraint(equalTo: leftAnchor, constant: padding).isActive = true
+        }
+    }
+    
+    func center(inView view : UIView, yConstant : CGFloat? = 0) {
+        translatesAutoresizingMaskIntoConstraints = false
+        centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: yConstant!).isActive = true
+    }
+    
+    func center(inView view : UIView, yConstant : CGFloat = 0) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+
+    
     // set Dimension
     
     func setDimension(width : CGFloat, height : CGFloat) {
