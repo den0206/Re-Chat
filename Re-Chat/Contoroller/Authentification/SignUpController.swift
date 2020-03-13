@@ -103,6 +103,15 @@ class SignUpController : UIViewController {
         return button
     }()
     
+    private let alertLabel :UILabel = {
+        let label = UILabel()
+        label.text = "※項目を埋めてください"
+        label.textColor = .red
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textAlignment = .center
+        return label
+    }()
+    
     let alreadyHaveAccountButton : UIButton  = {
         let button = UIButton(type: .system)
         let attributeTitle = NSMutableAttributedString(string: "アカウントを持ってる方は？ ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
@@ -144,6 +153,9 @@ class SignUpController : UIViewController {
         
         view.addSubview(stack)
         stack.anchor(top : plusPhotoButton.bottomAnchor, left : view.leftAnchor, right: view.rightAnchor,paddongTop: 40,paddingLeft: 16, paddingRight: 16)
+        
+        view.addSubview(alertLabel)
+        alertLabel.centerX(inView: view, topAnchor: stack.bottomAnchor, paddingTop: 23)
         
         view.addSubview(alreadyHaveAccountButton)
         alreadyHaveAccountButton.centerX(inView: view)
@@ -208,11 +220,14 @@ extension SignUpController {
     @objc func fillTextField() {
         // fill Textfield
         guard emailTextfiled.text != "" && fullnameTextfiled.text != "" && passwordTextfield.text != "" && passwordConfirmationTextfield.text != "" else {
+            alertLabel.isHidden = false
             
             SignUpButton.isEnabled = false
             SignUpButton.backgroundColor = .lightGray
             return
         }
+        
+        alertLabel.isHidden = true
         
         SignUpButton.isEnabled = true
         SignUpButton.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)

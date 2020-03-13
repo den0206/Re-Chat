@@ -52,6 +52,16 @@ class LoginViewController : UIViewController {
         return button
     }()
     
+    private let alertLabel :UILabel = {
+        let label = UILabel()
+        label.text = "※項目を埋めてください"
+        label.textColor = .red
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textAlignment = .center
+        return label
+    }()
+    
+    
     let dontHaveAccountButton : UIButton  = {
         let button = UIButton(type: .system)
         let attributeTitle = NSMutableAttributedString(string: "アカウントを持っていませんか？ ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
@@ -99,6 +109,9 @@ class LoginViewController : UIViewController {
         stack.centerY(inView: view)
         stack.anchor(left: view.leftAnchor, right: view.rightAnchor, paddongTop: 40, paddingLeft: 16, paddingRight: 16)
         
+        view.addSubview(alertLabel)
+        alertLabel.centerX(inView: view, topAnchor: stack.bottomAnchor, paddingTop: 23)
+        
         
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.centerX(inView: view)
@@ -118,12 +131,16 @@ class LoginViewController : UIViewController {
     }
     
     @objc func fillTextField() {
+        
         guard emailTextfiled.text != "" && passwordTextfield.text != "" else {
+            alertLabel.isHidden = false
             
             loginButton.isEnabled = false
             loginButton.backgroundColor = .lightGray
             return
         }
+        
+        alertLabel.isHidden = true
         
         loginButton.isEnabled = true
         loginButton.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
@@ -132,6 +149,13 @@ class LoginViewController : UIViewController {
     //MARK: - Actions
     
     @objc func handleLogin() {
+        // Recheck Fill TextFileld !
+        
+        guard let email = emailTextfiled.text , let password = passwordTextfield.text else {
+            showAlert(title: "Recheck", message: "項目を埋めてください")
+            
+            return
+        }
         
         
         print("Login")
