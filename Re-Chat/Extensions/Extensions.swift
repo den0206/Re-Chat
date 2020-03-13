@@ -85,3 +85,12 @@ extension UIView {
 extension UIColor {
        static let backGroundColor = UIColor.init(red: 25/255, green: 25/255, blue: 25/255, alpha: 1)
 }
+
+extension UIViewController {
+    func showAlert(title : String, message : String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+}

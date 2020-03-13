@@ -10,6 +10,8 @@ import UIKit
 
 class SignUpController : UIViewController {
     
+    var selectedImage : UIImage?
+    
     //MARK: - Parts
     
     private let titleLabel : UILabel = {
@@ -92,6 +94,7 @@ class SignUpController : UIViewController {
         let button = UIButton(type: .system)
         button.backgroundColor = .lightGray
         button.setTitle("Login", for: .normal)
+        button.isEnabled = false
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -134,7 +137,7 @@ class SignUpController : UIViewController {
        
         plusPhotoButton.setDimension(width: 150, height: 150)
         
-        let stack = UIStackView(arrangedSubviews: [emailContainerView, fullnameContainerView, sexTypeContainerView, passwordContainerView, passwordConfirmationContainerView])
+        let stack = UIStackView(arrangedSubviews: [emailContainerView, fullnameContainerView, sexTypeContainerView, passwordContainerView, passwordConfirmationContainerView, SignUpButton])
         stack.axis = .vertical
         stack.distribution = .fillEqually
         stack.spacing = 20
@@ -145,8 +148,19 @@ class SignUpController : UIViewController {
         view.addSubview(alreadyHaveAccountButton)
         alreadyHaveAccountButton.centerX(inView: view)
         alreadyHaveAccountButton.anchor(bottom : view.bottomAnchor, paddiongBottom:  12)
+        
+        addTextfFieldValidation()
    
         
+    }
+    
+    private func addTextfFieldValidation() {
+        let tfArray : [UITextField] = [emailTextfiled, fullnameTextfiled,passwordTextfield,passwordConfirmationTextfield]
+        
+        for tf in tfArray {
+            tf.addTarget(self, action: #selector(fillTextField), for: .editingChanged)
+            tf.delegate = self
+        }
     }
     
     //MARK: - Actions
@@ -155,20 +169,55 @@ class SignUpController : UIViewController {
         
     }
     
+    //MARK: - Login
+    
+    
     @objc func handleSignUp() {
+        // TODO: - Sign Up
         
+        guard selectedImage != nil else {
+            showAlert(title: "Recheck", message: "画像を選択してください")
+            return
+        }
+        
+        guard isValidEmail(emailTextfiled.text!) else {
+            showAlert(title: "Recheck", message: "Eメール用の書式を記入ください")
+            return
+        }
+        
+        guard passwordTextfield.text == passwordConfirmationTextfield.text else {
+            showAlert(title: "Recheck", message: "確認用パスワードが一致しません")
+            return
+        }
+        
+        print("Signup")
     }
     
     @objc func handleLogin() {
         navigationController?.popViewController(animated: true)
-        
     }
     
     
 }
 
+//MARK: - Helpers
+
 
 extension SignUpController {
+    
+    @objc func fillTextField() {
+        // fill Textfield
+        guard emailTextfiled.text != "" && fullnameTextfiled.text != "" && passwordTextfield.text != "" && passwordConfirmationTextfield.text != "" else {
+            
+            SignUpButton.isEnabled = false
+            SignUpButton.backgroundColor = .lightGray
+            return
+        }
+        
+        SignUpButton.isEnabled = true
+        SignUpButton.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
+        
+    }
     
     func inputContainerView(withImage : UIImage, textField : UITextField? = nil, segmentControl : UISegmentedControl? = nil) -> UIView {
         
@@ -218,4 +267,11 @@ extension SignUpController {
         return tf
     }
     
+}
+
+extension SignUpController : UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

@@ -104,12 +104,36 @@ class LoginViewController : UIViewController {
         dontHaveAccountButton.centerX(inView: view)
         dontHaveAccountButton.anchor(bottom : view.bottomAnchor, paddiongBottom:  12)
         
+        addTextfFieldValidation()
         
+    }
+    
+    private func addTextfFieldValidation() {
+        let tfArray : [UITextField] = [emailTextfiled,passwordTextfield]
+        
+        for tf in tfArray {
+            tf.addTarget(self, action: #selector(fillTextField), for: .editingChanged)
+            tf.delegate = self
+        }
+    }
+    
+    @objc func fillTextField() {
+        guard emailTextfiled.text != "" && passwordTextfield.text != "" else {
+            
+            loginButton.isEnabled = false
+            loginButton.backgroundColor = .lightGray
+            return
+        }
+        
+        loginButton.isEnabled = true
+        loginButton.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
     }
     
     //MARK: - Actions
     
     @objc func handleLogin() {
+        
+        
         print("Login")
     }
     
@@ -168,4 +192,11 @@ extension LoginViewController {
          return tf
      }
     
+}
+
+extension LoginViewController : UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
