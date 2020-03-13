@@ -47,8 +47,21 @@ class LoginViewController : UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         return button
+    }()
+    
+    let dontHaveAccountButton : UIButton  = {
+        let button = UIButton(type: .system)
+        let attributeTitle = NSMutableAttributedString(string: "アカウントを持っていませんか？ ", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        
+        attributeTitle.append(NSMutableAttributedString(string: "Sign up", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSMutableAttributedString.Key.foregroundColor : UIColor.lightGray]))
+        
+        button.setAttributedTitle(attributeTitle, for: .normal)
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        return button
+        
     }()
     
     
@@ -58,6 +71,13 @@ class LoginViewController : UIViewController {
         super.viewDidLoad()
         
         configureUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // hide navigation
+        
+        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.barStyle = .black
     }
     
     private func configureUI() {
@@ -77,8 +97,26 @@ class LoginViewController : UIViewController {
         view.addSubview(stack)
         
         stack.centerY(inView: view)
-        
         stack.anchor(left: view.leftAnchor, right: view.rightAnchor, paddongTop: 40, paddingLeft: 16, paddingRight: 16)
+        
+        
+        view.addSubview(dontHaveAccountButton)
+        dontHaveAccountButton.centerX(inView: view)
+        dontHaveAccountButton.anchor(bottom : view.bottomAnchor, paddiongBottom:  12)
+        
+        
+    }
+    
+    //MARK: - Actions
+    
+    @objc func handleLogin() {
+        print("Login")
+    }
+    
+    @objc func handleSignUp() {
+        let controller = SignUpController()
+        navigationController?.pushViewController(controller, animated: true)
+        
     }
     
     

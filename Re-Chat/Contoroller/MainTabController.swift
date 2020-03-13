@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class MaintabController : UITabBarController {
     
@@ -16,7 +17,7 @@ class MaintabController : UITabBarController {
         super.viewDidLoad()
         view.backgroundColor = .backGroundColor
         
-        configureTabControllers()
+        checkUserIsLogin()
     }
     
     //MARK: - UI
@@ -28,7 +29,31 @@ class MaintabController : UITabBarController {
         viewControllers = [nav1]
     }
     
-    //MARK: - Helpers
+    func checkUserIsLogin() {
+        
+        if Auth.auth().currentUser == nil {
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginViewController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            }
+        } else {
+            
+            configureTabControllers()
+
+        }
+    }
+    
+
+    
+    
+}
+
+ //MARK: - Helpers
+
+extension MaintabController {
+    
+   
     
     private func templetaNavigationViewController(image : UIImage?, rootiViewController : UIViewController) -> UINavigationController {
         
@@ -39,6 +64,5 @@ class MaintabController : UITabBarController {
         return nav
         
     }
-    
     
 }
