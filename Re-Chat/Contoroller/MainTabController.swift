@@ -11,16 +11,46 @@ import Firebase
 
 class MaintabController : UITabBarController {
     
+    var user : User? {
+        didSet {
+            guard let nav = viewControllers?[0] as? UINavigationController else {return}
+            guard let cont = nav.viewControllers.first as? ContainerController else {return}
+            
+            cont.user = user
+        }
+    }
  
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .backGroundColor
+        view.backgroundColor = .white
+//        view.backgroundColor = .backGroundColor
         
         checkUserIsLogin()
     }
     
     //MARK: - UI
+    
+  
+    
+    func checkUserIsLogin() {
+        
+        
+        
+        if Auth.auth().currentUser == nil {
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginViewController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            }
+            
+
+        } else {
+            
+            configureTabControllers()
+            fetchCurrentUser()
+        }
+    }
     
     func configureTabControllers() {
         let feedVC = ContainerController()
@@ -29,22 +59,16 @@ class MaintabController : UITabBarController {
         viewControllers = [nav1]
     }
     
-    func checkUserIsLogin() {
+    func fetchCurrentUser() {
+        guard let currentuid = Auth.auth().currentUser?.uid else {return}
         
-        if Auth.auth().currentUser == nil {
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginViewController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } else {
-            
-            configureTabControllers()
-
+        AuthSearvice.shared.fetchUser(uid: currentuid) { (user) in
+            self.user = user
         }
+        
     }
     
-
+    
     
     
 }

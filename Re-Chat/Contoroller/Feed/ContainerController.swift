@@ -21,14 +21,24 @@ class ContainerController : UIViewController {
     // black view X
     private lazy var xOrigin = self.view.frame.width - 80
     
+    var user : User? {
+        didSet {
+            configureFeedController()
+            configureMenuController()
+            
+            configureLeftBarButton()
+        }
+    }
+    
     //MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureFeedController()
-        configureMenuController()
         
-        configureLeftBarButton()
+        
+//        configureFeedController()
+    
+        
         
     }
     
@@ -46,17 +56,27 @@ class ContainerController : UIViewController {
         profileImageView.layer.cornerRadius = 32 / 2
         profileImageView.layer.masksToBounds = true
         
+        imageFromData(pictureData: user!.profileImage) { (avatar) in
+            profileImageView.image = avatar
+        }
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
         
     }
     
     
-    private func configureFeedController() {
-  
+    func configureFeedController() {
+        
+        guard let user = user else {
+            print("NO USER")
+            return}
+        
         addChild(feedController)
         feedController.didMove(toParent: self)
         feedController.delegate = self
         view.addSubview(feedController.view)
+        
+        //        feedController.user = user
     }
     
     func configureMenuController() {
@@ -133,15 +153,31 @@ extension ContainerController : SideMenuControllerDelegate {
         
         switch option {
         case .logout:
-            do {
-                try Auth.auth().signOut()
-                let nav = UINavigationController(rootViewController: LoginViewController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            } catch let error {
-                print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
-            }
+            let actionSheet = UIAlertController(title: "Logout", message: nil, preferredStyle: .actionSheet)
+            
+            actionSheet.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
+                self.logOut()
+            }))
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            actionSheet.addAction(cancel)
+            
+            present(actionSheet, animated: true, completion: nil)
+            
+            
         }
+    }
+    
+    func logOut() {
+        do {
+            try Auth.auth().signOut()
+            let nav = UINavigationController(rootViewController: LoginViewController())
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
+        } catch let error {
+            print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
+        }
+        
     }
     
     

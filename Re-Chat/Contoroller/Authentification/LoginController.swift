@@ -157,8 +157,40 @@ class LoginViewController : UIViewController {
             return
         }
         
+        guard isValidEmail(email) else {
+            showAlert(title: "Recheck", message: "Eメール用の書式を記入ください")
+            return
+        }
         
-        print("Login")
+        showPresentLoadindView(true, message: "確認中")
+        
+        AuthSearvice.shared.loginUser(email: email, password: password) { (result, error) in
+            
+            if error != nil {
+                
+                self.showAlert(title: "Recheck", message: error!.localizedDescription)
+                self.showPresentLoadindView(false)
+                return
+            }
+            
+            // no error (same signup)
+            
+            guard let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else {return}
+            guard let tab = window.rootViewController as? MaintabController else {return}
+            
+            tab.checkUserIsLogin()
+            
+            self.dismiss(animated: true) {
+                // dismiss Indicator
+                self.showPresentLoadindView(false)
+            }
+            
+            
+            
+        }
+        
+        
+        
     }
     
     @objc func handleSignUp() {

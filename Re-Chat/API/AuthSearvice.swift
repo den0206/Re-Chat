@@ -8,10 +8,6 @@
 
 import FirebaseAuth
 
-enum sexType : Int {
-    case man
-    case woman
-}
 
 struct AuthCredentials {
     
@@ -57,8 +53,34 @@ class AuthSearvice {
 
 
         }
+
+    }
+    
+    func loginUser(email : String, password : String, completion : AuthDataResultCallback?) {
         
+        Auth.auth().signIn(withEmail: email, password: password, completion: completion)
+    }
+    
+    func fetchUser(uid : String, completion : @escaping(User) -> Void) {
         
+        firebaseReference(.User).document(uid).getDocument { (snapshot, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            guard let snapshot = snapshot else {return}
+            
+            if snapshot.exists {
+                let dictionary = snapshot.data()!
+                let user = User(uid: snapshot.documentID, dictionary: dictionary)
+                
+                completion(user)
+                
+            }
+            
+            
+        }
         
     }
     

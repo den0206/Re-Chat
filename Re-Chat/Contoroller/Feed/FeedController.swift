@@ -17,6 +17,7 @@ class FeedController : UICollectionViewController {
     var delegate : FeedControllerDelegate?
     
     
+    
     //MARK: - Parts
     
     private let sideMenuButton : UIButton = {
@@ -51,9 +52,12 @@ class FeedController : UICollectionViewController {
         sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
     }
     
+ 
+    
     //MARK: - Actions
     
     @objc func handleTappSideMenuButton() {
+        
         
         delegate?.handleMenuToggle()
         

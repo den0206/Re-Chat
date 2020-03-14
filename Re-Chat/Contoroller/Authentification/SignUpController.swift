@@ -213,6 +213,7 @@ class SignUpController : UIViewController {
         let avatarData = selectedImage?.jpegData(compressionQuality: 0.3)
         let avatar = avatarData?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         
+        showPresentLoadindView(true, message: nil)
         
         
         let credential = AuthCredentials(email: emailTextfiled.text!, fullname: fullnameTextfiled.text!, sex: sex, profileImage: avatar!, password: passwordTextfield.text!)
@@ -220,8 +221,11 @@ class SignUpController : UIViewController {
         AuthSearvice.shared.registerUser(credential: credential) { (error) in
             
             if error != nil {
+                // hide indicator
+                self.showPresentLoadindView(false)
+                
                 self.showAlert(title: "Recheck", message: error!.localizedDescription)
-                // dismiss indicator
+                
                 return
             }
             
@@ -234,6 +238,7 @@ class SignUpController : UIViewController {
             
             self.dismiss(animated: true) {
                 // dismiss Indicator
+                self.showPresentLoadindView(false)
             }
             
             

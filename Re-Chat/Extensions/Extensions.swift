@@ -93,4 +93,56 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    func showPresentLoadindView(_ present : Bool, message : String? = nil) {
+        
+        if present {
+            
+            let blackView = UIView()
+            blackView.frame = self.view.frame
+            blackView.backgroundColor = .black
+            blackView.alpha = 0
+            blackView.tag = 1
+            
+            let indicator = UIActivityIndicatorView()
+            indicator.style = .whiteLarge
+            indicator.center = blackView.center
+            
+            let label = UILabel()
+            label.text = message
+            label.font = UIFont.systemFont(ofSize: 16)
+            label.textColor = .white
+            label.textAlignment = .center
+            label.alpha = 0.7
+            
+            self.view.addSubview(blackView)
+            blackView.addSubview(indicator)
+            blackView.addSubview(label)
+            
+            label.centerX(inView: view)
+            label.anchor(top : indicator.bottomAnchor,paddongTop: 23)
+            
+            indicator.startAnimating()
+            
+            UIView.animate(withDuration: 0.2) {
+                blackView.alpha = 0.7
+            }
+        
+            
+        } else {
+            
+            // hide
+            view.subviews.forEach { (subview) in
+                
+                if subview.tag == 1 {
+                    UIView.animate(withDuration: 0.5, animations: {
+                        subview.alpha = 0
+                    }) { (_) in
+                        subview.removeFromSuperview()
+                    }
+                }
+            }
+            
+        }
+    }
+    
 }

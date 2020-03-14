@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3A4D1A38241BA5C200397225 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D1A37241BA5C200397225 /* SignUpController.swift */; };
 		3A4D1A3A241BB89E00397225 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D1A39241BB89E00397225 /* HelperFunctions.swift */; };
+		3AC4D285241C952600917988 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4D284241C952600917988 /* User.swift */; };
+		3AC4D287241CAE2300917988 /* dounloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4D286241CAE2300917988 /* dounloader.swift */; };
 		3AD638F4241A646400EDA267 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AD638F3241A646400EDA267 /* GoogleService-Info.plist */; };
 		3AD638F6241A65AC00EDA267 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD638F5241A65AC00EDA267 /* LoginController.swift */; };
 		3AF9A71D2418FC4E006C52B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF9A71C2418FC4E006C52B7 /* AppDelegate.swift */; };
@@ -29,6 +31,8 @@
 /* Begin PBXFileReference section */
 		3A4D1A37241BA5C200397225 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		3A4D1A39241BB89E00397225 /* HelperFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
+		3AC4D284241C952600917988 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3AC4D286241CAE2300917988 /* dounloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dounloader.swift; sourceTree = "<group>"; };
 		3AD638F3241A646400EDA267 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3AD638F5241A65AC00EDA267 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		3AF9A7192418FC4E006C52B7 /* Re-Chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Re-Chat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +77,7 @@
 		3A06E6CB241A6219005A5D24 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3AC4D284241C952600917988 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -124,8 +129,8 @@
 		3AF9A7302418FCA2006C52B7 /* Contoroller */ = {
 			isa = PBXGroup;
 			children = (
-				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
 				3A06E6CC241A6270005A5D24 /* Authentification */,
+				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
 				3AF9A7332418FE9F006C52B7 /* Feed */,
 			);
 			path = Contoroller;
@@ -148,6 +153,7 @@
 				3A4D1A39241BB89E00397225 /* HelperFunctions.swift */,
 				3AFC14EC241C7811000E15D9 /* Constracts.swift */,
 				3AFC14EE241C7915000E15D9 /* FirebaseReference.swift */,
+				3AC4D286241CAE2300917988 /* dounloader.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -287,9 +293,11 @@
 				3AF9A73824190398006C52B7 /* Extensions.swift in Sources */,
 				3AFC14EF241C7915000E15D9 /* FirebaseReference.swift in Sources */,
 				3AF9A71D2418FC4E006C52B7 /* AppDelegate.swift in Sources */,
+				3AC4D287241CAE2300917988 /* dounloader.swift in Sources */,
 				3A4D1A38241BA5C200397225 /* SignUpController.swift in Sources */,
 				3AF9A71F2418FC4E006C52B7 /* SceneDelegate.swift in Sources */,
 				3AF9A7352418FEBB006C52B7 /* FeedController.swift in Sources */,
+				3AC4D285241C952600917988 /* User.swift in Sources */,
 				3A4D1A3A241BB89E00397225 /* HelperFunctions.swift in Sources */,
 				3AF9A73C24190A4A006C52B7 /* SideMenuController.swift in Sources */,
 				3AFC14ED241C7811000E15D9 /* Constracts.swift in Sources */,
