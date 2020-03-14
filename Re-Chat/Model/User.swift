@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 enum sexType : Int {
     case man
@@ -14,7 +15,7 @@ enum sexType : Int {
 }
 
 
-struct User {
+class User {
     
     let email : String
     var fullname : String
@@ -36,6 +37,10 @@ struct User {
         }
         
         
+    }
+    
+    class func currentId() -> String {
+        return Auth.auth().currentUser!.uid
     }
     
     

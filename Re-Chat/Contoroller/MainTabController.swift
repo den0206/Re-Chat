@@ -56,7 +56,12 @@ class MaintabController : UITabBarController {
         let feedVC = ContainerController()
         let nav1 = templetaNavigationViewController(image: #imageLiteral(resourceName: "home_unselected"), rootiViewController: feedVC)
         
-        viewControllers = [nav1]
+        let recentVC = RecentController()
+        let nav2 = templetaNavigationViewController(image: #imageLiteral(resourceName: "comment"), rootiViewController: recentVC)
+        
+        
+        
+        viewControllers = [nav1, nav2]
     }
     
     func fetchCurrentUser() {

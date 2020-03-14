@@ -82,6 +82,19 @@ extension UIView {
     
 }
 
+extension UIImageView {
+    func profileImageView(setDimencion dimension: CGFloat) -> UIImageView {
+        
+        let iv = UIImageView()
+        iv.clipsToBounds = true
+        iv.setDimension(width: dimension, height: dimension)
+        iv.layer.cornerRadius = dimension / 2
+        iv.backgroundColor = .lightGray
+        
+        return iv
+    }
+}
+
 extension UIColor {
        static let backGroundColor = UIColor.init(red: 25/255, green: 25/255, blue: 25/255, alpha: 1)
 }
