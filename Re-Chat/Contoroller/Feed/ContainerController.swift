@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class ContainerController : UIViewController {
     
@@ -132,10 +133,17 @@ extension ContainerController : SideMenuControllerDelegate {
         
         switch option {
         case .logout:
-            print("Logout")
+            do {
+                try Auth.auth().signOut()
+                let nav = UINavigationController(rootViewController: LoginViewController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            } catch let error {
+                print("DEBUG: Failed to sign out with error \(error.localizedDescription)")
+            }
         }
     }
-
+    
     
 }
 

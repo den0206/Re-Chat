@@ -10,7 +10,8 @@ import UIKit
 
 class SignUpController : UIViewController {
     
-    var selectedImage : UIImage?
+    private var selectedImage : UIImage?
+    private let imagePicker = UIImagePickerController()
     
     //MARK: - Parts
     
@@ -143,6 +144,9 @@ class SignUpController : UIViewController {
         
         view.addSubview(plusPhotoButton)
         plusPhotoButton.centerX(inView: view, topAnchor: titleLabel.bottomAnchor, paddingTop: 16)
+        
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
        
         plusPhotoButton.setDimension(width: 150, height: 150)
         
@@ -178,10 +182,10 @@ class SignUpController : UIViewController {
     //MARK: - Actions
     
     @objc func tappedPlusButton() {
-        
+        present(imagePicker, animated: true, completion: nil)
     }
     
-    //MARK: - Login
+    //MARK: - Sign Up
     
     
     @objc func handleSignUp() {
@@ -202,7 +206,39 @@ class SignUpController : UIViewController {
             return
         }
         
-        print("Signup")
+//        guard let sex = sexType(rawValue: sexTypeSegmentControl.selectedSegmentIndex) else {return}
+        let sex = sexTypeSegmentControl.selectedSegmentIndex
+       
+        // encode Image
+        let avatarData = selectedImage?.jpegData(compressionQuality: 0.3)
+        let avatar = avatarData?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+        
+        
+        
+        let credential = AuthCredentials(email: emailTextfiled.text!, fullname: fullnameTextfiled.text!, sex: sex, profileImage: avatar!, password: passwordTextfield.text!)
+        
+        AuthSearvice.shared.registerUser(credential: credential) { (error) in
+            
+            if error != nil {
+                self.showAlert(title: "Recheck", message: error!.localizedDescription)
+                // dismiss indicator
+                return
+            }
+            
+            // no error
+            
+            guard let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else {return}
+            guard let tab = window.rootViewController as? MaintabController else {return}
+            
+            tab.checkUserIsLogin()
+            
+            self.dismiss(animated: true) {
+                // dismiss Indicator
+            }
+            
+            
+            
+        }
     }
     
     @objc func handleLogin() {
@@ -284,9 +320,35 @@ extension SignUpController {
     
 }
 
+//MARK: - Textfield Delegate
+
 extension SignUpController : UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
+}
+
+//MARK: - ImagePickerDelegate
+
+extension SignUpController : UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        guard let profileImage = info[.editedImage] as? UIImage else {return}
+        self.selectedImage = profileImage
+        
+        plusPhotoButton.layer.cornerRadius = 150 / 2
+        plusPhotoButton.layer.masksToBounds = true
+        plusPhotoButton.imageView?.contentMode = .scaleAspectFill
+        plusPhotoButton.imageView?.clipsToBounds = true
+        plusPhotoButton.layer.borderColor = UIColor.white.cgColor
+        plusPhotoButton.layer.borderWidth = 2
+        
+        plusPhotoButton.setImage(profileImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        self.dismiss(animated: true, completion: nil)
+        
+        
+    }
+    
 }

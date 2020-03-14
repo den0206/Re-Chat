@@ -83,6 +83,10 @@ extension SideMenuController {
         cell.backgroundColor = .black
         cell.textLabel?.textColor = .white
         
+        if cell.textLabel?.text == "Log Out" {
+             cell.textLabel?.textColor = .red
+        }
+        
         let selectedView = UIView()
         selectedView.backgroundColor = .backGroundColor
         cell.selectedBackgroundView = selectedView
