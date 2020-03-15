@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol UserCellDelegate : class {
+    func tappedProfileImage(_ cell : UserCell)
+}
+
 class UserCell : UITableViewCell {
     
     var user : User? {
@@ -16,10 +20,18 @@ class UserCell : UITableViewCell {
         }
     }
     
+    weak var delegate : UserCellDelegate?
+    
     //MARK: - Parts
     
     private lazy var profileImageView : UIImageView = {
-        return UIImageView().profileImageView(setDimencion: 40)
+        let iv = UIImageView().profileImageView(setDimencion: 40)
+        iv.isUserInteractionEnabled = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tappedProfileImage))
+        iv.addGestureRecognizer(tap)
+        return iv
+    
     }()
     
     private let fullnameLabel : UILabel = {
@@ -82,8 +94,12 @@ class UserCell : UITableViewCell {
         default :
             return
         }
-        
-        
-        
+    }
+    
+    
+    //MARK: - Actions
+    
+    @objc func tappedProfileImage() {
+        delegate?.tappedProfileImage(self)
     }
 }

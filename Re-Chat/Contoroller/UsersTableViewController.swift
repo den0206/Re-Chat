@@ -18,9 +18,17 @@ class UsersTableViewController : UITableViewController {
         }
     }
     
+    var filterUsers = [User]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     //MARK: - Parts
     
     // segment controller
+    
+    let searchController = UISearchController(searchResultsController: nil)
     
     private lazy var userSegmentController : UISegmentedControl = {
         let sc = UISegmentedControl(items: ["All", "Man", "Woman"])
@@ -34,10 +42,14 @@ class UsersTableViewController : UITableViewController {
         
         configureNavController()
         configureTableView()
+        configureSearchController()
+        
         
         // fetch All users
         fetchUsers(filter: nil)
     }
+    
+    //MARK: - configureb UI
     
     private func configureNavController() {
         
@@ -58,6 +70,14 @@ class UsersTableViewController : UITableViewController {
         tableView.register(UserCell.self, forCellReuseIdentifier: reuserIdentifer)
 
         
+    }
+    
+    private func configureSearchController() {
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+  
     }
     
     private func fetchUsers(filter : String?) {
@@ -95,15 +115,61 @@ class UsersTableViewController : UITableViewController {
 extension UsersTableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filterUsers.count
+        }
+        
         return users.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        var user : User
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: reuserIdentifer, for: indexPath) as! UserCell
         
-        cell.user = users[indexPath.row]
+        cell.delegate = self
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            user = filterUsers[indexPath.row]
+        } else {
+            user = users[indexPath.row]
+        }
+        
+        cell.user = user
         
         return cell
     }
+}
+
+//MARK: - UserCell Delegate
+
+extension UsersTableViewController : UserCellDelegate {
+    func tappedProfileImage(_ cell: UserCell) {
+        
+        // user navigation
+        print("Tapp")
+    }
+    
+    
+}
+
+//MARK: - SearchResult Updating
+
+extension UsersTableViewController : UISearchResultsUpdating {
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(searchText : String) {
+        
+        filterUsers = users.filter({ (user) -> Bool in
+            return user.fullname.lowercased().contains(searchText.lowercased())
+        })
+        
+        
+    }
+
 }
