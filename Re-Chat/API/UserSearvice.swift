@@ -12,10 +12,21 @@ struct UserSearvice {
     
     static let shared = UserSearvice()
     
-    func fetchUsers(completion : @escaping([User]) -> Void) {
-        var users = [User]()
+    func filterUsers(filter : String?, completion : @escaping([User]) -> Void) {
         
-        firebaseReference(.User).getDocuments { (snapshot, error) in
+        var query : Query!
+        
+        switch filter {
+        case kMAN:
+            query = firebaseReference(.User).whereField(kSEX, isEqualTo: 0)
+        case kWOMAN :
+             query = firebaseReference(.User).whereField(kSEX, isEqualTo: 1)
+        default:
+            query = firebaseReference(.User)
+        }
+        
+        query.getDocuments { (snapshot, error) in
+            var Users = [User]()
             
             guard let snapshot = snapshot else {return}
             
@@ -23,15 +34,13 @@ struct UserSearvice {
                 for document in snapshot.documents {
                     let dictionary = document.data()
                     
-                    // except currentuser
                     if document.documentID != User.currentId() {
-                        let user = User(uid: document.documentID, dictionary: dictionary)
-                        users.append(user)
+                          let user = User(uid: document.documentID, dictionary: dictionary)
+                        Users.append(user)
                     }
-                    
-                    
+    
                 }
-                completion(users)
+                completion(Users)
             }
         }
     }

@@ -15,3 +15,6 @@ public let kPASSWORD = "password"
 public let kPROFILE_IMAGE = "profileImage"
 public let kFULLNAME = "fullname"
 public let kSEX = "Sex"
+
+public let kMAN = "Man"
+public let kWOMAN = "Woman"

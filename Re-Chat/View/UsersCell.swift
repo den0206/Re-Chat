@@ -67,6 +67,23 @@ class UserCell : UITableViewCell {
     }
     
     private func configure() {
-        print("Set User")
+        guard let user = user else {return}
+        
+        profileImageView.image = downloadImageFromData(picturedata: user.profileImage)
+        fullnameLabel.text = user.fullname
+        
+        switch user.sex {
+        case .man:
+            exTypeButton.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+            exTypeButton.setTitle("男", for: .normal)
+        case .woman :
+            exTypeButton.backgroundColor = #colorLiteral(red: 0.8549019694, green: 0.250980407, blue: 0.4784313738, alpha: 1)
+            exTypeButton.setTitle("女", for: .normal)
+        default :
+            return
+        }
+        
+        
+        
     }
 }

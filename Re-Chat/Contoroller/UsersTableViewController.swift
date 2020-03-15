@@ -18,14 +18,25 @@ class UsersTableViewController : UITableViewController {
         }
     }
     
+    //MARK: - Parts
+    
+    // segment controller
+    
+    private lazy var userSegmentController : UISegmentedControl = {
+        let sc = UISegmentedControl(items: ["All", "Man", "Woman"])
+        sc.selectedSegmentIndex = 0
+        sc.addTarget(self, action: #selector(changeValue), for: .valueChanged)
+        return sc
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNavController()
         configureTableView()
         
-        fetchUsers()
-        
+        // fetch All users
+        fetchUsers(filter: nil)
     }
     
     private func configureNavController() {
@@ -42,21 +53,41 @@ class UsersTableViewController : UITableViewController {
         tableView.rowHeight = 60
         tableView.separatorStyle = .none
         
+        tableView.tableHeaderView = userSegmentController
+        
         tableView.register(UserCell.self, forCellReuseIdentifier: reuserIdentifer)
 
         
     }
     
-    private func fetchUsers() {
-        UserSearvice.shared.fetchUsers { (users) in
+    private func fetchUsers(filter : String?) {
+        
+        UserSearvice.shared.filterUsers(filter: filter) { (users) in
             self.users = users
         }
+      
     }
     //MARK: - Actions
+ 
+    @objc func changeValue(sender : UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            fetchUsers(filter: nil)
+        case 1 :
+            fetchUsers(filter: kMAN)
+        case 2 :
+            fetchUsers(filter: kWOMAN)
+        default:
+            return
+        }
+        
+    }
     
     @objc func handleDismiss() {
-        self.dismiss(animated: true, completion: nil)
-    }
+         self.dismiss(animated: true, completion: nil)
+     }
+     
 }
 
 //MARK: - tableview Delegate
