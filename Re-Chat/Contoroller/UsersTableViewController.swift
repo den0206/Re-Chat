@@ -141,6 +141,23 @@ extension UsersTableViewController {
         
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        var user : User
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            user = filterUsers[indexPath.row]
+        } else {
+            user = users[indexPath.row]
+        }
+        
+       
+        
+
+    }
 }
 
 //MARK: - UserCell Delegate
@@ -148,8 +165,12 @@ extension UsersTableViewController {
 extension UsersTableViewController : UserCellDelegate {
     func tappedProfileImage(_ cell: UserCell) {
         
-        // user navigation
-        print("Tapp")
+        guard let user = cell.user else {return}
+        
+        // use navigation
+        let profileVC = ProfileCpntroller(user: user)
+        navigationController?.pushViewController(profileVC, animated: true)
+        
     }
     
     

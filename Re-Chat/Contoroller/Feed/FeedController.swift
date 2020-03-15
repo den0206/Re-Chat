@@ -16,9 +16,13 @@ class FeedController : UICollectionViewController {
     
     var delegate : FeedControllerDelegate?
     
+    var user : User?
+    
     
     
     //MARK: - Parts
+    
+    // Side Menu
     
     private let sideMenuButton : UIButton = {
         let button = UIButton(type: .system)
@@ -26,6 +30,20 @@ class FeedController : UICollectionViewController {
         button.addTarget(self, action: #selector(handleTappSideMenuButton), for: .touchUpInside)
         return button
     }()
+    
+    // New Tweet
+    
+    let actionButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.tintColor = .white
+        button.backgroundColor = .blue
+        button.setImage(#imageLiteral(resourceName: "new_tweet"), for: .normal)
+        button.addTarget(self, action: #selector(handleTappedNewTweet), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    
     
     init() {
           super.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -50,6 +68,10 @@ class FeedController : UICollectionViewController {
         
         view.addSubview(sideMenuButton)
         sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
+        
+        view.addSubview(actionButton)
+        actionButton.anchor( bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddiongBottom: 64, paddingRight: 16, width: 56, height: 56)
+        actionButton.layer.cornerRadius = 56 / 2
     }
     
  
@@ -57,10 +79,19 @@ class FeedController : UICollectionViewController {
     //MARK: - Actions
     
     @objc func handleTappSideMenuButton() {
-        
-        
+   
         delegate?.handleMenuToggle()
         
+    }
+    
+    @objc func handleTappedNewTweet() {
+        guard let user = user else {return}
+        
+        let uploadVC = UploadTweetController(user: user)
+        
+        let nav = UINavigationController(rootViewController: uploadVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
         
     }
     

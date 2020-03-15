@@ -75,8 +75,7 @@ class ContainerController : UIViewController {
         feedController.didMove(toParent: self)
         feedController.delegate = self
         view.addSubview(feedController.view)
-        
-        //        feedController.user = user
+        feedController.user = user
     }
     
     func configureMenuController() {
