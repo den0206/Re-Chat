@@ -40,6 +40,7 @@ class User {
     }
     
     class func currentId() -> String {
+        
         return Auth.auth().currentUser!.uid
     }
     

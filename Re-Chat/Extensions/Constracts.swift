@@ -18,3 +18,14 @@ public let kSEX = "Sex"
 
 public let kMAN = "Man"
 public let kWOMAN = "Woman"
+
+//MARK: - Tweet
+
+public let kTIMESTAMP = "timestamp"
+public let kLIKES = "likes"
+public let kRETWEETS = "retweets"
+public let kCAPTION = "caption"
+public let kTWEETID = "tweetId"
+public let kREPLYINGTO = "replyingTo"
+public let kUSERIDTO = "userIDTo"
+

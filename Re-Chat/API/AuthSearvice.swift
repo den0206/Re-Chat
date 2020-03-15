@@ -43,7 +43,6 @@ class AuthSearvice {
             guard let uid = result?.user.uid else {return}
 
             let values  = [kEMAIL : email,
-                           kPASSWORD : password,
                            kFULLNAME : fullname,
                            kPROFILE_IMAGE : avatar,
                            kSEX : sex,

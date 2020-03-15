@@ -15,7 +15,16 @@ struct TweetService {
     
     func uploadTweet(caption : String, completion : @escaping(Error?) -> Void) {
         
+        let tweetId = UUID().uuidString
         
+        let values = [kUSERID : User.currentId(),
+                      kTWEETID : tweetId,
+                      kLIKES : 0,
+                      kRETWEETS : 0,
+                      kCAPTION : caption,
+                      kTIMESTAMP : Int(NSDate().timeIntervalSince1970)] as [String : Any]
+        
+        firebaseReference(.Tweet).document(tweetId).setData(values, completion: completion)
         
     }
     

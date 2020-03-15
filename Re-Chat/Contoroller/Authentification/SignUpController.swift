@@ -236,6 +236,7 @@ class SignUpController : UIViewController {
             
             tab.checkUserIsLogin()
             
+            
             self.dismiss(animated: true) {
                 // dismiss Indicator
                 self.showPresentLoadindView(false)

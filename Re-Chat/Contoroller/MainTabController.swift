@@ -35,8 +35,6 @@ class MaintabController : UITabBarController {
     
     func checkUserIsLogin() {
         
-        
-        
         if Auth.auth().currentUser == nil {
             DispatchQueue.main.async {
                 let nav = UINavigationController(rootViewController: LoginViewController())
@@ -46,7 +44,7 @@ class MaintabController : UITabBarController {
             
 
         } else {
-            
+            print("Exist")
             configureTabControllers()
             fetchCurrentUser()
         }

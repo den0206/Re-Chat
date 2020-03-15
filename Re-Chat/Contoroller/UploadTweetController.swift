@@ -99,10 +99,26 @@ class UploadTweetController : UIViewController {
         
         guard !caption.isEmpty  else {return}
         
-        print("New")
         
         
+        showPresentLoadindView(true, message: "Sending...")
         
+        // no caption empty
+
+        TweetService.shared.uploadTweet(caption: caption) { (error) in
+
+            if error != nil {
+                self.showPresentLoadindView(false)
+                self.showAlert(title: "Recheck", message: error!.localizedDescription)
+                return
+            }
+            
+            self.dismiss(animated: true) {
+                self.showPresentLoadindView(false)
+            }
+
+        }
+
     }
     
     @objc func handleDismiss() {

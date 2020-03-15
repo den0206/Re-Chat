@@ -25,7 +25,7 @@ class ContainerController : UIViewController {
         didSet {
             configureFeedController()
             configureMenuController()
-            
+
             configureLeftBarButton()
         }
     }
@@ -35,10 +35,7 @@ class ContainerController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-//        configureFeedController()
-    
-        
+
         
     }
     
@@ -59,7 +56,7 @@ class ContainerController : UIViewController {
         imageFromData(pictureData: user!.profileImage) { (avatar) in
             profileImageView.image = avatar
         }
-        
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
         
     }
@@ -70,6 +67,8 @@ class ContainerController : UIViewController {
         guard let user = user else {
             print("NO USER")
             return}
+        
+        tabBarController?.tabBar.isHidden = false
         
         addChild(feedController)
         feedController.didMove(toParent: self)

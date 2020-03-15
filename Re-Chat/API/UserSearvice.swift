@@ -34,7 +34,7 @@ struct UserSearvice {
                 for document in snapshot.documents {
                     let dictionary = document.data()
                     
-                    if document.documentID != User.currentId() {
+                    if document.documentID != Auth.auth().currentUser?.uid {
                           let user = User(uid: document.documentID, dictionary: dictionary)
                         Users.append(user)
                     }

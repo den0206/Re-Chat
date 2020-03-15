@@ -111,7 +111,7 @@ extension UIViewController {
         if present {
             
             let blackView = UIView()
-            blackView.frame = self.view.frame
+            blackView.frame = self.view.bounds
             blackView.backgroundColor = .black
             blackView.alpha = 0
             blackView.tag = 1
