@@ -10,6 +10,7 @@
 		3A19CB7D241DEDD6003BB2DB /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */; };
 		3A19CB7F241DF5AC003BB2DB /* UploadTweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */; };
 		3A19CB81241DFD0E003BB2DB /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB80241DFD0E003BB2DB /* InputTextView.swift */; };
+		3A19CB83241E0560003BB2DB /* TweetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB82241E0560003BB2DB /* TweetService.swift */; };
 		3A4D1A38241BA5C200397225 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D1A37241BA5C200397225 /* SignUpController.swift */; };
 		3A4D1A3A241BB89E00397225 /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D1A39241BB89E00397225 /* HelperFunctions.swift */; };
 		3AC4D285241C952600917988 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4D284241C952600917988 /* User.swift */; };
@@ -39,6 +40,7 @@
 		3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetController.swift; sourceTree = "<group>"; };
 		3A19CB80241DFD0E003BB2DB /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
+		3A19CB82241E0560003BB2DB /* TweetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetService.swift; sourceTree = "<group>"; };
 		3A4D1A37241BA5C200397225 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		3A4D1A39241BB89E00397225 /* HelperFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
 		3AC4D284241C952600917988 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 			children = (
 				3AFC14EA241C7035000E15D9 /* AuthSearvice.swift */,
 				3AC8A4DC241CCE1500460CE8 /* UserSearvice.swift */,
+				3A19CB82241E0560003BB2DB /* TweetService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				3AC8A4DD241CCE1500460CE8 /* UserSearvice.swift in Sources */,
 				3AF9A73824190398006C52B7 /* Extensions.swift in Sources */,
 				3AFC14EF241C7915000E15D9 /* FirebaseReference.swift in Sources */,
+				3A19CB83241E0560003BB2DB /* TweetService.swift in Sources */,
 				3AF9A71D2418FC4E006C52B7 /* AppDelegate.swift in Sources */,
 				3AC4D287241CAE2300917988 /* dounloader.swift in Sources */,
 				3A4D1A38241BA5C200397225 /* SignUpController.swift in Sources */,

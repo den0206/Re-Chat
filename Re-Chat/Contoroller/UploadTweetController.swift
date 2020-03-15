@@ -25,14 +25,16 @@ class UploadTweetController : UIViewController {
     
     private lazy var actionButton : UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .blue
+        button.backgroundColor = .lightGray
         button.setTitle("Tweet", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.titleLabel?.textAlignment = .center
+        button.isEnabled = false
         
         button.frame = CGRect(x: 0, y: 0, width: 64, height: 32)
         button.layer.cornerRadius = 32 / 2
+        button.addTarget(self, action: #selector(handleUploadTweet), for: .touchUpInside)
         
         
         return button
@@ -62,6 +64,8 @@ class UploadTweetController : UIViewController {
         configureNavigationbar()
         view.backgroundColor = .white
         
+        captionTextView.delegate = self
+        
         let imageCaptionStack = UIStackView(arrangedSubviews: [profileImage, captionTextView])
         imageCaptionStack.axis = .horizontal
         imageCaptionStack.spacing = 12
@@ -89,10 +93,41 @@ class UploadTweetController : UIViewController {
     
     //MARK: - Actions
     
+    @objc func handleUploadTweet() {
+        
+        guard let caption = captionTextView.text else {return}
+        
+        guard !caption.isEmpty  else {return}
+        
+        print("New")
+        
+        
+        
+    }
+    
     @objc func handleDismiss() {
         self.dismiss(animated: true, completion: nil)
     }
     
     
+    
+}
+
+//MARK: - Textfield Delegate
+
+extension UploadTweetController : UITextViewDelegate {
+    
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if !textView.hasText {
+            actionButton.backgroundColor = .lightGray
+            actionButton.isEnabled = false
+        } else {
+            actionButton.backgroundColor = .blue
+            actionButton.isEnabled = true
+        }
+        
+        
+    }
     
 }
