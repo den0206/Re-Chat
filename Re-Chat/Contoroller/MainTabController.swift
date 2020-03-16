@@ -57,9 +57,13 @@ class MaintabController : UITabBarController {
         let recentVC = RecentController()
         let nav2 = templetaNavigationViewController(image: #imageLiteral(resourceName: "comment"), rootiViewController: recentVC)
         
+        let newsVC = NewsViewController()
+        newsVC.tabBarItem.image = #imageLiteral(resourceName: "baseline_menu_black_36dp")
         
         
-        viewControllers = [nav1, nav2]
+        
+        
+        viewControllers = [nav1, nav2, newsVC]
     }
     
     func fetchCurrentUser() {
