@@ -44,6 +44,8 @@ class Page1 : UITableViewController {
         print(newsItems.count)
         
     }
+    
+    
 }
 
 //MARK: - Table View Delegate
@@ -77,11 +79,13 @@ extension Page1  {
         
     }
     
+    
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         cell.backgroundColor = .clear
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         cell.textLabel?.textColor = .white
+    
     
         cell.detailTextLabel?.textColor = .white
         
@@ -154,5 +158,9 @@ extension Page1 : XMLParserDelegate {
 
 
 extension Page1 : SegementSlideContentScrollViewDelegate {
+    
+    @objc var scrollView: UIScrollView {
+           return tableView
+       }
     
 }

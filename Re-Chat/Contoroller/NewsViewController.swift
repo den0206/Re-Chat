@@ -18,6 +18,7 @@ class NewsViewController : SegementSlideViewController {
         
         reloadData()
         scrollToSlide(at: 0, animated: false)
+        slideSwitcherView.backgroundColor = .lightGray
     }
     
     
@@ -26,12 +27,14 @@ class NewsViewController : SegementSlideViewController {
         headerView.isUserInteractionEnabled = true
         headerView.contentMode = .scaleAspectFill
         headerView.image = UIImage(named: "header")
+//        headerView.backgroundColor = .lightGray
         
         headerView.translatesAutoresizingMaskIntoConstraints = false
         headerView.heightAnchor.constraint(equalToConstant: view.bounds.height/4).isActive = true
         
         return headerView
         
+        // or nil
 //        return UIView()
      }
 
@@ -39,6 +42,8 @@ class NewsViewController : SegementSlideViewController {
          return ["Swift", "Ruby", "Kotlin"]
      }
 
+    
+    
      override func segementSlideContentViewController(at index: Int) -> SegementSlideContentScrollViewDelegate? {
          
         switch index {

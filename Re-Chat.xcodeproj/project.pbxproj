@@ -166,10 +166,10 @@
 			children = (
 				3A06E6CC241A6270005A5D24 /* Authentification */,
 				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
+				3AE3D6AE241F98E700280305 /* NewsViewController.swift */,
 				3AF9A7332418FE9F006C52B7 /* Feed */,
 				3ADFCFCF241CD2830021B223 /* RecentController.swift */,
-				3AE3D6AE241F98E700280305 /* NewsViewController.swift */,
-				3AFE5FF8241F9CDF00D7D2DA /* New Group */,
+				3AFE5FF8241F9CDF00D7D2DA /* News Group */,
 				3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */,
 				3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */,
 				3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */,
@@ -209,13 +209,13 @@
 			path = API;
 			sourceTree = "<group>";
 		};
-		3AFE5FF8241F9CDF00D7D2DA /* New Group */ = {
+		3AFE5FF8241F9CDF00D7D2DA /* News Group */ = {
 			isa = PBXGroup;
 			children = (
 				3AFE5FF9241F9CF900D7D2DA /* Page1.swift */,
 				3AFE5FFD241FA89700D7D2DA /* WebViewController.swift */,
 			);
-			path = "New Group";
+			path = "News Group";
 			sourceTree = "<group>";
 		};
 		5FDCB119675186B6453C8DFD /* Pods */ = {
