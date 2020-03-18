@@ -16,30 +16,49 @@ class WeatherController : UIViewController {
         
         view.backgroundColor = .red
         
-        getCurrentWeather()
+        //        let current = WheatherData()
+        //        current.getCurrentWeather()
+        
+        downloadHourlyForecastWeather { (array) in
+            for data in array {
+                print(data.temp)
+            }
+        }
     }
     
-    func getCurrentWeather() {
-
-        let KLOCATIONAPI_URL = "https://api.weatherbit.io/v2.0/current?city=Raleigh,NC&key=3f9863d5e4fc40e893eb9bc2dda7857a"
+    func downloadHourlyForecastWeather(completion : @escaping(_ weatherForecats : [HourlyForecast]) -> Void) {
         
+        let KHOULYFORECAT_URL = "https://api.weatherbit.io/v2.0/forecast/hourly?city=Nicosia,CY&hours=24&key=3f9863d5e4fc40e893eb9bc2dda7857a"
         
-        
-        AF.request(KLOCATIONAPI_URL).responseJSON { (response) in
+        AF.request(KHOULYFORECAT_URL).responseJSON { (response) in
+            
+            var forecastArray: [HourlyForecast] = []
+            
             guard let data = response.data else {return}
-            let decorder : JSONDecoder = JSONDecoder()
+              let decorder : JSONDecoder = JSONDecoder()
+            
             
             do {
-                let weather : WheatherData = try decorder.decode(WheatherData.self, from: data)
+                let houly = try decorder.decode(HourlyDate.self, from: data)
                 
-                print(weather.data[0].city)
+//                print(houly.data.count)
+//                for item in houly.data {
+//                    forecastArray.append(item)
+//
+//                }
                 
+                forecastArray = houly.data
+                completion(forecastArray)
             } catch {
-                print(error)
+                completion(forecastArray)
+                print(error.localizedDescription)
             }
             
         }
         
         
-    }
+            
+            
+        }
+    
 }

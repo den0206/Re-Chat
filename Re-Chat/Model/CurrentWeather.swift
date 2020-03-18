@@ -13,6 +13,34 @@ import Alamofire
 // nest 0
 struct WheatherData : Codable {
     let data : [CurrentWeather]
+    
+    init() {
+        self.data = []
+    }
+    
+    func getCurrentWeather() {
+
+        let KLOCATIONAPI_URL = "https://api.weatherbit.io/v2.0/current?city=Raleigh,NC&key=3f9863d5e4fc40e893eb9bc2dda7857a"
+        
+        
+        
+        AF.request(KLOCATIONAPI_URL).responseJSON { (response) in
+            guard let data = response.data else {return}
+            let decorder : JSONDecoder = JSONDecoder()
+            
+            do {
+                let weather : WheatherData = try decorder.decode(WheatherData.self, from: data)
+                
+                print(weather.data[0].city)
+                
+            } catch {
+                print(error)
+            }
+            
+        }
+        
+        
+    }
 }
 
 // nest 1
