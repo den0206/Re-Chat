@@ -60,10 +60,14 @@ class MaintabController : UITabBarController {
         let newsVC = NewsViewController()
         newsVC.tabBarItem.image = #imageLiteral(resourceName: "baseline_menu_black_36dp")
         
+        let weatherVC =  WeatherController()
+        weatherVC.tabBarItem.image = #imageLiteral(resourceName: "humidity")
+    
         
         
         
-        viewControllers = [nav1, nav2, newsVC]
+        
+        viewControllers = [nav1, nav2, newsVC, weatherVC]
     }
     
     func fetchCurrentUser() {

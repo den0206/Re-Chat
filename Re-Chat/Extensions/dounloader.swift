@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-//MARK: - Decorde Image
+//MARK: - Decode Image
 
 func imageFromData(pictureData : String, withBlock : (_ image : UIImage?) -> Void) {
     
