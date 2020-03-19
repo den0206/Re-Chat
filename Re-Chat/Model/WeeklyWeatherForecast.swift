@@ -9,6 +9,24 @@
 import Foundation
 import Alamofire
 
-struct WeeklyWeatherForecast {
+struct WeeklyData : Codable {
+    let data : [WeeklyWeatherForecast]
     
+}
+
+struct WeeklyWeatherForecast : Codable{
+    
+    let date : Date
+    let temp : Double
+    let weather : Weather
+    
+    private enum CodingKeys : String, CodingKey {
+        case date = "ts"
+        case temp = "temp"
+        case weather
+    }
+    
+   
+    
+
 }

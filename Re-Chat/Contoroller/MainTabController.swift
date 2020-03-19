@@ -62,6 +62,7 @@ class MaintabController : UITabBarController {
         
         let weatherVC =  WeatherController()
         weatherVC.tabBarItem.image = #imageLiteral(resourceName: "humidity")
+        weatherVC.hidesBottomBarWhenPushed = true
     
         
         
