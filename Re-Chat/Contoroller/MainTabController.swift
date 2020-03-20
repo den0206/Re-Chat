@@ -59,13 +59,9 @@ class MaintabController : UITabBarController {
         
         let newsVC = NewsViewController()
         newsVC.tabBarItem.image = #imageLiteral(resourceName: "baseline_menu_black_36dp")
-        
-        let weatherVC =  WeatherViewController()
-        let nav3 = templetaNavigationViewController(image: #imageLiteral(resourceName: "humidity"), rootiViewController: weatherVC)
-
 
         
-        viewControllers = [nav1, nav2, newsVC, nav3]
+        viewControllers = [nav1, nav2, newsVC]
     }
     
     func fetchCurrentUser() {

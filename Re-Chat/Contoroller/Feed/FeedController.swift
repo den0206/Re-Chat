@@ -36,7 +36,7 @@ class FeedController : UICollectionViewController {
     let actionButton : UIButton = {
         let button = UIButton(type: .system)
         button.tintColor = .white
-        button.backgroundColor = .blue
+        button.backgroundColor = .lightGray
         button.setImage(#imageLiteral(resourceName: "new_tweet"), for: .normal)
         button.addTarget(self, action: #selector(handleTappedNewTweet), for: .touchUpInside)
         

@@ -26,7 +26,7 @@ class ContainerController : UIViewController {
             configureFeedController()
             configureMenuController()
 
-            configureLeftBarButton()
+            configureNavigationBarButton()
         }
     }
     
@@ -39,13 +39,16 @@ class ContainerController : UIViewController {
         
     }
     
+   
     override var prefersStatusBarHidden: Bool {
         return isExpand
     }
     
-    private func configureLeftBarButton() {
+    private func configureNavigationBarButton() {
         
         navigationItem.title = "Feed"
+        
+        // right button
         
         let profileImageView = UIImageView()
         profileImageView.setDimension(width: 32, height: 32)
@@ -59,7 +62,16 @@ class ContainerController : UIViewController {
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
         
+        // left button
+        let rightButton = UIBarButtonItem(image: #imageLiteral(resourceName: "humidity"), style: .plain, target: self, action: #selector(showWeatherVC(_ :)))
+        rightButton.tintColor = .lightGray
+        navigationItem.rightBarButtonItem = rightButton
+        
+        
+        
     }
+    
+   
     
     
     func configureFeedController() {
@@ -102,6 +114,8 @@ class ContainerController : UIViewController {
     func animateMenu(shouldExpand : Bool, completion :((Bool) -> Void)? = nil) {
         
         if shouldExpand {
+            view.backgroundColor = .darkGray
+            
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                 self.feedController.view.frame.origin.x = self.xOrigin
                 
@@ -112,6 +126,9 @@ class ContainerController : UIViewController {
             }, completion: nil)
             
         } else {
+            // return
+            
+            view.backgroundColor = .white
             self.blackView.alpha = 0
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
@@ -125,6 +142,16 @@ class ContainerController : UIViewController {
     }
     
     //MARK: - Actions
+    
+    @objc func showWeatherVC(_ sender : UIBarButtonItem) {
+        let weatherVC = WeatherViewController()
+        
+        if #available(iOS 13.0, *) {
+            weatherVC.modalPresentationStyle = .fullScreen
+        }
+        present(weatherVC, animated: true, completion: nil)
+    }
+    
     
     @objc func dismissMenu() {
         isExpand = false

@@ -83,12 +83,15 @@ class UploadTweetController : UIViewController {
     
     private func configureNavigationbar() {
          navigationController?.navigationBar.barTintColor = .white
-         navigationController?.navigationBar.isTranslucent = false
-         
-         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleDismiss))
-         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: actionButton)
-         
-     }
+        navigationController?.navigationBar.isTranslucent = false
+        
+        let leftButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleDismiss))
+        leftButton.tintColor = .black
+        
+        navigationItem.leftBarButtonItem = leftButton
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: actionButton)
+        
+    }
      
     
     //MARK: - Actions

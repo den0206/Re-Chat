@@ -38,8 +38,8 @@ class SideMenuController : UITableViewController {
     }
     
     private func configureTableView() {
-        view.backgroundColor = .black
-        tableView.backgroundColor = .black
+        
+        tableView.backgroundColor = .darkGray
         tableView.separatorStyle = .none
         
         tableView.isScrollEnabled = false
@@ -80,7 +80,7 @@ extension SideMenuController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
-        cell.backgroundColor = .black
+        cell.backgroundColor = .darkGray
         cell.textLabel?.textColor = .white
         
         if cell.textLabel?.text == "Log Out" {

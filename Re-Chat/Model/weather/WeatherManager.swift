@@ -50,7 +50,7 @@ struct WeatherManager {
             }
             
             guard let safedata = data else {return}
-            //parse To JSON
+            //parse To JSON (return WeatherModel)
             if let weather = self.parseJSON(safedata) {
                 print("THISSS")
                 self.delegate?.didUpdateWeather(self, weather: weather)

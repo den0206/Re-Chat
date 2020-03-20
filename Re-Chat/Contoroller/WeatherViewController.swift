@@ -20,12 +20,12 @@ class WeatherViewController : UIViewController {
         return makeTextField(withPlaceholder: "Search", isSecureType: false)
     }()
     
-    private let locationButton : UIButton = {
+    private let dismissButton : UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(#imageLiteral(resourceName: "retweet").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.setDimension(width: 20, height: 20)
-        button.tintColor = .black
-        button.addTarget(self, action: #selector(locationPressed(_ :)), for: .touchUpInside)
+        button.tintColor = .white
+        button.addTarget(self, action: #selector(handleDismiss), for: .touchUpInside)
         return button
     }()
     
@@ -44,31 +44,43 @@ class WeatherViewController : UIViewController {
         let iv = UIImageView()
         iv.backgroundColor = .lightGray
         iv.setDimension(width: 120, height: 120)
-        iv.image = UIImage(systemName: "sun.max")
+        iv.image = UIImage(systemName: "rays")
         iv.tintColor = .darkGray
         return iv
     }()
     
     private let templatureLabel : UILabel = {
         let label = UILabel()
-        label.text = "20 c"
+        label.text = "Loading..."
         label.font = UIFont.boldSystemFont(ofSize: 50)
         return label
     }()
     
     private let citLabel : UILabel = {
          let label = UILabel()
-         label.text = "test city"
-         label.font = UIFont.systemFont(ofSize: 16)
+         label.text = "Loading..."
+         label.font = UIFont.systemFont(ofSize: 35)
          return label
      }()
+    
+    private let updateLocationButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "retweet"), for: .normal)
+        button.setDimension(width: 65, height: 65)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(locationPressed(_ :)), for: .touchUpInside)
+        return button
+    }()
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         configureUI()
+        
+        showPresentLoadindView(true)
         
         configureLocationManager()
         
@@ -82,14 +94,14 @@ class WeatherViewController : UIViewController {
         
         view.backgroundColor = .lightGray
         
-        view.addSubview(locationButton)
-        locationButton.anchor(top : view.safeAreaLayoutGuide.topAnchor,  left : view.leftAnchor,paddongTop: 16, paddingLeft: 8)
+        view.addSubview(dismissButton)
+        dismissButton.anchor(top : view.safeAreaLayoutGuide.topAnchor,  left : view.leftAnchor,paddongTop: 16, paddingLeft: 8)
         
         view.addSubview(searchTextField)
-        searchTextField.centerY(inView: locationButton)
+        searchTextField.centerY(inView: dismissButton)
         
         searchTextField.anchor(left:
-            locationButton.rightAnchor, paddingLeft: 16)
+            dismissButton.rightAnchor, paddingLeft: 16)
         searchTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         searchTextField.delegate = self
         
@@ -112,6 +124,9 @@ class WeatherViewController : UIViewController {
         
         view.addSubview(citLabel)
         citLabel.anchor(top : templatureLabel.bottomAnchor, right: view.rightAnchor, paddongTop: 16, paddingRight: 16)
+        
+        view.addSubview(updateLocationButton)
+        updateLocationButton.anchor(top : citLabel.bottomAnchor, right: view.rightAnchor, paddongTop: 16, paddingLeft: 16)
         
   
         
@@ -149,8 +164,11 @@ class WeatherViewController : UIViewController {
     
     @objc func pressedSearch(_ sender : UIButton) {
         
-        
         searchTextField.endEditing(true)
+    }
+    
+    @objc func handleDismiss() {
+        self.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -209,9 +227,13 @@ extension WeatherViewController : CLLocationManagerDelegate {
         if let location = locations.last {
             locationManager.stopUpdatingLocation()
             let lat = location.coordinate.latitude
-            let lon = location.coordinate.latitude
+            let lon = location.coordinate.longitude
             
             weatherManager.fetchWeather(latitude: lat, longtude: lon)
+        } else {
+            showPresentLoadindView(false)
+            
+            showAlert(title: "Error", message: "居場所がわかりません")
         }
     }
     
@@ -229,11 +251,15 @@ extension WeatherViewController : WeatherManagerDelegate {
             self.templatureLabel.text = weather.tempratureStrig
             self.conditionImageview.image = UIImage(systemName: weather.conditionName)
             self.citLabel.text = weather.cityName
+            
+            self.showPresentLoadindView(false)
         }
     }
     
     func didFailWithError(error: Error) {
         DispatchQueue.main.async {
+            
+            self.showPresentLoadindView(false)
             self.showAlert(title: "Error", message: error.localizedDescription)
         }
     }
