@@ -7,13 +7,26 @@
 //
 
 import UIKit
+import CoreLocation
 
 class WeatherViewController : UIViewController {
+    
+    var weatherManager = WeatherManager()
+    let locationManager = CLLocationManager()
     
     //MARK: - parts
     
     private lazy var searchTextField : UITextField = {
         return makeTextField(withPlaceholder: "Search", isSecureType: false)
+    }()
+    
+    private let locationButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(#imageLiteral(resourceName: "retweet").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setDimension(width: 20, height: 20)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(locationPressed(_ :)), for: .touchUpInside)
+        return button
     }()
     
     private let searchButton : UIButton = {
@@ -31,7 +44,8 @@ class WeatherViewController : UIViewController {
         let iv = UIImageView()
         iv.backgroundColor = .lightGray
         iv.setDimension(width: 120, height: 120)
-        iv.image = #imageLiteral(resourceName: "c02n")
+        iv.image = UIImage(systemName: "sun.max")
+        iv.tintColor = .darkGray
         return iv
     }()
     
@@ -55,6 +69,10 @@ class WeatherViewController : UIViewController {
         super.viewDidLoad()
         
         configureUI()
+        
+        configureLocationManager()
+        
+        weatherManager.delegate = self
       
     }
     
@@ -64,8 +82,14 @@ class WeatherViewController : UIViewController {
         
         view.backgroundColor = .lightGray
         
+        view.addSubview(locationButton)
+        locationButton.anchor(top : view.safeAreaLayoutGuide.topAnchor,  left : view.leftAnchor,paddongTop: 16, paddingLeft: 8)
+        
         view.addSubview(searchTextField)
-        searchTextField.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 16)
+        searchTextField.centerY(inView: locationButton)
+        
+        searchTextField.anchor(left:
+            locationButton.rightAnchor, paddingLeft: 16)
         searchTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         searchTextField.delegate = self
         
@@ -73,7 +97,7 @@ class WeatherViewController : UIViewController {
         let separatorVIew = UIView()
         separatorVIew.backgroundColor = .white
         searchTextField.addSubview(separatorVIew)
-        separatorVIew.anchor(left : searchTextField.leftAnchor, bottom: searchTextField.bottomAnchor, right: searchTextField.rightAnchor, paddingLeft: 8, height: 0.75)
+        separatorVIew.anchor(left : searchTextField.leftAnchor, bottom: searchTextField.bottomAnchor, right: searchTextField.rightAnchor, height: 0.75)
         
         
         view.addSubview(searchButton)
@@ -92,6 +116,33 @@ class WeatherViewController : UIViewController {
   
         
         
+    }
+    
+    private func configureLocationManager() {
+        
+        enableLocationSearvice()
+        locationManager.requestLocation()
+        
+    }
+    
+    private func enableLocationSearvice() {
+        
+        locationManager.delegate = self
+        
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted , .denied:
+            locationManager.requestWhenInUseAuthorization()
+        case .authorizedAlways:
+            print("Always")
+            locationManager.startUpdatingLocation()
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        case .authorizedWhenInUse:
+            locationManager.requestAlwaysAuthorization()
+        @unknown default:
+            break
+        }
     }
     
     //MARK: - Actions
@@ -131,11 +182,61 @@ extension WeatherViewController  : UITextFieldDelegate{
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-        if let city = searchTextField.text {
-            print(city)
+        guard let searchText = searchTextField.text else {return}
+        
+        guard searchText != "" , !searchText.isEmpty else {
+            showAlert(title: "Error", message: "書き込みください")
+            return
         }
+        
+        weatherManager.fetchWeather(cityName: searchText)
+
         
         searchTextField.text = ""
     }
+    
+}
+
+//MARK: - LocationManger Delegate
+extension WeatherViewController : CLLocationManagerDelegate {
+    
+    @objc func locationPressed(_ sender : UIButton) {
+        locationManager.requestLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if let location = locations.last {
+            locationManager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.latitude
+            
+            weatherManager.fetchWeather(latitude: lat, longtude: lon)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        showAlert(title: "Location Error", message: error.localizedDescription)
+    }
+   
+}
+
+//MARK: - WeatherManager Delegate
+
+extension WeatherViewController : WeatherManagerDelegate {
+    func didUpdateWeather(_ weatherManager: WeatherManager, weather: WeatherModel) {
+        DispatchQueue.main.async {
+            self.templatureLabel.text = weather.tempratureStrig
+            self.conditionImageview.image = UIImage(systemName: weather.conditionName)
+            self.citLabel.text = weather.cityName
+        }
+    }
+    
+    func didFailWithError(error: Error) {
+        DispatchQueue.main.async {
+            self.showAlert(title: "Error", message: error.localizedDescription)
+        }
+    }
+    
     
 }
