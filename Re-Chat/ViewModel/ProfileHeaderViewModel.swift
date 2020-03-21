@@ -6,6 +6,10 @@
 //  Copyright © 2020 Yuuki sakai. All rights reserved.
 //
 
+
+
+
+
 struct ProfileHeaderViewModel {
     
     let user : User

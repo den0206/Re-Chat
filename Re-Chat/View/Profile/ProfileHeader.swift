@@ -99,6 +99,8 @@ class ProfileHeader : UICollectionReusableView {
 
         return label
     }()
+    
+    private let filterView = ProfileFilterView()
      
     
     //MARK: - Init
@@ -131,6 +133,8 @@ class ProfileHeader : UICollectionReusableView {
         addSubview(followStack)
         followStack.anchor(top : detailStack.bottomAnchor,left :leftAnchor,paddongTop: 8,paddingLeft: 12)
         
+        addSubview(filterView)
+        filterView.anchor(left : leftAnchor, bottom: bottomAnchor, right: rightAnchor,height: 50)
         
         
     }

@@ -65,10 +65,7 @@ extension UIView {
         centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: yConstant!).isActive = true
     }
     
-    func center(inView view : UIView, yConstant : CGFloat = 0) {
-        translatesAutoresizingMaskIntoConstraints = false
-        
-    }
+ 
 
     
     // set Dimension
