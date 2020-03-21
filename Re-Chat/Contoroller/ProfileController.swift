@@ -81,6 +81,10 @@ extension ProfileController : UICollectionViewDelegateFlowLayout {
 //MARK: - take Delegate Area
 
 extension ProfileController : ProfileHeaderDelegate {
+    func didSelect(filter: ProfileFilterOption) {
+        print("\(filter) catch controller !!")
+    }
+    
     func backAction() {
         navigationController?.popViewController(animated: true)
     }

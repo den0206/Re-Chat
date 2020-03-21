@@ -63,9 +63,6 @@ class ContainerController : UIViewController {
         }
         profileImageView.isUserInteractionEnabled = true
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTappedImage))
-        profileImageView.addGestureRecognizer(tap)
-
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
         
         // left button
@@ -96,7 +93,9 @@ class ContainerController : UIViewController {
     }
     
     func configureMenuController() {
-        sideMenuController = SideMenuController()
+        guard let user = user else {return}
+        
+        sideMenuController = SideMenuController(user: user)
         addChild(sideMenuController)
         sideMenuController.delegate = self
         view.insertSubview(sideMenuController.view, at: 0)
@@ -164,16 +163,7 @@ class ContainerController : UIViewController {
         animateMenu(shouldExpand: false)
     }
     
-    @objc func handleTappedImage() {
-        
-        guard let user = user else {return}
-        let profileVC = ProfileController(user: user)
-        
-        navigationController?.pushViewController(profileVC, animated: true)
-    }
-    
-    
-    
+
     
 }
 
@@ -188,6 +178,12 @@ extension ContainerController : FeedControllerDelegate {
 }
 
 extension ContainerController : SideMenuControllerDelegate {
+    
+    func userFromHeaderView(user: User) {
+        let profileVC = ProfileController(user: user)
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
     func didSelect(option: MenuOptions) {
         
         switch option {
@@ -221,4 +217,6 @@ extension ContainerController : SideMenuControllerDelegate {
     
     
 }
+
+
 

@@ -25,11 +25,36 @@ enum MenuOptions : Int, CaseIterable, CustomStringConvertible {
 
 protocol SideMenuControllerDelegate {
     func didSelect(option : MenuOptions)
+    func userFromHeaderView(user : User)
 }
 
+//MARK: - Controller
+
 class SideMenuController : UITableViewController {
+
+    private let user : User
     
     var delegate : SideMenuControllerDelegate?
+    
+    //MARK: - Parts(side Menu)
+    
+    private lazy var sideMenuHeader : UIView = {
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width - 80, height: 140)
+        let view = SideMenuHeader(user: user, frame: frame)
+        view.delegate = self
+        
+        return view
+        
+    }()
+    
+    init(user : User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +69,8 @@ class SideMenuController : UITableViewController {
         
         tableView.isScrollEnabled = false
         tableView.rowHeight = 60
+        
+        tableView.tableHeaderView = sideMenuHeader
         
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuserIdentifer)
@@ -91,6 +118,16 @@ extension SideMenuController {
         selectedView.backgroundColor = .backGroundColor
         cell.selectedBackgroundView = selectedView
     }
+}
+
+extension SideMenuController : SIdeMenuHeaderDelegate {
+    
+    func tappedProfileImage(user: User) {
+        delegate?.userFromHeaderView(user: user)
+    }
+    
+    
+    
 }
 
 

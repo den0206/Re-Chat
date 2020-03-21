@@ -10,16 +10,30 @@ import UIKit
 
 class ProfileFilterCell : UICollectionViewCell {
     
+    var option : ProfileFilterOption? {
+        didSet {
+            guard let option = option else {return}
+            titleLabel.text = option.description
+        }
+    }
+    
     //MARK: - Parts
     
     let titleLabel : UILabel = {
         let label = UILabel()
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "Test"
+        label.text = "Loading"
         return label
         
     }()
+    
+    override var isSelected: Bool {
+        didSet {
+            titleLabel.font = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.systemFont(ofSize: 14)
+            titleLabel.textColor = isSelected ? .lightGray : .black
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

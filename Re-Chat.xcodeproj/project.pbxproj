@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A0F6A5F2425DC17005FB05F /* SideMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */; };
 		3A19CB7D241DEDD6003BB2DB /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */; };
 		3A19CB7F241DF5AC003BB2DB /* UploadTweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */; };
 		3A19CB81241DFD0E003BB2DB /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB80241DFD0E003BB2DB /* InputTextView.swift */; };
@@ -53,6 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuHeader.swift; sourceTree = "<group>"; };
 		3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetController.swift; sourceTree = "<group>"; };
 		3A19CB80241DFD0E003BB2DB /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				3AC8A4DA241CC5DA00460CE8 /* UsersCell.swift */,
 				3A19CB80241DFD0E003BB2DB /* InputTextView.swift */,
 				3AE759182425926800CA5793 /* Profile */,
+				3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -412,6 +415,7 @@
 			files = (
 				3AC8A4DD241CCE1500460CE8 /* UserSearvice.swift in Sources */,
 				3A326628242261FE00506D59 /* HoulrForecast.swift in Sources */,
+				3A0F6A5F2425DC17005FB05F /* SideMenuHeader.swift in Sources */,
 				3AB4FCD62425BF060060F028 /* ProfileFilterCell.swift in Sources */,
 				3AFE5FFE241FA89700D7D2DA /* WebViewController.swift in Sources */,
 				3AF9A73824190398006C52B7 /* Extensions.swift in Sources */,

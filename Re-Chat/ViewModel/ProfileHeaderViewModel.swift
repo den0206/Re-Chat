@@ -7,7 +7,25 @@
 //
 
 
-
+enum ProfileFilterOption : Int, CaseIterable {
+    
+    case tweet
+    case reply
+    case like
+    
+    var description : String {
+        switch self {
+        case .tweet:
+            return "Tweet"
+        case .reply:
+            return "Reply"
+        case .like:
+            return "Like"
+        }
+    }
+    
+    
+}
 
 
 struct ProfileHeaderViewModel {

@@ -10,6 +10,7 @@ import UIKit
 
 protocol ProfileHeaderDelegate : class {
     func backAction()
+    func didSelect(filter : ProfileFilterOption)
 }
 
 class ProfileHeader : UICollectionReusableView {
@@ -134,6 +135,7 @@ class ProfileHeader : UICollectionReusableView {
         followStack.anchor(top : detailStack.bottomAnchor,left :leftAnchor,paddongTop: 8,paddingLeft: 12)
         
         addSubview(filterView)
+        filterView.delagate = self
         filterView.anchor(left : leftAnchor, bottom: bottomAnchor, right: rightAnchor,height: 50)
         
         
@@ -164,4 +166,14 @@ class ProfileHeader : UICollectionReusableView {
     @objc func handleEditProfileFollow() {
         print("handle follow")
     }
+}
+
+extension ProfileHeader : ProfileFilterViewDelegate {
+    
+    func filterView(didSelect index: Int) {
+        guard let filter = ProfileFilterOption(rawValue: index) else {return}
+        delegate?.didSelect(filter: filter)
+    }
+    
+    
 }
