@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A0F6A5F2425DC17005FB05F /* SideMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */; };
+		3A0F6A612425EBF8005FB05F /* Tweet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0F6A602425EBF8005FB05F /* Tweet.swift */; };
 		3A19CB7D241DEDD6003BB2DB /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */; };
 		3A19CB7F241DF5AC003BB2DB /* UploadTweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */; };
 		3A19CB81241DFD0E003BB2DB /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB80241DFD0E003BB2DB /* InputTextView.swift */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuHeader.swift; sourceTree = "<group>"; };
+		3A0F6A602425EBF8005FB05F /* Tweet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tweet.swift; sourceTree = "<group>"; };
 		3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetController.swift; sourceTree = "<group>"; };
 		3A19CB80241DFD0E003BB2DB /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				3AC4D284241C952600917988 /* User.swift */,
+				3A0F6A602425EBF8005FB05F /* Tweet.swift */,
 				3AFE5FFB241F9F3300D7D2DA /* NewsItems.swift */,
 				3AEB57662424831C00968ADB /* weather */,
 				3AEB5765242482F700968ADB /* re-wearther */,
@@ -271,10 +274,10 @@
 		3AFC14E9241C6D88000E15D9 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				3AEB57672424835F00968ADB /* WeatherManager.swift */,
 				3AFC14EA241C7035000E15D9 /* AuthSearvice.swift */,
 				3AC8A4DC241CCE1500460CE8 /* UserSearvice.swift */,
 				3A19CB82241E0560003BB2DB /* TweetService.swift */,
+				3AEB57672424835F00968ADB /* WeatherManager.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				3A19CB7F241DF5AC003BB2DB /* UploadTweetController.swift in Sources */,
 				3AEB576424246C0200968ADB /* WeatherViewController.swift in Sources */,
 				3AC4D285241C952600917988 /* User.swift in Sources */,
+				3A0F6A612425EBF8005FB05F /* Tweet.swift in Sources */,
 				3A4D1A3A241BB89E00397225 /* HelperFunctions.swift in Sources */,
 				3AC8A4DB241CC5DA00460CE8 /* UsersCell.swift in Sources */,
 				3ADFCFD0241CD2830021B223 /* RecentController.swift in Sources */,

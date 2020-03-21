@@ -45,4 +45,16 @@ struct UserSearvice {
         }
     }
     
+    func userIdToUser(uid : String, completion : @escaping(User) -> Void) {
+        
+        firebaseReference(.User).document(uid).getDocument { (snapshot, error) in
+            guard let snapshot = snapshot else {return}
+            if snapshot.exists {
+                let dictionary = snapshot.data()!
+                let user = User(uid: snapshot.documentID, dictionary: dictionary)
+                completion(user)
+            }
+        }
+    }
+    
 }

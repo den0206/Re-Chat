@@ -18,7 +18,11 @@ class FeedController : UICollectionViewController {
     
     var user : User?
     
-    
+    private var tweets = [Tweet]() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     //MARK: - Parts
     
@@ -46,17 +50,18 @@ class FeedController : UICollectionViewController {
     
     
     init() {
-          super.init(collectionViewLayout: UICollectionViewFlowLayout())
-      }
-      
-      required init?(coder: NSCoder) {
-          fatalError("init(coder:) has not been implemented")
-      }
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configiureUI()
+        
+        fetchTweets()
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -79,12 +84,21 @@ class FeedController : UICollectionViewController {
         actionButton.layer.cornerRadius = 56 / 2
     }
     
- 
+    //MARK: - API
+    
+    private func fetchTweets() {
+        TweetService.shared.fetchAllTweets { (tweets) in
+            self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
+            
+        }
+    }
+    
+    
     
     //MARK: - Actions
     
     @objc func handleTappSideMenuButton() {
-   
+        
         delegate?.handleMenuToggle()
         
     }
@@ -100,6 +114,6 @@ class FeedController : UICollectionViewController {
         
     }
     
- 
-  
+    
+    
 }

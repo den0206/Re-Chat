@@ -28,6 +28,32 @@ struct TweetService {
         
     }
     
+    func fetchAllTweets(completion : @escaping([Tweet]) -> Void) {
+        var tweets = [Tweet]()
+        
+        firebaseReference(.Tweet).getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            if !snapshot.isEmpty {
+                for documents in snapshot.documents {
+                    guard let uid = documents.data()[kUSERID] as? String else {return}
+                    print(uid)
+                    
+                    UserSearvice.shared.userIdToUser(uid: uid) { (user) in
+                        // convertTweet Model
+                        let tweet = Tweet(user: user, tweetId: uid, dictionary: documents.data())
+                        tweets.append(tweet)
+                        completion(tweets)
+                    }
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
     
     
 }
