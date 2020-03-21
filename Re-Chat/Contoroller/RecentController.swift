@@ -10,11 +10,15 @@ import UIKit
 
 class RecentController : UIViewController {
     
+    //MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureNavController()
     }
+    
+    
     
     private func configureNavController() {
         

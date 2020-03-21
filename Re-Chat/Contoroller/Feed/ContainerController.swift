@@ -55,10 +55,16 @@ class ContainerController : UIViewController {
         profileImageView.backgroundColor = .lightGray
         profileImageView.layer.cornerRadius = 32 / 2
         profileImageView.layer.masksToBounds = true
+        profileImageView.layer.borderColor = UIColor.white.cgColor
+        profileImageView.layer.borderWidth = 4
         
         imageFromData(pictureData: user!.profileImage) { (avatar) in
             profileImageView.image = avatar
         }
+        profileImageView.isUserInteractionEnabled = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTappedImage))
+        profileImageView.addGestureRecognizer(tap)
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
         
@@ -156,6 +162,14 @@ class ContainerController : UIViewController {
     @objc func dismissMenu() {
         isExpand = false
         animateMenu(shouldExpand: false)
+    }
+    
+    @objc func handleTappedImage() {
+        
+        guard let user = user else {return}
+        let profileVC = ProfileController(user: user)
+        
+        navigationController?.pushViewController(profileVC, animated: true)
     }
     
     

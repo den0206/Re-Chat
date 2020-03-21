@@ -59,6 +59,11 @@ class FeedController : UICollectionViewController {
         configiureUI()
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.barStyle = .default
+        
+    }
     
     //MARK: - UI
     

@@ -168,7 +168,7 @@ extension UsersTableViewController : UserCellDelegate {
         guard let user = cell.user else {return}
         
         // use navigation
-        let profileVC = ProfileCpntroller(user: user)
+        let profileVC = ProfileController(user: user)
         navigationController?.pushViewController(profileVC, animated: true)
         
     }
