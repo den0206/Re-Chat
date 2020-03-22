@@ -17,6 +17,7 @@ class ProfileController : UICollectionViewController {
     
     private var selectedFilter : ProfileFilterOption = .tweet {
         didSet {
+            
             collectionView.reloadData()
         }
     }
@@ -26,6 +27,7 @@ class ProfileController : UICollectionViewController {
     private var replyTweets = [Tweet]()
     
     private var currentTweets : [Tweet] {
+       
         switch selectedFilter {
             
         case .tweet:
@@ -87,6 +89,7 @@ class ProfileController : UICollectionViewController {
         
         TweetService.shared.fetchTweetSpecificUser(user: user) { (tweets) in
             self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
+            
             self.collectionView.reloadData()
         }
     }
@@ -101,12 +104,23 @@ class ProfileController : UICollectionViewController {
     private func fetchLikes() {
         TweetService.shared.fetchLikes(user: user) { (like) in
             self.likedTweets = like.sorted(by: { $0.timestamp > $1.timestamp })
+            
+            // already Check did like
         }
     }
     
-    
-    
-    
+//    func checkDidlike() {
+//        self.currentTweets.forEach { (tweet) in
+//            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+//                guard didLike == true else {return}
+//
+//                if let index = self.currentTweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
+//                    self.currentTweets[index].didLike = true
+//                }
+//            }
+//        }
+//    }
+//
     
 }
 
@@ -147,8 +161,12 @@ extension ProfileController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width: view.frame.width, height: 120)
-       }
+        let vm = TweetViewModel(tweet: currentTweets[indexPath.item])
+        let captionSize = vm.size(forWidth: view.frame.width).height
+        
+        
+        return CGSize(width: view.frame.width, height: captionSize + 72)
+    }
     
     // header size
     

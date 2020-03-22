@@ -62,5 +62,16 @@ struct Tweet {
         
     }
     
+    func checkTweetDidlike(completion : @escaping(Bool) -> Void) {
+          guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        tweetLikedReference(tweetId: tweetId).document(uid).getDocument { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            completion(snapshot.exists)
+        }
+    }
+    
     
 }

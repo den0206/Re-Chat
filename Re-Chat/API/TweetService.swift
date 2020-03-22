@@ -72,12 +72,6 @@ struct TweetService {
         
     }
     
-    func likeTweet(tweet : Tweet , completion : @escaping(Error?) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        
-        let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
-        firebaseReference(.Tweet).document(tweet.tweetId).updateData([kLIKES : likes])
-    }
     
     func checkIfUserLikedTweet(_ tweet : Tweet, completion : @escaping(Bool) -> Void) {
        guard let currentUid = Auth.auth().currentUser?.uid else {return}
@@ -90,6 +84,25 @@ struct TweetService {
 
     }
     
+    
+    func fetchSingleTweet(tweetId : String, completion : @escaping(Tweet) -> Void) {
+        
+        firebaseReference(.Tweet).document(tweetId).getDocument { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            if snapshot.exists {
+                let dictionary = snapshot.data()!
+                let uid = dictionary[kUSERID] as! String
+                
+                UserSearvice.shared.userIdToUser(uid: uid) { (user) in
+                    let tweet = Tweet(user: user, tweetId: tweetId, dictionary: dictionary)
+                    completion(tweet)
+                }
+            }
+            
+        }
+    }
     
  
     
@@ -156,14 +169,18 @@ struct TweetService {
             
             if !snapshot.isEmpty {
                 for document in snapshot.documents {
-                    let dictionary = document.data()
-                    let tweetId = dictionary[kTWEETID] as! String
-                    let userId = dictionary[kUSERID] as! String
                     
-                    UserSearvice.shared.userIdToUser(uid: userId) { (user) in
-                        let tweet = Tweet(user: user, tweetId: tweetId, dictionary: dictionary)
+                    let dictionary = document.data()
+                    print(dictionary)
+                    let tweetId = dictionary[kTWEETID] as! String
+                    
+                    TweetService.shared.fetchSingleTweet(tweetId: tweetId) { (likedTweet) in
+                        var tweet = likedTweet
+                        tweet.didLike = true
+                        
                         likesTweets.append(tweet)
                         completion(likesTweets)
+                        
                     }
                 }
             }
