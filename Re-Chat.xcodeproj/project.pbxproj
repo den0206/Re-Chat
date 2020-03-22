@@ -13,6 +13,7 @@
 		3A19CB7F241DF5AC003BB2DB /* UploadTweetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */; };
 		3A19CB81241DFD0E003BB2DB /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB80241DFD0E003BB2DB /* InputTextView.swift */; };
 		3A19CB83241E0560003BB2DB /* TweetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB82241E0560003BB2DB /* TweetService.swift */; };
+		3A201B82242713B50058A81A /* UploadTweetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A201B81242713B50058A81A /* UploadTweetViewModel.swift */; };
 		3A3266262422320B00506D59 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3266252422320B00506D59 /* WeatherController.swift */; };
 		3A326628242261FE00506D59 /* HoulrForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A326627242261FE00506D59 /* HoulrForecast.swift */; };
 		3A32662A2422750F00506D59 /* WeeklyWeatherForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3266292422750F00506D59 /* WeeklyWeatherForecast.swift */; };
@@ -63,6 +64,7 @@
 		3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetController.swift; sourceTree = "<group>"; };
 		3A19CB80241DFD0E003BB2DB /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		3A19CB82241E0560003BB2DB /* TweetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetService.swift; sourceTree = "<group>"; };
+		3A201B81242713B50058A81A /* UploadTweetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetViewModel.swift; sourceTree = "<group>"; };
 		3A3266252422320B00506D59 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		3A326627242261FE00506D59 /* HoulrForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoulrForecast.swift; sourceTree = "<group>"; };
 		3A3266292422750F00506D59 /* WeeklyWeatherForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeatherForecast.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				3AD3591A2426F441006D69BE /* TweetViewModel.swift */,
 				3AE7591C24259DEC00CA5793 /* ProfileHeaderViewModel.swift */,
+				3A201B81242713B50058A81A /* UploadTweetViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -225,8 +228,8 @@
 				3AF9A71C2418FC4E006C52B7 /* AppDelegate.swift */,
 				3AF9A71E2418FC4E006C52B7 /* SceneDelegate.swift */,
 				3A06E6CB241A6219005A5D24 /* Model */,
-				3AC8A4D9241CC59A00460CE8 /* View */,
 				3AE7591B24259DC900CA5793 /* ViewModel */,
+				3AC8A4D9241CC59A00460CE8 /* View */,
 				3AF9A7302418FCA2006C52B7 /* Contoroller */,
 				3AFC14E9241C6D88000E15D9 /* API */,
 				3AF9A73624190378006C52B7 /* Extensions */,
@@ -425,6 +428,7 @@
 				3AC8A4DD241CCE1500460CE8 /* UserSearvice.swift in Sources */,
 				3A326628242261FE00506D59 /* HoulrForecast.swift in Sources */,
 				3A0F6A5F2425DC17005FB05F /* SideMenuHeader.swift in Sources */,
+				3A201B82242713B50058A81A /* UploadTweetViewModel.swift in Sources */,
 				3AB4FCD62425BF060060F028 /* ProfileFilterCell.swift in Sources */,
 				3AFE5FFE241FA89700D7D2DA /* WebViewController.swift in Sources */,
 				3AF9A73824190398006C52B7 /* Extensions.swift in Sources */,

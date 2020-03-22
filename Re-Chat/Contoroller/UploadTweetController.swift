@@ -13,10 +13,23 @@ class UploadTweetController : UIViewController {
     let user : User
     
     //MARK: - Parts
+    private let config : UploadTweetConfiguration
+    private lazy var viewModel = UploadTweetViewModel(config: config)
+    
+
     
     private let profileImage : UIImageView = {
         let iv = UIImageView().profileImageView(setDimencion: 48)
         return iv
+    }()
+    
+    private lazy var replyLabel : UILabel = {
+    let label = UILabel()
+        label.text = "Info text"
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .darkGray
+        label.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+        return label
     }()
     
     private let captionTextView = InputTextView()
@@ -42,8 +55,9 @@ class UploadTweetController : UIViewController {
     
     //MARK: - Life cycle
     
-    init(user : User) {
+    init(user : User, config : UploadTweetConfiguration) {
         self.user = user
+        self.config = config
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,6 +68,7 @@ class UploadTweetController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        print(viewModel)
     
     }
     
@@ -71,11 +86,25 @@ class UploadTweetController : UIViewController {
         imageCaptionStack.spacing = 12
         imageCaptionStack.alignment = .leading
         
-        view.addSubview(imageCaptionStack)
-        imageCaptionStack.anchor(top : view.safeAreaLayoutGuide.topAnchor, left:  view.leftAnchor,
-                                 right: view.rightAnchor,paddongTop: 16,paddingLeft: 16,paddingRight: 16)
+        let stack = UIStackView(arrangedSubviews: [replyLabel, imageCaptionStack])
+        stack.axis = .vertical
+        stack.spacing = 12
+        
+        view.addSubview(stack)
+        stack.anchor(top : view.safeAreaLayoutGuide.topAnchor, left:  view.leftAnchor, right: view.rightAnchor,paddongTop: 16,paddingLeft: 16,paddingRight: 16)
+        
+        // config From View model
         
         profileImage.image = downloadImageFromData(picturedata: user.profileImage)
+        
+        actionButton.setTitle(viewModel.actionButtonTitle, for: .normal)
+        captionTextView.placeholderLabel.text = viewModel.placeholderText
+        
+        replyLabel.isHidden = !viewModel.shouldShowReplyLabel
+        
+//        guard let replyText = viewModel.replyText else {return}
+//        replyLabel.text = replyText
+        
         
         
         

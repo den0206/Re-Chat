@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol TweetCellDelegate : class {
+    func handleRetweetTapped(cell : TweetCell)
+}
+
 class TweetCell : UICollectionViewCell {
     
     var tweet : Tweet? {
@@ -15,6 +19,8 @@ class TweetCell : UICollectionViewCell {
             configure()
         }
     }
+    
+    var delegate : TweetCellDelegate?
     
     //MARK: - parts
     private let profileImageView : UIImageView = {
@@ -47,6 +53,7 @@ class TweetCell : UICollectionViewCell {
     
     private lazy var retweetButton : UIButton = {
         let button = createButton(withImage: #imageLiteral(resourceName: "retweet") )
+        button.addTarget(self, action: #selector(handleRetweetTapped(_ :)), for: .touchUpInside)
         return button
     }()
     
@@ -114,6 +121,12 @@ class TweetCell : UICollectionViewCell {
         likeButton.tintColor = vm.likeButtonTintColor
         likeButton.setImage(vm.likeButtonImage, for: .normal)
         
+    }
+    
+    //MARK: - Delegate Functions
+    
+    @objc func handleRetweetTapped(_ sender : UIButton) {
+        delegate?.handleRetweetTapped(cell: self)
     }
 }
 

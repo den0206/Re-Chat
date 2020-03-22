@@ -54,6 +54,29 @@ struct TweetService {
         
     }
     
+    //MARK: - Profile
+    
+    func fetchTweetSpecificUser(user : User, completion : @escaping([Tweet]) -> Void) {
+        
+        var tweets = [Tweet]()
+        
+        firebaseReference(.Tweet).whereField(kUSERID, isEqualTo: user.uid).getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            if !snapshot.isEmpty {
+                for document in snapshot.documents {
+                    let dictionary = document.data()
+                    let tweet = Tweet(user: user, tweetId: document.documentID, dictionary: dictionary)
+                    
+                    tweets.append(tweet)
+                }
+                completion(tweets)
+            }
+        }
+        
+    }
+    
     
     
 }

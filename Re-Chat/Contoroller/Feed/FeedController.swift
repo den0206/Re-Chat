@@ -108,9 +108,11 @@ class FeedController : UICollectionViewController {
     }
     
     @objc func handleTappedNewTweet() {
+        
+        // New tweet config
         guard let user = user else {return}
         
-        let uploadVC = UploadTweetController(user: user)
+        let uploadVC = UploadTweetController(user: user, config: .tweet)
         
         let nav = UINavigationController(rootViewController: uploadVC)
         nav.modalPresentationStyle = .fullScreen
@@ -135,6 +137,7 @@ extension FeedController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuserIdentifer, for: indexPath) as! TweetCell
         
         cell.tweet = tweets[indexPath.item]
+        cell.delegate = self
         return cell
         
     }
@@ -152,5 +155,24 @@ extension FeedController : UICollectionViewDelegateFlowLayout{
 //        print(captionSize)
         return CGSize(width: view.frame.width, height: captionSize + 72)
     }
+    
+}
+
+//MARK: - Tweet Cell Delgate
+
+extension FeedController : TweetCellDelegate {
+    
+    func handleRetweetTapped(cell: TweetCell) {
+        // Retweet config
+        
+        guard let tweet = cell.tweet else {return}
+        let replyVC = UploadTweetController(user: tweet.user, config: .reply(tweet))
+        
+        let nav = UINavigationController(rootViewController: replyVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true, completion: nil)
+        
+    }
+    
     
 }
