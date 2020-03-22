@@ -25,6 +25,8 @@
 		3AC8A4D8241CC34100460CE8 /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */; };
 		3AC8A4DB241CC5DA00460CE8 /* UsersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8A4DA241CC5DA00460CE8 /* UsersCell.swift */; };
 		3AC8A4DD241CCE1500460CE8 /* UserSearvice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8A4DC241CCE1500460CE8 /* UserSearvice.swift */; };
+		3AD359192426EC68006D69BE /* TweetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD359182426EC68006D69BE /* TweetCell.swift */; };
+		3AD3591B2426F441006D69BE /* TweetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3591A2426F441006D69BE /* TweetViewModel.swift */; };
 		3AD638F4241A646400EDA267 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AD638F3241A646400EDA267 /* GoogleService-Info.plist */; };
 		3AD638F6241A65AC00EDA267 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD638F5241A65AC00EDA267 /* LoginController.swift */; };
 		3ADFCFD0241CD2830021B223 /* RecentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ADFCFCF241CD2830021B223 /* RecentController.swift */; };
@@ -73,6 +75,8 @@
 		3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
 		3AC8A4DA241CC5DA00460CE8 /* UsersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersCell.swift; sourceTree = "<group>"; };
 		3AC8A4DC241CCE1500460CE8 /* UserSearvice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearvice.swift; sourceTree = "<group>"; };
+		3AD359182426EC68006D69BE /* TweetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetCell.swift; sourceTree = "<group>"; };
+		3AD3591A2426F441006D69BE /* TweetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewModel.swift; sourceTree = "<group>"; };
 		3AD638F3241A646400EDA267 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3AD638F5241A65AC00EDA267 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		3ADFCFCF241CD2830021B223 /* RecentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentController.swift; sourceTree = "<group>"; };
@@ -154,6 +158,7 @@
 				3A19CB80241DFD0E003BB2DB /* InputTextView.swift */,
 				3AE759182425926800CA5793 /* Profile */,
 				3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */,
+				3AD359182426EC68006D69BE /* TweetCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -171,6 +176,7 @@
 		3AE7591B24259DC900CA5793 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				3AD3591A2426F441006D69BE /* TweetViewModel.swift */,
 				3AE7591C24259DEC00CA5793 /* ProfileHeaderViewModel.swift */,
 			);
 			path = ViewModel;
@@ -431,6 +437,7 @@
 				3A4D1A38241BA5C200397225 /* SignUpController.swift in Sources */,
 				3AF9A71F2418FC4E006C52B7 /* SceneDelegate.swift in Sources */,
 				3AFE5FFA241F9CF900D7D2DA /* Page1.swift in Sources */,
+				3AD359192426EC68006D69BE /* TweetCell.swift in Sources */,
 				3AE0157C2421218C004999AD /* CurrentWeather.swift in Sources */,
 				3AF9A7352418FEBB006C52B7 /* FeedController.swift in Sources */,
 				3A19CB7F241DF5AC003BB2DB /* UploadTweetController.swift in Sources */,
@@ -449,6 +456,7 @@
 				3A32662A2422750F00506D59 /* WeeklyWeatherForecast.swift in Sources */,
 				3A19CB81241DFD0E003BB2DB /* InputTextView.swift in Sources */,
 				3A19CB7D241DEDD6003BB2DB /* ProfileController.swift in Sources */,
+				3AD3591B2426F441006D69BE /* TweetViewModel.swift in Sources */,
 				3AFC14EB241C7035000E15D9 /* AuthSearvice.swift in Sources */,
 				3AF9A7322418FCD6006C52B7 /* MainTabController.swift in Sources */,
 				3AEE8D6E242491C100D7595D /* WeatherData.swift in Sources */,

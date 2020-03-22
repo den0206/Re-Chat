@@ -12,6 +12,8 @@ protocol FeedControllerDelegate {
     func handleMenuToggle()
 }
 
+private let reuserIdentifer = "FeedCell"
+
 class FeedController : UICollectionViewController {
     
     var delegate : FeedControllerDelegate?
@@ -59,7 +61,7 @@ class FeedController : UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configiureUI()
+        configureCV()
         
         fetchTweets()
         
@@ -72,9 +74,11 @@ class FeedController : UICollectionViewController {
     
     //MARK: - UI
     
-    private func configiureUI() {
+    private func configureCV() {
         view.backgroundColor = .white
         collectionView.backgroundColor = .white
+        
+        collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuserIdentifer)
         
         view.addSubview(sideMenuButton)
         sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
@@ -115,5 +119,38 @@ class FeedController : UICollectionViewController {
     }
     
     
+    
+}
+
+//MARK: - Colleectionview Delegate
+
+extension FeedController {
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return tweets.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuserIdentifer, for: indexPath) as! TweetCell
+        
+        cell.tweet = tweets[indexPath.item]
+        return cell
+        
+    }
+}
+
+//MARK: - UICollectionView Flowlayout
+
+extension FeedController : UICollectionViewDelegateFlowLayout{
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let vm = TweetViewModel(tweet: tweets[indexPath.item])
+        let captionSize = vm.size(forWidth: view.frame.width).height
+        
+//        print(captionSize)
+        return CGSize(width: view.frame.width, height: captionSize + 72)
+    }
     
 }
