@@ -72,6 +72,27 @@ struct TweetService {
         
     }
     
+    func likeTweet(tweet : Tweet , completion : @escaping(Error?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let likes = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+        firebaseReference(.Tweet).document(tweet.tweetId).updateData([kLIKES : likes])
+    }
+    
+    func checkIfUserLikedTweet(_ tweet : Tweet, completion : @escaping(Bool) -> Void) {
+       guard let currentUid = Auth.auth().currentUser?.uid else {return}
+        firebaseReference(.Tweet).document(tweet.tweetId).collection(kLIKES).document(currentUid).getDocument { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            completion(snapshot.exists)
+        }
+
+    }
+    
+    
+ 
+    
     //MARK: - Profile
     
     func fetchTweetSpecificUser(user : User, completion : @escaping([Tweet]) -> Void) {
@@ -120,6 +141,34 @@ struct TweetService {
                     }
                 }
             }
+        }
+    }
+    
+    func fetchLikes(user : User, completion : @escaping([Tweet]) -> Void) {
+        
+        var likesTweets = [Tweet]()
+        
+        Firestore.firestore().collectionGroup(kLIKES).whereField(kUSERID, isEqualTo: user.uid).getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {
+                print(error!.localizedDescription)
+                return}
+            
+            if !snapshot.isEmpty {
+                for document in snapshot.documents {
+                    let dictionary = document.data()
+                    let tweetId = dictionary[kTWEETID] as! String
+                    let userId = dictionary[kUSERID] as! String
+                    
+                    UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+                        let tweet = Tweet(user: user, tweetId: tweetId, dictionary: dictionary)
+                        likesTweets.append(tweet)
+                        completion(likesTweets)
+                    }
+                }
+            }
+            
+            
         }
     }
     

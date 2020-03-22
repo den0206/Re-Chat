@@ -96,9 +96,24 @@ class FeedController : UICollectionViewController {
         TweetService.shared.fetchAllTweets { (tweets) in
             self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
             
+            // check like
+            self.checkifUserLikedTweet()
+            
         }
     }
     
+    private func checkifUserLikedTweet() {
+        self.tweets.forEach { (tweet) in
+            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+                // remove un Like
+                guard didLike == true else {return}
+                
+                if let index = self.tweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
+                    self.tweets[index].didLike = true
+                }
+            }
+        }
+    }
     
     
     //MARK: - Actions
@@ -179,7 +194,23 @@ extension FeedController : TweetCellDelegate {
     }
     
     func handleLikeTapped(cell: TweetCell) {
-        print("like")
+        guard let tweet = cell.tweet else {return}
+        
+        if tweet.didLike {
+            tweet.unlike()
+            
+            // for sync conf
+            cell.likeButton.tintColor = .lightGray
+            cell.likeButton.setImage(#imageLiteral(resourceName: "like_unselected"), for: .normal)
+            cell.tweet?.didLike = false
+        } else {
+            tweet.like()
+            
+            // for sync conf
+            cell.likeButton.tintColor = .red
+            cell.likeButton.setImage(#imageLiteral(resourceName: "like_filled"), for: .normal)
+            cell.tweet?.didLike = true
+        }
     }
     
     

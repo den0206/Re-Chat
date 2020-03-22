@@ -56,6 +56,8 @@ class ProfileController : UICollectionViewController {
         fetchTweetsSpecificUser()
         
         fetchReply()
+        fetchLikes()
+        
         
         
     }
@@ -93,6 +95,12 @@ class ProfileController : UICollectionViewController {
         TweetService.shared.fetchReply(user: user) { (reply) in
             self.replyTweets = reply.sorted(by: { $0.timestamp > $1.timestamp })
             
+        }
+    }
+    
+    private func fetchLikes() {
+        TweetService.shared.fetchLikes(user: user) { (like) in
+            self.likedTweets = like.sorted(by: { $0.timestamp > $1.timestamp })
         }
     }
     

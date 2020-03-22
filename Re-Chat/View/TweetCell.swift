@@ -58,7 +58,7 @@ class TweetCell : UICollectionViewCell {
         return button
     }()
     
-    private lazy var likeButton : UIButton = {
+    lazy var likeButton : UIButton = {
         let button = createButton(withImage: #imageLiteral(resourceName: "like_unselected") )
         button.addTarget(self, action: #selector(handleLikeTapped(_ :)), for: .touchUpInside)
         return button

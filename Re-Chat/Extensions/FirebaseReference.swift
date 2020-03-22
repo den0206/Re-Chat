@@ -20,3 +20,8 @@ func firebaseReference(_ reference : References) -> CollectionReference {
 func tweetReplyReference(tweetId : String) -> CollectionReference {
     return firebaseReference(.Tweet).document(tweetId).collection(kRETWEETS)
 }
+
+
+func tweetLikedReference(tweetId : String) -> CollectionReference {
+    firebaseReference(.Tweet).document(tweetId).collection(kLIKES)
+}
