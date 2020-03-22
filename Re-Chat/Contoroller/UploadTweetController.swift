@@ -68,7 +68,7 @@ class UploadTweetController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        print(viewModel)
+        
     
     }
     
@@ -102,8 +102,8 @@ class UploadTweetController : UIViewController {
         
         replyLabel.isHidden = !viewModel.shouldShowReplyLabel
         
-//        guard let replyText = viewModel.replyText else {return}
-//        replyLabel.text = replyText
+        guard let replyText = viewModel.replyText else {return}
+        replyLabel.text = replyText
         
         
         
@@ -136,21 +136,27 @@ class UploadTweetController : UIViewController {
         showPresentLoadindView(true, message: "Sending...")
         
         // no caption empty
-
-        TweetService.shared.uploadTweet(caption: caption) { (error) in
-
+        
+        
+        TweetService.shared.uploadTweet(caption: caption, type: config) { (error) in
+            
             if error != nil {
                 self.showPresentLoadindView(false)
                 self.showAlert(title: "Recheck", message: error!.localizedDescription)
                 return
             }
             
+            if case .reply = self.config {
+                print("Reply")
+            }
+            
             self.dismiss(animated: true) {
                 self.showPresentLoadindView(false)
             }
-
+            
         }
-
+        
+        
     }
     
     @objc func handleDismiss() {

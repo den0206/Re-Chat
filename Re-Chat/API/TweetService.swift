@@ -13,18 +13,37 @@ struct TweetService {
     
     static let shared = TweetService()
     
-    func uploadTweet(caption : String, completion : @escaping(Error?) -> Void) {
+    func uploadTweet(caption : String, type :UploadTweetConfiguration, completion : @escaping(Error?) -> Void) {
         
         let tweetId = UUID().uuidString
         
-        let values = [kUSERID : User.currentId(),
+        var values = [kUSERID : User.currentId(),
                       kTWEETID : tweetId,
                       kLIKES : 0,
                       kRETWEETS : 0,
                       kCAPTION : caption,
                       kTIMESTAMP : Int(NSDate().timeIntervalSince1970)] as [String : Any]
         
-        firebaseReference(.Tweet).document(tweetId).setData(values, completion: completion)
+        switch type {
+       
+        case .tweet:
+             firebaseReference(.Tweet).document(tweetId).setData(values, completion: completion)
+        case .reply(let tweet):
+            
+            values[kREPLYINGTO] = tweet.user.fullname
+            values[kUSERIDTO] = tweet.user.uid
+
+            tweetReplyReference(tweetId: tweet.tweetId).document(tweetId).setData(values, completion: completion)
+
+            // increment count
+
+        firebaseReference(.Tweet).document(tweet.tweetId).updateData([kRETWEETS : FieldValue.increment((Int64(1)))])
+
+            
+            
+        }
+        
+       
         
     }
     
@@ -36,13 +55,12 @@ struct TweetService {
             guard let snapshot = snapshot else {return}
             
             if !snapshot.isEmpty {
-                for documents in snapshot.documents {
-                    guard let uid = documents.data()[kUSERID] as? String else {return}
-                    print(uid)
+                for document in snapshot.documents {
+                    guard let uid = document.data()[kUSERID] as? String else {return}
                     
                     UserSearvice.shared.userIdToUser(uid: uid) { (user) in
                         // convertTweet Model
-                        let tweet = Tweet(user: user, tweetId: uid, dictionary: documents.data())
+                        let tweet = Tweet(user: user, tweetId: document.documentID, dictionary: document.data())
                         tweets.append(tweet)
                         completion(tweets)
                     }

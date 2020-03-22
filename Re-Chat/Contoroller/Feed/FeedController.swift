@@ -166,6 +166,7 @@ extension FeedController : TweetCellDelegate {
         // Retweet config
         
         guard let tweet = cell.tweet else {return}
+        print(tweet)
         let replyVC = UploadTweetController(user: tweet.user, config: .reply(tweet))
         
         let nav = UINavigationController(rootViewController: replyVC)

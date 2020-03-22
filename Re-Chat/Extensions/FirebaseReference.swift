@@ -16,3 +16,7 @@ enum References : String {
 func firebaseReference(_ reference : References) -> CollectionReference {
     return Firestore.firestore().collection(reference.rawValue)
 }
+
+func tweetReplyReference(tweetId : String) -> CollectionReference {
+    return firebaseReference(.Tweet).document(tweetId).collection(kRETWEETS)
+}
