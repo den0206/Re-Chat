@@ -23,7 +23,7 @@ class ProfileController : UICollectionViewController {
     
     private var tweets = [Tweet]()
     private var likedTweets = [Tweet]()
-    private var replyTweet = [Tweet]()
+    private var replyTweets = [Tweet]()
     
     private var currentTweets : [Tweet] {
         switch selectedFilter {
@@ -31,9 +31,9 @@ class ProfileController : UICollectionViewController {
         case .tweet:
             return tweets
         case .reply:
-            return likedTweets
+            return replyTweets
         case .like:
-            return replyTweet
+            return likedTweets
        
         }
     }
@@ -54,6 +54,9 @@ class ProfileController : UICollectionViewController {
         
         configureCollectionView()
         fetchTweetsSpecificUser()
+        
+        fetchReply()
+        
         
     }
     
@@ -83,6 +86,13 @@ class ProfileController : UICollectionViewController {
         TweetService.shared.fetchTweetSpecificUser(user: user) { (tweets) in
             self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
             self.collectionView.reloadData()
+        }
+    }
+    
+    private func fetchReply() {
+        TweetService.shared.fetchReply(user: user) { (reply) in
+            self.replyTweets = reply.sorted(by: { $0.timestamp > $1.timestamp })
+            
         }
     }
     

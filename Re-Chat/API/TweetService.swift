@@ -95,6 +95,34 @@ struct TweetService {
         
     }
     
+    func fetchReply(user : User, completion : @escaping([Tweet]) -> Void) {
+        
+        Firestore.firestore().collectionGroup(kRETWEETS).whereField(kUSERIDTO, isEqualTo: user.uid).getDocuments { (snapshot, error) in
+            
+            var replyTweets = [Tweet]()
+            
+            guard let snapshot = snapshot else {
+                
+                // set index
+                print(error?.localizedDescription)
+                return}
+            
+            if !snapshot.isEmpty {
+                for document in snapshot.documents {
+                    let dictionary = document.data()
+                    let tweetId = dictionary[kTWEETID] as! String
+                    let userId = dictionary[kUSERID] as! String
+                    
+                    UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+                        let tweet = Tweet(user: user, tweetId: tweetId, dictionary: dictionary)
+                        replyTweets.append(tweet)
+                        completion(replyTweets)
+                    }
+                }
+            }
+        }
+    }
+    
     
     
 }

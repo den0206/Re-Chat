@@ -80,9 +80,11 @@ class FeedController : UICollectionViewController {
         
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuserIdentifer)
         
-        view.addSubview(sideMenuButton)
-        sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
+        // replace containerVC nav left button
+//        view.addSubview(sideMenuButton)
+//        sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
         
+         
         view.addSubview(actionButton)
         actionButton.anchor( bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddiongBottom: 64, paddingRight: 16, width: 56, height: 56)
         actionButton.layer.cornerRadius = 56 / 2
@@ -161,6 +163,7 @@ extension FeedController : UICollectionViewDelegateFlowLayout{
 //MARK: - Tweet Cell Delgate
 
 extension FeedController : TweetCellDelegate {
+
     
     func handleRetweetTapped(cell: TweetCell) {
         // Retweet config
@@ -174,6 +177,11 @@ extension FeedController : TweetCellDelegate {
         present(nav, animated: true, completion: nil)
         
     }
+    
+    func handleLikeTapped(cell: TweetCell) {
+        print("like")
+    }
+    
     
     
 }

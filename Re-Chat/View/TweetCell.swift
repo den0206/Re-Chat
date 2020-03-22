@@ -10,6 +10,7 @@ import UIKit
 
 protocol TweetCellDelegate : class {
     func handleRetweetTapped(cell : TweetCell)
+    func handleLikeTapped(cell : TweetCell)
 }
 
 class TweetCell : UICollectionViewCell {
@@ -20,7 +21,7 @@ class TweetCell : UICollectionViewCell {
         }
     }
     
-    var delegate : TweetCellDelegate?
+    weak var delegate : TweetCellDelegate?
     
     //MARK: - parts
     private let profileImageView : UIImageView = {
@@ -59,6 +60,7 @@ class TweetCell : UICollectionViewCell {
     
     private lazy var likeButton : UIButton = {
         let button = createButton(withImage: #imageLiteral(resourceName: "like_unselected") )
+        button.addTarget(self, action: #selector(handleLikeTapped(_ :)), for: .touchUpInside)
         return button
     }()
     
@@ -127,6 +129,10 @@ class TweetCell : UICollectionViewCell {
     
     @objc func handleRetweetTapped(_ sender : UIButton) {
         delegate?.handleRetweetTapped(cell: self)
+    }
+    
+    @objc func handleLikeTapped(_ sender : UIButton) {
+        delegate?.handleLikeTapped(cell: self)
     }
 }
 

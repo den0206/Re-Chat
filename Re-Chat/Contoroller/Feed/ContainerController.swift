@@ -49,26 +49,30 @@ class ContainerController : UIViewController {
         navigationItem.title = "Feed"
         
         // right button
+
+        let sideMenuButton : UIBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "baseline_menu_black_36dp"), style: .plain, target: self, action: #selector(handleMenuToggle))
+        sideMenuButton.tintColor = .black
         
-        let profileImageView = UIImageView()
-        profileImageView.setDimension(width: 32, height: 32)
-        profileImageView.backgroundColor = .lightGray
-        profileImageView.layer.cornerRadius = 32 / 2
-        profileImageView.layer.masksToBounds = true
-        profileImageView.layer.borderColor = UIColor.white.cgColor
-        profileImageView.layer.borderWidth = 4
+        // multiple Button
+        navigationItem.leftBarButtonItem = sideMenuButton
+        
+        // left button
+        
+        let profileImageView = UIImageView().profileImageView(setDimencion: 27)
+      
         
         imageFromData(pictureData: user!.profileImage) { (avatar) in
             profileImageView.image = avatar
         }
         profileImageView.isUserInteractionEnabled = true
+        profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showProfileVC)))
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImageView)
+        let profileImageButton = UIBarButtonItem(customView: profileImageView)
         
-        // left button
         let rightButton = UIBarButtonItem(image: #imageLiteral(resourceName: "humidity"), style: .plain, target: self, action: #selector(showWeatherVC(_ :)))
         rightButton.tintColor = .lightGray
-        navigationItem.rightBarButtonItem = rightButton
+        
+        navigationItem.rightBarButtonItems = [rightButton, profileImageButton]
         
         
         
@@ -157,6 +161,12 @@ class ContainerController : UIViewController {
         present(weatherVC, animated: true, completion: nil)
     }
     
+    @objc func showProfileVC() {
+        guard let user = user else {return}
+        let profileVC = ProfileController(user: user)
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
     
     @objc func dismissMenu() {
         isExpand = false
@@ -168,11 +178,15 @@ class ContainerController : UIViewController {
 }
 
 extension ContainerController : FeedControllerDelegate {
-    func handleMenuToggle() {
+    
+    // add @objc for user self
+    
+    @objc func handleMenuToggle() {
         isExpand.toggle()
         
         animateMenu(shouldExpand: isExpand)
     }
+    
     
     
 }
