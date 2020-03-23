@@ -62,6 +62,7 @@ class ProfileController : UICollectionViewController {
         
         // status
         checkUserIsFollow()
+        checkUserStatus()
         
         
         
@@ -115,7 +116,16 @@ class ProfileController : UICollectionViewController {
     private func checkUserIsFollow() {
         UserSearvice.shared.checkUsetIsFollow(uid: user.uid) { (follow) in
             self.user.isFollewed = follow
-            // for config button & label
+            // for config button & label (add snapshot listner)
+            self.collectionView.reloadData()
+        }
+    }
+    
+    private func checkUserStatus() {
+        UserSearvice.shared.fetchUserStats(uid: user.uid) { (status) in
+            
+            self.user.stats = status
+            // for config button & label (add snapshot listner)
             self.collectionView.reloadData()
         }
     }

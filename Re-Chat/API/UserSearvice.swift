@@ -77,4 +77,24 @@ struct UserSearvice {
         }
     }
     
+    func fetchUserStats(uid : String , completion :  @escaping(UserRelationStats) -> Void) {
+        
+
+        firebaseReference(.User).document(uid).addSnapshotListener { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            if snapshot.exists {
+                let dictionary = snapshot.data()!
+                
+                let followers = dictionary[kFOLLOWERS] as? Int ?? 0
+                let following = dictionary[kFOLLOWING] as? Int ?? 0
+                
+                let stats = UserRelationStats(followers: followers, following: following)
+                completion(stats)
+                
+            }
+        }
+    }
+    
 }
