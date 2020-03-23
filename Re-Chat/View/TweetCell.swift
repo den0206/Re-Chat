@@ -11,6 +11,7 @@ import UIKit
 protocol TweetCellDelegate : class {
     func handleRetweetTapped(cell : TweetCell)
     func handleLikeTapped(cell : TweetCell)
+    func handleTappedProfile(cell : TweetCell)
 }
 
 class TweetCell : UICollectionViewCell {
@@ -24,9 +25,12 @@ class TweetCell : UICollectionViewCell {
     weak var delegate : TweetCellDelegate?
     
     //MARK: - parts
-    private let profileImageView : UIImageView = {
+    private lazy var profileImageView : UIImageView = {
         let iv = UIImageView().profileImageView(setDimencion: 48)
+        iv.isUserInteractionEnabled = true
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTappedProfile))
+        iv.addGestureRecognizer(tap)
         return iv
     }()
     
@@ -145,6 +149,10 @@ class TweetCell : UICollectionViewCell {
     
     @objc func handleLikeTapped(_ sender : UIButton) {
         delegate?.handleLikeTapped(cell: self)
+    }
+    
+    @objc func handleTappedProfile() {
+        delegate?.handleTappedProfile(cell: self)
     }
 }
 

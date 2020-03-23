@@ -15,7 +15,7 @@ class InputTextView : UITextView {
     let placeholderLabel : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .darkGray
+        label.textColor = .black
         label.text = "What's are you Doing ??"
         return label
     }()
@@ -29,10 +29,16 @@ class InputTextView : UITextView {
         backgroundColor = .white
         font = UIFont.systemFont(ofSize: 16)
         isScrollEnabled = false
+        layer.borderColor = UIColor.black.cgColor
+        layer.borderWidth = 2
+        
         
         heightAnchor.constraint(equalToConstant: 200).isActive = true
         addSubview(placeholderLabel)
-        placeholderLabel.anchor(top : topAnchor, left: leftAnchor, paddongTop: 8,paddingLeft: 4)
+//        placeholderLabel.anchor(top : topAnchor, left: leftAnchor, paddongTop: 8,paddingLeft: 4)
+        placeholderLabel.center(inView: self)
+        
+     
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleTextChange), name: UITextView.textDidChangeNotification, object: nil)
         

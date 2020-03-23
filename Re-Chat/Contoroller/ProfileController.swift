@@ -60,6 +60,9 @@ class ProfileController : UICollectionViewController {
         fetchReply()
         fetchLikes()
         
+        // status
+        checkUserIsFollow()
+        
         
         
     }
@@ -109,18 +112,13 @@ class ProfileController : UICollectionViewController {
         }
     }
     
-//    func checkDidlike() {
-//        self.currentTweets.forEach { (tweet) in
-//            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
-//                guard didLike == true else {return}
-//
-//                if let index = self.currentTweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
-//                    self.currentTweets[index].didLike = true
-//                }
-//            }
-//        }
-//    }
-//
+    private func checkUserIsFollow() {
+        UserSearvice.shared.checkUsetIsFollow(uid: user.uid) { (follow) in
+            self.user.isFollewed = follow
+            // for config button & label
+            self.collectionView.reloadData()
+        }
+    }
     
 }
 
@@ -178,6 +176,26 @@ extension ProfileController : UICollectionViewDelegateFlowLayout {
 //MARK: - take Delegate Area
 
 extension ProfileController : ProfileHeaderDelegate {
+    
+    func handleEditProfileFollow(header: ProfileHeader) {
+        if user.isCurrentUser {
+            print("Edit")
+            return
+        }
+        
+        if user.isFollewed {
+            // unfollow
+            user.unFollow()
+            user.isFollewed = false
+        } else {
+            // follow
+            user.follow()
+            user.isFollewed = true
+            
+            // add Notification
+        }
+    }
+    
     func didSelect(filter: ProfileFilterOption) {
         // pass filter
         self.selectedFilter = filter

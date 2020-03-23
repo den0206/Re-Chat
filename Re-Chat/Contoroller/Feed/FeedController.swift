@@ -178,6 +178,15 @@ extension FeedController : UICollectionViewDelegateFlowLayout{
 //MARK: - Tweet Cell Delgate
 
 extension FeedController : TweetCellDelegate {
+    
+    func handleTappedProfile(cell: TweetCell) {
+       
+        guard let user = cell.tweet?.user else {return}
+
+        let profileVC = ProfileController(user: user)
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
 
     
     func handleRetweetTapped(cell: TweetCell) {

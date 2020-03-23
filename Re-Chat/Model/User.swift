@@ -14,6 +14,10 @@ enum sexType : Int {
     case woman
 }
 
+struct UserRelationStats {
+    var followers : Int
+    var following : Int
+}
 
 class User {
     
@@ -22,6 +26,12 @@ class User {
     let uid : String
     let profileImage : String
     var sex : sexType!
+    
+    var stats : UserRelationStats?
+    var isFollewed = false
+    var isCurrentUser : Bool {
+        return Auth.auth().currentUser?.uid == uid
+    }
     
     
     init(uid : String, dictionary : [String : Any]) {
@@ -42,6 +52,30 @@ class User {
     class func currentId() -> String {
         
         return Auth.auth().currentUser!.uid
+    }
+    
+    //MARK: - Follow func
+    
+    func follow() {
+        let date = Int(NSDate().timeIntervalSince1970)
+        guard let currentId = Auth.auth().currentUser?.uid else {return}
+        
+        followingRefernce(uid: currentId).document(self.uid).setData([kTIMESTAMP : date])
+        followersRefernce(uid: self.uid).document(currentId).setData([kTIMESTAMP : date])
+        
+        // increment
+        firebaseReference(.User).document(currentId).updateData([kFOLLOWING : FieldValue.increment(Int64(1))])
+        firebaseReference(.User).document(self.uid).updateData([kFOLLOWERS : FieldValue.increment(Int64(1))])
+    }
+    
+    func unFollow() {
+         guard let currentId = Auth.auth().currentUser?.uid else {return}
+        
+        followingRefernce(uid: currentId).document(self.uid).delete()
+        followersRefernce(uid: self.uid).document(currentId).delete()
+        
+        firebaseReference(.User).document(currentId).updateData([kFOLLOWING : FieldValue.increment(Int64(-1))])
+        firebaseReference(.User).document(self.uid).updateData([kFOLLOWERS : FieldValue.increment(Int64(-1))])
     }
     
     

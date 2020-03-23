@@ -17,10 +17,23 @@ func firebaseReference(_ reference : References) -> CollectionReference {
     return Firestore.firestore().collection(reference.rawValue)
 }
 
+//MARK: - Status Col
+
+func followingRefernce(uid : String) -> CollectionReference {
+    return firebaseReference(.User).document(uid).collection(kFOLLOWING)
+}
+
+func followersRefernce(uid : String) -> CollectionReference {
+    return firebaseReference(.User).document(uid).collection(kFOLLOWERS)
+}
+
+//MARK: - Retweet col
+
 func tweetReplyReference(tweetId : String) -> CollectionReference {
     return firebaseReference(.Tweet).document(tweetId).collection(kRETWEETS)
 }
 
+//MARK: - Like col
 
 func tweetLikedReference(tweetId : String) -> CollectionReference {
     firebaseReference(.Tweet).document(tweetId).collection(kLIKES)

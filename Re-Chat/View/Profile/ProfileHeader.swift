@@ -11,6 +11,7 @@ import UIKit
 protocol ProfileHeaderDelegate : class {
     func backAction()
     func didSelect(filter : ProfileFilterOption)
+    func handleEditProfileFollow(header : ProfileHeader)
 }
 
 class ProfileHeader : UICollectionReusableView {
@@ -61,7 +62,7 @@ class ProfileHeader : UICollectionReusableView {
         button.setTitleColor(.backGroundColor, for: .normal)
         button.setDimension(width: 100, height: 32)
         button.layer.cornerRadius = 36 / 2
-//        button.addTarget(self, action: #selector(handleEditProfileFollow), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleEditProfileFollow), for: .touchUpInside)
         return button
     }()
      
@@ -155,16 +156,29 @@ class ProfileHeader : UICollectionReusableView {
         
         profileImageView.image = downloadImageFromData(picturedata: user.profileImage)
         
+        followersLabel.attributedText = vm.followingString
+        followingLabel.attributedText = vm.followerString
+        
+        editProfileFollowButton.setTitle(vm.actionButtonTitle, for: .normal)
+        
+        if !user.isCurrentUser {
+            editProfileFollowButton.backgroundColor = vm.actionButtonColor
+            editProfileFollowButton.setTitleColor(vm.actionButtonTitleColor, for: .normal)
+            editProfileFollowButton.layer.borderColor = vm.actionButtonTitleColor.cgColor
+        }
+        
+        
     }
     
     //MARK: - delegate Action
+
     
     @objc func backAction() {
         delegate?.backAction()
     }
     
     @objc func handleEditProfileFollow() {
-        print("handle follow")
+        delegate?.handleEditProfileFollow(header: self)
     }
 }
 

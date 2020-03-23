@@ -57,4 +57,24 @@ struct UserSearvice {
         }
     }
     
+    
+    
+    func checkUsetIsFollow(uid : String, completion :  @escaping(Bool) -> Void) {
+        guard let currentId = Auth.auth().currentUser?.uid else {return}
+        
+//        followingRefernce(uid: currentId).document(uid).getDocument { (snapshot, error) in
+//
+//            guard let snapshot = snapshot else {return}
+//
+//            completion(snapshot.exists)
+//        }
+        
+        followingRefernce(uid: currentId).document(uid).addSnapshotListener { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            completion(snapshot.exists)
+        }
+    }
+    
 }
