@@ -17,7 +17,7 @@ struct Tweet {
     var retweetCount : Int
     var timestamp : Date!
     let uid : String
-    let user : User
+    var user : User
     var didLike = false
     
     init(user : User, tweetId : String, dictionary : [String : Any]) {
@@ -33,6 +33,8 @@ struct Tweet {
             self.timestamp = Date(timeIntervalSince1970: timestamp)
         }
     }
+    
+    
     
     
     func like() {

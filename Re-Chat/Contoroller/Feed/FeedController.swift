@@ -24,6 +24,7 @@ class FeedController : UICollectionViewController {
     let followingRef = followingRefernce(uid: User.currentId())
     var followingIds = [User.currentId()]
     var followingListner : ListenerRegistration?
+
     
     private var tweets = [Tweet]() {
         didSet {
@@ -54,6 +55,9 @@ class FeedController : UICollectionViewController {
         return button
     }()
     
+    deinit {
+        followingListner?.remove()
+    }
     
     
     init() {
@@ -68,8 +72,16 @@ class FeedController : UICollectionViewController {
         super.viewDidLoad()
         configureCV()
         
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.followingIds = self.getFollowingAsync()
+            self.fetchFirstFeeds()
+    
+            
+        }
         
-        fetchTweets()
+       
+        
+//        fetchTweets()
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -98,9 +110,46 @@ class FeedController : UICollectionViewController {
     
     //MARK: - API
     
+    func getFollowingAsync() -> [String] {
+        let semaphore = DispatchSemaphore(value: 0)
+        var result = [String]()
+        
+        followingListner = UserSearvice.shared.fetchFollowingIDs(uid: User.currentId()) { (following) in
+            
+            result = following
+            semaphore.signal()
+        }
+        semaphore.wait()
+
+        return result
+    }
+    
+    
+    private func fetchFirstFeeds() {
+        firebaseReference(.Tweet).whereField(kUSERID, in: followingIds).order(by: kTIMESTAMP, descending: true).limit(to: 5).getDocuments { (snapshot, error) in
+
+            guard let snapshot = snapshot else {return}
+
+            if !snapshot.isEmpty {
+                for doc in snapshot.documents {
+                    let dictionary = doc.data()
+                    let tweetID = dictionary[kTWEETID] as! String
+                    
+                    TweetService.shared.fetchSingleTweet(tweetId: tweetID) { (tweet) in
+                        self.tweets.append(tweet)
+                        
+                    }
+
+                    
+                }
+            }
+
+        }
+    }
+    
     private func fetchTweets() {
         TweetService.shared.fetchAllTweets { (tweets) in
-            self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
+            
             
             // check like
             self.checkifUserLikedTweet()
@@ -163,6 +212,12 @@ extension FeedController {
         cell.delegate = self
         return cell
         
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if tweets.count >= 5 && indexPath.item == (self.tweets.count - 1) {
+            print(followingIds)
+        }
     }
 }
 
