@@ -94,13 +94,40 @@ class ProfileController : UICollectionViewController {
         TweetService.shared.fetchTweetSpecificUser(user: user) { (tweets) in
             self.tweets = tweets.sorted(by: { $0.timestamp > $1.timestamp })
             
-            self.collectionView.reloadData()
+            // check didLike
+            self.tweets.forEach { (tweet) in
+                
+                TweetService.shared.checkIfUserLikedTweet(tweet) { (didlike) in
+                    
+                    guard didlike == true else {return}
+                    
+                    if let index = self.tweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
+                        self.tweets[index].didLike = true
+                    }
+                }
+            }
+            
+            //            self.collectionView.reloadData()
         }
     }
     
     private func fetchReply() {
         TweetService.shared.fetchReply(user: user) { (reply) in
             self.replyTweets = reply.sorted(by: { $0.timestamp > $1.timestamp })
+            
+            // check didLike
+
+            self.replyTweets.forEach { (tweet) in
+                
+                TweetService.shared.checkIfUserLikedTweet(tweet) { (didlike) in
+                    
+                    guard didlike == true else {return}
+                    
+                    if let index = self.replyTweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
+                        self.replyTweets[index].didLike = true
+                    }
+                }
+            }
             
         }
     }
@@ -109,6 +136,7 @@ class ProfileController : UICollectionViewController {
         TweetService.shared.fetchLikes(user: user) { (like) in
             self.likedTweets = like.sorted(by: { $0.timestamp > $1.timestamp })
             
+            self.collectionView.reloadData()
             // already Check did like
         }
     }

@@ -171,7 +171,7 @@ struct TweetService {
                 for document in snapshot.documents {
                     
                     let dictionary = document.data()
-                    print(dictionary)
+                  
                     let tweetId = dictionary[kTWEETID] as! String
                     
                     TweetService.shared.fetchSingleTweet(tweetId: tweetId) { (likedTweet) in

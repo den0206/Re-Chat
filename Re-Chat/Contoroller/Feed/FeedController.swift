@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 protocol FeedControllerDelegate {
     func handleMenuToggle()
@@ -19,6 +20,10 @@ class FeedController : UICollectionViewController {
     var delegate : FeedControllerDelegate?
     
     var user : User?
+    
+    let followingRef = followingRefernce(uid: User.currentId())
+    var followingIds = [User.currentId()]
+    var followingListner : ListenerRegistration?
     
     private var tweets = [Tweet]() {
         didSet {
@@ -62,6 +67,7 @@ class FeedController : UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCV()
+        
         
         fetchTweets()
         

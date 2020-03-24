@@ -64,8 +64,8 @@ class User {
         followersRefernce(uid: self.uid).document(currentId).setData([kTIMESTAMP : date])
         
         // increment
-        firebaseReference(.User).document(currentId).updateData([kFOLLOWING : FieldValue.increment(Int64(1))])
-        firebaseReference(.User).document(self.uid).updateData([kFOLLOWERS : FieldValue.increment(Int64(1))])
+        firebaseReference(.User).document(currentId).updateData([kFOLLOWING : FieldValue.increment((Int64(1)))])
+        firebaseReference(.User).document(self.uid).updateData([kFOLLOWERS : FieldValue.increment((Int64(1)))])
     }
     
     func unFollow() {
@@ -74,8 +74,8 @@ class User {
         followingRefernce(uid: currentId).document(self.uid).delete()
         followersRefernce(uid: self.uid).document(currentId).delete()
         
-        firebaseReference(.User).document(currentId).updateData([kFOLLOWING : FieldValue.increment(Int64(-1))])
-        firebaseReference(.User).document(self.uid).updateData([kFOLLOWERS : FieldValue.increment(Int64(-1))])
+        firebaseReference(.User).document(currentId).updateData([kFOLLOWING : FieldValue.increment((Int64(-1)))])
+        firebaseReference(.User).document(self.uid).updateData([kFOLLOWERS : FieldValue.increment((Int64(-1)))])
     }
     
     
