@@ -27,6 +27,8 @@ class FeedController : UICollectionViewController {
     
     var followingIds = [User.currentId()] {
         didSet {
+            
+            // after set followingIds get relation Tweets
             fetchFirstFeeds()
         }
     }
@@ -97,15 +99,19 @@ class FeedController : UICollectionViewController {
         collectionView.backgroundColor = .white
         
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuserIdentifer)
-        
-        // replace containerVC nav left button
-//        view.addSubview(sideMenuButton)
-//        sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
-        
-         
+
         view.addSubview(actionButton)
         actionButton.anchor( bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddiongBottom: 64, paddingRight: 16, width: 56, height: 56)
         actionButton.layer.cornerRadius = 56 / 2
+        
+        // set refresh Controller
+        let refreshController = UIRefreshControl()
+        refreshController.addTarget(self, action: #selector(handleRefresh(_ :)), for: .valueChanged)
+        collectionView.refreshControl = refreshController
+        
+        // replace containerVC nav left button
+        //        view.addSubview(sideMenuButton)
+        //        sideMenuButton.anchor(top : view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddongTop: 16, paddingLeft: 20,width: 30,height: 30)
     }
     
     //MARK: - API
@@ -127,6 +133,8 @@ class FeedController : UICollectionViewController {
             
             self.tweets = tweets.sorted(by: {$0.timestamp > $1.timestamp})
             self.lastDocument = lastDoc
+            
+            self.collectionView.refreshControl?.endRefreshing()
         
         }
 
@@ -173,15 +181,6 @@ class FeedController : UICollectionViewController {
             }
             
         }
-        
-//        TweetService.shared.getFeeds(userIds: self.followingIds, limit: 8, lastDocument: lastDocument) { (tweets, lastDoc) in
-//
-//            self.tweets += tweets
-//
-//            self.lastDocument = lastDocument
-//
-//            self.collectionView.reloadData()
-//        }
     }
     
     
@@ -204,6 +203,14 @@ class FeedController : UICollectionViewController {
         let nav = UINavigationController(rootViewController: uploadVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true, completion: nil)
+        
+    }
+    
+    @objc func handleRefresh(_ sender : UIRefreshControl) {
+        
+        self.tweets.removeAll(keepingCapacity: false)
+        
+        fetchFirstFeeds()
         
     }
     
@@ -306,6 +313,8 @@ extension FeedController : TweetCellDelegate {
     
     
 }
+
+
 
 //MARK: - Fetch All Tweets(haven't use)
 
