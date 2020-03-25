@@ -22,7 +22,11 @@ class ProfileController : UICollectionViewController {
         }
     }
     
-    private var tweets = [Tweet]()
+    private var tweets = [Tweet]() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     private var likedTweets = [Tweet]()
     private var replyTweets = [Tweet]()
     
@@ -106,8 +110,6 @@ class ProfileController : UICollectionViewController {
                     }
                 }
             }
-            
-            //            self.collectionView.reloadData()
         }
     }
     
@@ -136,7 +138,7 @@ class ProfileController : UICollectionViewController {
         TweetService.shared.fetchLikes(user: user) { (like) in
             self.likedTweets = like.sorted(by: { $0.timestamp > $1.timestamp })
             
-            self.collectionView.reloadData()
+          
             // already Check did like
         }
     }
@@ -173,6 +175,7 @@ extension ProfileController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuserIdentifer, for: indexPath) as! TweetCell
         
         cell.tweet = currentTweets[indexPath.item]
+        cell.delegate = self
         
         return cell
     }
@@ -248,4 +251,22 @@ extension ProfileController : ProfileHeaderDelegate {
     
 }
 
+extension ProfileController : TweetCellDelegate {
+    func handleRetweetTapped(cell: TweetCell) {
+        print("Retweet")
+    }
+    
+    func handleLikeTapped(cell: TweetCell) {
+        print("Like")
+    }
+    
+    func handleTappedProfile(cell: TweetCell) {
+        guard let user = cell.tweet?.user else {return}
+        
+        let profileVC = ProfileController(user: user)
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
+    
+}
 

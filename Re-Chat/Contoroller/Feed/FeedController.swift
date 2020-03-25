@@ -20,10 +20,16 @@ class FeedController : UICollectionViewController {
     var delegate : FeedControllerDelegate?
     
     var user : User?
+    var lastDocument : DocumentSnapshot? = nil
     
     let followingRef = followingRefernce(uid: User.currentId())
-    var followingIds = [User.currentId()]
     var followingListner : ListenerRegistration?
+    
+    var followingIds = [User.currentId()] {
+        didSet {
+            fetchFirstFeeds()
+        }
+    }
 
     
     private var tweets = [Tweet]() {
@@ -72,13 +78,7 @@ class FeedController : UICollectionViewController {
         super.viewDidLoad()
         configureCV()
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.followingIds = self.getFollowingAsync()
-            self.fetchFirstFeeds()
-    
-            
-        }
-        
+        getFollowing()
        
         
 //        fetchTweets()
@@ -110,67 +110,82 @@ class FeedController : UICollectionViewController {
     
     //MARK: - API
     
-    func getFollowingAsync() -> [String] {
-        let semaphore = DispatchSemaphore(value: 0)
-        var result = [String]()
+    func getFollowing(){
         
-        followingListner = UserSearvice.shared.fetchFollowingIDs(uid: User.currentId()) { (following) in
+        followingListner = UserSearvice.shared.fetchFollowingIDs(uid: User.currentId(), completion: { (following) in
             
-            result = following
-            semaphore.signal()
-        }
-        semaphore.wait()
+            self.followingIds = following
+            
+        })
 
-        return result
     }
     
     
     private func fetchFirstFeeds() {
-        firebaseReference(.Tweet).whereField(kUSERID, in: followingIds).order(by: kTIMESTAMP, descending: true).limit(to: 5).getDocuments { (snapshot, error) in
+        
+        TweetService.shared.getFeeds(userIds: self.followingIds, limit: 8, lastDocument: nil) { (tweets, lastDoc) in
+            
+            self.tweets = tweets.sorted(by: {$0.timestamp > $1.timestamp})
+            self.lastDocument = lastDoc
+        
+        }
 
+    }
+    
+    private func fetchMoreFeeds() {
+        
+         guard let lastDocument = lastDocument else {return}
+        
+        firebaseReference(.Tweet).whereField(kUSERID, in: self.followingIds).order(by: kTIMESTAMP, descending: true).start(afterDocument: lastDocument).limit(to: 8).getDocuments { (snapshot, error) in
+            
             guard let snapshot = snapshot else {return}
-
+            
+            
+            
             if !snapshot.isEmpty {
-                for doc in snapshot.documents {
-                    let dictionary = doc.data()
-                    let tweetID = dictionary[kTWEETID] as! String
-                    
-                    TweetService.shared.fetchSingleTweet(tweetId: tweetID) { (tweet) in
-                        self.tweets.append(tweet)
-                        
-                    }
-
-                    
-                }
-            }
-
-        }
-    }
-    
-    private func fetchTweets() {
-        TweetService.shared.fetchAllTweets { (tweets) in
-            
-            
-            // check like
-            self.checkifUserLikedTweet()
-            
-        }
-    }
-    
-    private func checkifUserLikedTweet() {
-        self.tweets.forEach { (tweet) in
-            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
-                // remove un Like
-                guard didLike == true else {return}
                 
-                if let index = self.tweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
-                    self.tweets[index].didLike = true
+                
+                for doc in snapshot.documents {
+                    let dictionatry = doc.data()
+                    let userId = dictionatry[kUSERID] as! String
+                    
+                    UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+                        
+                        var tweet = Tweet(user: user, tweetId: doc.documentID, dictionary: dictionatry)
+                        
+                        
+                        TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+                            
+                            
+                            
+                            tweet.didLike = didLike
+                            self.tweets.append(tweet)
+                           
+                            //tweets.sorted(by: {$0.timestamp > $1.timestamp})
+                            
+                            
+                        }
+                    }
                 }
+                let lastDoc = snapshot.documents.last
+                self.lastDocument = lastDoc
+                
             }
+            
         }
+        
+//        TweetService.shared.getFeeds(userIds: self.followingIds, limit: 8, lastDocument: lastDocument) { (tweets, lastDoc) in
+//
+//            self.tweets += tweets
+//
+//            self.lastDocument = lastDocument
+//
+//            self.collectionView.reloadData()
+//        }
     }
     
     
+
     //MARK: - Actions
     
     @objc func handleTappSideMenuButton() {
@@ -214,9 +229,14 @@ extension FeedController {
         
     }
     
+    //MARK: - For pagination
+    
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if tweets.count >= 5 && indexPath.item == (self.tweets.count - 1) {
-            print(followingIds)
+        
+        if tweets.count >= 8 && indexPath.item == (self.tweets.count - 1) {
+            
+            fetchMoreFeeds()
+
         }
     }
 }
@@ -286,3 +306,30 @@ extension FeedController : TweetCellDelegate {
     
     
 }
+
+//MARK: - Fetch All Tweets(haven't use)
+
+//    private func fetchTweets() {
+//        TweetService.shared.fetchAllTweets { (tweets) in
+//
+//
+//            // check like
+//            self.checkifUserLikedTweet()
+//
+//        }
+//    }
+//
+//    private func checkifUserLikedTweet() {
+//        self.tweets.forEach { (tweet) in
+//            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+//                // remove un Like
+//                guard didLike == true else {return}
+//
+//                if let index = self.tweets.firstIndex(where: {$0.tweetId == tweet.tweetId}) {
+//                    self.tweets[index].didLike = true
+//                }
+//            }
+//        }
+//    }
+//
+//

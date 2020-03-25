@@ -77,7 +77,9 @@ struct TweetService {
        guard let currentUid = Auth.auth().currentUser?.uid else {return}
         firebaseReference(.Tweet).document(tweet.tweetId).collection(kLIKES).document(currentUid).getDocument { (snapshot, error) in
             
-            guard let snapshot = snapshot else {return}
+            guard let snapshot = snapshot else {
+                completion(false)
+                return}
             
             completion(snapshot.exists)
         }
@@ -107,6 +109,127 @@ struct TweetService {
  
     
     //MARK: - Profile
+    
+    func getFeeds(userIds : [String], limit : Int , lastDocument : DocumentSnapshot?, completion : @escaping(_ tweets : [Tweet], _ lastDocument : DocumentSnapshot?) -> Void) {
+        var tweets = [Tweet]()
+        
+        if lastDocument == nil {
+            
+            // fetch first Feeds
+            firebaseReference(.Tweet).whereField(kUSERID, in: userIds).order(by: kTIMESTAMP, descending: true).limit(to: limit).getDocuments { (snapshot, error) in
+                
+                guard let snapshot = snapshot else {return}
+                
+                let lastDoc = snapshot.documents.last
+                
+                if !snapshot.isEmpty {
+                    
+                    
+                    for doc in snapshot.documents {
+                        let dictionatry = doc.data()
+                        let userId = dictionatry[kUSERID] as! String
+                        
+                        UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+                            
+                            var tweet = Tweet(user: user, tweetId: doc.documentID, dictionary: dictionatry)
+                            
+                            
+                            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+                                
+                                
+                                
+                                tweet.didLike = didLike
+                                tweets.append(tweet)
+                                
+                                completion(tweets, lastDoc)
+                                //tweets.sorted(by: {$0.timestamp > $1.timestamp})
+                                
+                                
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            
+        } else {
+            
+            // fetch more Pagination
+            
+            firebaseReference(.Tweet).whereField(kUSERID, in: userIds).order(by: kTIMESTAMP, descending: true).start(afterDocument: lastDocument!).limit(to: limit).getDocuments { (snapshot, error) in
+                
+                guard let snapshot = snapshot else {return}
+                
+                let lastDoc = snapshot.documents.last
+                
+                if !snapshot.isEmpty {
+                    
+                    
+                    for doc in snapshot.documents {
+                        let dictionatry = doc.data()
+                        let userId = dictionatry[kUSERID] as! String
+                        
+                        UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+                            
+                            var tweet = Tweet(user: user, tweetId: doc.documentID, dictionary: dictionatry)
+                            
+                            
+                            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+                                
+                                
+                                
+                                tweet.didLike = didLike
+                                tweets.append(tweet)
+                                
+                                completion(tweets, lastDoc)
+                                //tweets.sorted(by: {$0.timestamp > $1.timestamp})
+                                
+                                
+                            }
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+        
+      
+        
+//        for userId in userIds {
+//
+//            firebaseReference(.Tweet).whereField(kUSERID, isEqualTo: userId).limit(to: limit).getDocuments { (snapshot, error) in
+//
+//                guard let snapshot = snapshot else {return}
+//
+//                if !snapshot.isEmpty {
+//
+//                    for doc in snapshot.documents {
+//                        let dictionatry = doc.data()
+//
+//                        UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+//
+//                            var tweet = Tweet(user: user, tweetId: doc.documentID, dictionary: dictionatry)
+//
+//
+//                            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
+//                                tweet.didLike = didLike
+//
+//                                tweets.append(tweet)
+//                                completion(tweets, nil)
+//                                //tweets.sorted(by: {$0.timestamp > $1.timestamp})
+//
+//
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//
+//        }
+        
+       
+    }
     
     func fetchTweetSpecificUser(user : User, completion : @escaping([Tweet]) -> Void) {
         
