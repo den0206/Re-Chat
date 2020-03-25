@@ -54,6 +54,18 @@ class User {
         return Auth.auth().currentUser!.uid
     }
     
+    class func currentUser() -> User? {
+        
+        if Auth.auth().currentUser != nil {
+            UserSearvice.shared.userIdToUser(uid: Auth.auth().currentUser!.uid) { (user) in
+                return user
+            }
+            
+        }
+        
+        return nil
+    }
+    
     //MARK: - Follow func
     
     func follow() {

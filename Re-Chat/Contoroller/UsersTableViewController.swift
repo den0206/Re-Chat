@@ -12,11 +12,14 @@ private let reuserIdentifer = "UserCell"
 
 class UsersTableViewController : UITableViewController {
     
+    var user : User?
+    
     var users = [User]() {
         didSet {
             tableView.reloadData()
         }
     }
+
     
     var filterUsers = [User]() {
         didSet {
@@ -47,6 +50,15 @@ class UsersTableViewController : UITableViewController {
         
         // fetch All users
         fetchUsers(filter: nil)
+    }
+    
+    init(user : User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - configureb UI
@@ -154,8 +166,10 @@ extension UsersTableViewController {
             user = users[indexPath.row]
         }
         
-       
+        guard let currentUser = self.user else {return}
         
+        let chatRoomId = startPrivateChat(user1: currentUser, user2: user)
+       
 
     }
 }

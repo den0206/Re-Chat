@@ -17,6 +17,11 @@ class MaintabController : UITabBarController {
             guard let cont = nav.viewControllers.first as? ContainerController else {return}
             
             cont.user = user
+            
+            guard let nav2 = viewControllers?[1] as? UINavigationController else {return}
+            guard let recent = nav2.viewControllers.first as? RecentController else {return}
+            
+            recent.currentUser = user
         }
     }
  
