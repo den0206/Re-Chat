@@ -96,7 +96,8 @@ func createRecentToFirestore(userId : String,chatRoomId : String,members : [Stri
                   kLASTMESSAGE : "",
                   kCOUNTER : 0,
                   kDATE : date,
-                  kTYPE : type ] as [String : Any]
+                  kTYPE : type,
+                  kPROFILE_IMAGE : withUser!.profileImage ] as [String : Any]
     } else {
         // for grouu
     }

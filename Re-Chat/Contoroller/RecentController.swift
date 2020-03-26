@@ -14,6 +14,8 @@ class RecentController : UIViewController {
     
      var currentUser : User?
     
+    var recentChats : [String : Any] = [:]
+    
     //MARK: - Psrts
     
     var tableView = UITableView()
@@ -76,11 +78,14 @@ class RecentController : UIViewController {
         super.viewDidLoad()
         
         configuretableView()
+        configureUI()
         
-        configureNavController()
+        fetchRecent()
         
         
     }
+    
+    //MARK: - configureUI sec
     
     private func configuretableView() {
         
@@ -88,18 +93,20 @@ class RecentController : UIViewController {
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 60
+        tableView.rowHeight = 100
+        tableView.separatorStyle = .none
+        
         
         tableView.tableFooterView = UIView()
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifer)
+        tableView.register(RecentCell.self, forCellReuseIdentifier: reuseIdentifer)
     }
     
     
     
     
     
-    private func configureNavController() {
+    private func configureUI() {
         navigationItem.title = "Recent"
         
         view.backgroundColor = .white
@@ -125,6 +132,14 @@ class RecentController : UIViewController {
         
     }
     
+    //MARK: - API
+    
+    func fetchRecent() {
+        MessageSearvice.shared.fetchRecent()
+    }
+    
+    
+    
     //MARK: - Actions
     
     @objc func handleNewChat(_ sender : UIButton) {
@@ -147,7 +162,9 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath) as! RecentCell
+        
+        cell.generateCell(recent: [kWITHUSERUSERID : ""], indexPath: indexPath)
         
         return cell
     }
