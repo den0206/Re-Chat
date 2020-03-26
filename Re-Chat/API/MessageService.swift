@@ -12,7 +12,34 @@ struct MessageSearvice {
     
     static let shared = MessageSearvice()
     
-    func fetchRecent() {
-        print("fetch")
+    //MARK: - Recent
+    func fetchRecent(userId : String, comletion :  @escaping([Dictionary<String, Any>]) -> Void) -> ListenerRegistration? {
+
+        return firebaseReference(.Recent).whereField(kUSERID, isEqualTo: userId).order(by: kDATE, descending: false).addSnapshotListener { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            var recents : [Dictionary<String, Any>] = []
+            
+            if !snapshot.isEmpty {
+                
+                for doc in snapshot.documents {
+                    
+                    let recent = doc.data()
+                    
+                    if recent[kLASTMESSAGE] as! String != "" && recent[kCHATROOMID] != nil && recent[kRECENTID] != nil {
+                        
+                        recents.append(recent)
+                    }
+                }
+                
+                comletion(recents)
+            } else {
+                print("No Fetch")
+            }
+            
+            
+        }
     }
+    
 }

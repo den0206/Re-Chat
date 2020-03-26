@@ -7,14 +7,21 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 private let reuseIdentifer = "RecentCell"
 
 class RecentController : UIViewController {
     
-     var currentUser : User?
+    var currentUser : User?
     
-    var recentChats : [String : Any] = [:]
+    var recentChats : [Dictionary<String, Any>] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    var recentListner : ListenerRegistration?
     
     //MARK: - Psrts
     
@@ -83,6 +90,7 @@ class RecentController : UIViewController {
         fetchRecent()
         
         
+        
     }
     
     //MARK: - configureUI sec
@@ -135,7 +143,12 @@ class RecentController : UIViewController {
     //MARK: - API
     
     func fetchRecent() {
-        MessageSearvice.shared.fetchRecent()
+        guard let uid = currentUser?.uid else { return}
+        
+        recentListner = MessageSearvice.shared.fetchRecent(userId: uid) { (recents) in
+            self.recentChats = recents
+        }
+ 
     }
     
     
@@ -158,13 +171,17 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return 5
+        return recentChats.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath) as! RecentCell
         
-        cell.generateCell(recent: [kWITHUSERUSERID : ""], indexPath: indexPath)
+        var recent : Dictionary<String, Any>
+        
+        recent = recentChats[indexPath.row]
+        
+        cell.generateCell(recent: recent, indexPath: indexPath)
         
         return cell
     }

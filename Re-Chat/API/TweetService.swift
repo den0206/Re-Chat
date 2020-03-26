@@ -194,40 +194,7 @@ struct TweetService {
             }
         }
         
-      
-        
-//        for userId in userIds {
-//
-//            firebaseReference(.Tweet).whereField(kUSERID, isEqualTo: userId).limit(to: limit).getDocuments { (snapshot, error) in
-//
-//                guard let snapshot = snapshot else {return}
-//
-//                if !snapshot.isEmpty {
-//
-//                    for doc in snapshot.documents {
-//                        let dictionatry = doc.data()
-//
-//                        UserSearvice.shared.userIdToUser(uid: userId) { (user) in
-//
-//                            var tweet = Tweet(user: user, tweetId: doc.documentID, dictionary: dictionatry)
-//
-//
-//                            TweetService.shared.checkIfUserLikedTweet(tweet) { (didLike) in
-//                                tweet.didLike = didLike
-//
-//                                tweets.append(tweet)
-//                                completion(tweets, nil)
-//                                //tweets.sorted(by: {$0.timestamp > $1.timestamp})
-//
-//
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }
-        
+
        
     }
     
