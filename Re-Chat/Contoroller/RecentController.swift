@@ -21,6 +21,12 @@ class RecentController : UIViewController {
         }
     }
     
+    var filterChats : [Dictionary<String, Any>] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     var recentListner : ListenerRegistration?
     
     //MARK: - Psrts
@@ -43,11 +49,12 @@ class RecentController : UIViewController {
     
     private let searchTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Search Recent"
+        tf.placeholder = "Search User name.."
         tf.font = UIFont.systemFont(ofSize: 14)
         tf.borderStyle = .roundedRect
         tf.layer.borderColor = UIColor.lightGray.cgColor.copy(alpha: 0.9)
         tf.layer.borderWidth = 0.3
+        tf.addTarget(self, action: #selector(valitation), for: .editingChanged)
         
         // padding
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: tf.frame.height))
@@ -60,8 +67,11 @@ class RecentController : UIViewController {
         let button = UIButton(type: .system)
         button.backgroundColor = .lightGray
         button.setTitle("Search", for: .normal)
+        button.isEnabled = false
         button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(searchTapped(_ :)), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        
         
         return button
     }()
@@ -77,9 +87,15 @@ class RecentController : UIViewController {
         return button
     }()
     
+    let searchController = UISearchController(searchResultsController: nil)
+    
    
     
     //MARK: - Life Cycle
+    
+    deinit {
+        recentListner?.remove()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,11 +119,17 @@ class RecentController : UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = 100
         tableView.separatorStyle = .none
-        
-        
+
         tableView.tableFooterView = UIView()
-        
         tableView.register(RecentCell.self, forCellReuseIdentifier: reuseIdentifer)
+        
+        // search Controller
+        searchController.searchResultsUpdater = self
+        
+        searchController.searchBar.searchTextField.text = searchTextField.text
+        
+        
+       
     }
     
     
@@ -124,6 +146,7 @@ class RecentController : UIViewController {
         
         searchOptionView.addSubview(searchTextField)
         searchTextField.centerY(inView: searchOptionView)
+        searchTextField.delegate = self
         searchTextField.anchor(left : searchOptionView.leftAnchor,  paddingLeft: 16,height: 36)
         
         searchOptionView.addSubview(searchButton)
@@ -155,6 +178,7 @@ class RecentController : UIViewController {
     
     //MARK: - Actions
     
+
     @objc func handleNewChat(_ sender : UIButton) {
         guard let user = self.currentUser else {return}
         let usersVC = UsersTableViewController(user: user)
@@ -162,7 +186,31 @@ class RecentController : UIViewController {
         let nav = UINavigationController(rootViewController: usersVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true, completion: nil)
+        
     }
+    
+    @objc func searchTapped(_ sender : UIButton) {
+        
+        searchController.searchBar.searchTextField.text = searchTextField.text
+        print(searchController.searchBar.searchTextField.text)
+        
+    }
+    
+    
+    
+    @objc func valitation() {
+        guard searchTextField.hasText else {
+            searchButton.isEnabled = false
+            searchButton.backgroundColor = .lightGray
+            searchButton.setTitleColor(.white, for: .normal)
+            return
+        }
+        searchButton.isEnabled = true
+        searchButton.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        
+    }
+    
+    
 }
 
 //MARK: - UItableview Delegate
@@ -171,7 +219,13 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return recentChats.count
+        if searchTextField.text != "" {
+            return filterChats.count
+        } else {
+            return recentChats.count
+        }
+        
+       
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -179,11 +233,40 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         
         var recent : Dictionary<String, Any>
         
-        recent = recentChats[indexPath.row]
+        if searchTextField.text != "" {
+            recent = filterChats[indexPath.row]
+        } else {
+            recent = recentChats[indexPath.row]
+        }
         
+    
         cell.generateCell(recent: recent, indexPath: indexPath)
         
         return cell
+    }
+    
+    
+}
+
+extension RecentController : UISearchResultsUpdating, UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        searchController.searchBar.searchTextField.text = searchTextField.text
+        filterContentForText(searchText: searchController.searchBar.searchTextField.text!)
+        return true
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForText(searchText: searchController.searchBar.text!)
+    }
+    
+    func filterContentForText(searchText : String, scope : String = "All") {
+        
+        filterChats = recentChats.filter({ (recentChat) -> Bool in
+            return (recentChat[kWITHUSERFULLNAME] as! String).lowercased().contains(searchText.lowercased())
+        })
+        
     }
     
     

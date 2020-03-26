@@ -15,7 +15,7 @@ struct MessageSearvice {
     //MARK: - Recent
     func fetchRecent(userId : String, comletion :  @escaping([Dictionary<String, Any>]) -> Void) -> ListenerRegistration? {
 
-        return firebaseReference(.Recent).whereField(kUSERID, isEqualTo: userId).order(by: kDATE, descending: false).addSnapshotListener { (snapshot, error) in
+        return firebaseReference(.Recent).whereField(kUSERID, isEqualTo: userId).order(by: kDATE, descending: true).addSnapshotListener { (snapshot, error) in
             
             guard let snapshot = snapshot else {return}
             

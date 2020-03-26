@@ -16,13 +16,13 @@ class RecentCell : UITableViewCell {
     //MARK: - Parts
     
     private let profileImageView : UIImageView = {
-        let iv = UIImageView().profileImageView(setDimencion: 30)
+        let iv = UIImageView().profileImageView(setDimencion: 48)
         return iv
     }()
     
     private let withUserNameLabel : UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         label.text = "User name"
         return label
     }()
@@ -52,7 +52,7 @@ class RecentCell : UITableViewCell {
         profileImageView.anchor(left : leftAnchor, paddingLeft: 16)
         
         addSubview(withUserNameLabel)
-        withUserNameLabel.anchor(top : topAnchor, left:  profileImageView.rightAnchor,paddongTop: 16, paddingLeft: 24)
+        withUserNameLabel.anchor(top : topAnchor, left:  profileImageView.rightAnchor,paddongTop: 24, paddingLeft: 24)
         
         addSubview(lastMessageLabel)
         lastMessageLabel.anchor(top : withUserNameLabel.bottomAnchor, left:  profileImageView.rightAnchor,paddongTop: 8,paddingLeft: 24)
@@ -71,7 +71,7 @@ class RecentCell : UITableViewCell {
     func generateCell(recent : [String : Any], indexPath : IndexPath) {
         self.indexPath = indexPath
         
-        withUserNameLabel.text = recent[kWITHUSERUSERNAME] as? String
+        withUserNameLabel.text = recent[kWITHUSERFULLNAME] as? String
         self.lastMessageLabel.text = recent[kLASTMESSAGE] as? String
         
         var date : Date!

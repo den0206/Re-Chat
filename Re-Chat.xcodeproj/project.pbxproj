@@ -166,8 +166,8 @@
 				3A19CB80241DFD0E003BB2DB /* InputTextView.swift */,
 				3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */,
 				3AD359182426EC68006D69BE /* TweetCell.swift */,
-				3AE759182425926800CA5793 /* Profile */,
 				3AF4B212242CD6EB0097CC46 /* RecentCell.swift */,
+				3AE759182425926800CA5793 /* Profile */,
 			);
 			path = View;
 			sourceTree = "<group>";
