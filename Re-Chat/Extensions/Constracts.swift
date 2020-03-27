@@ -17,6 +17,7 @@ public let kFULLNAME = "fullname"
 public let kSEX = "Sex"
 public let kFOLLOWING = "FOLLOWING"
 public let kFOLLOWERS = "FOLLOWER"
+public let kCURRENTUSER = "currentUser"
 
 public let kMAN = "Man"
 public let kWOMAN = "Woman"

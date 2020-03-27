@@ -218,6 +218,10 @@ extension ContainerController : SideMenuControllerDelegate {
     }
     
     func logOut() {
+        
+        UserDefaults.standard.removeObject(forKey: kCURRENTUSER)
+        UserDefaults.standard.synchronize()
+        
         do {
             try Auth.auth().signOut()
             let nav = UINavigationController(rootViewController: LoginViewController())

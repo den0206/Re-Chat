@@ -72,9 +72,13 @@ class MaintabController : UITabBarController {
     func fetchCurrentUser() {
         guard let currentuid = Auth.auth().currentUser?.uid else {return}
         
-        AuthSearvice.shared.fetchUser(uid: currentuid) { (user) in
+        UserSearvice.shared.fetchCurrentUser(uid: currentuid) { (user) in
             self.user = user
         }
+        
+//        AuthSearvice.shared.fetchUser(uid: currentuid) { (user) in
+//            self.user = user
+//        }
         
     }
     

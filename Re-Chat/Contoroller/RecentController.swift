@@ -105,6 +105,9 @@ class RecentController : UIViewController {
         
         fetchRecent()
         
+        print(User.currentUser()?.uid)
+        print(User.currentId())
+        
         
         
     }

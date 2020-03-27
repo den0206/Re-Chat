@@ -47,6 +47,9 @@ class AuthSearvice {
                            kPROFILE_IMAGE : avatar,
                            kSEX : sex,
                            kUSERID : uid] as [String : Any]
+            
+            UserDefaults.standard.setValue(values, forKey: kCURRENTUSER)
+            UserDefaults.standard.synchronize()
 
             firebaseReference(.User).document(uid).setData(values, completion: completion)
 

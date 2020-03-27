@@ -34,9 +34,13 @@ class User {
     }
     
     
-    init(uid : String, dictionary : [String : Any]) {
+    init(uid : String? , dictionary : [String : Any]) {
         
-        self.uid = uid
+        if let uid = uid {
+            self.uid = uid
+        } else {
+            self.uid = dictionary[kUSERID] as? String ?? ""
+        }
         
         self.fullname = dictionary[kFULLNAME] as? String ?? ""
         self.email = dictionary[kEMAIL] as? String ?? ""
@@ -49,22 +53,27 @@ class User {
         
     }
     
+   
+    
     class func currentId() -> String {
         
         return Auth.auth().currentUser!.uid
     }
     
     class func currentUser() -> User? {
-        
         if Auth.auth().currentUser != nil {
-            UserSearvice.shared.userIdToUser(uid: Auth.auth().currentUser!.uid) { (user) in
-                return user
-            }
             
+            if let dictiobnary = UserDefaults.standard.object(forKey: kCURRENTUSER) {
+     
+                return User(uid: nil, dictionary: dictiobnary as! [String : Any])
+            }
         }
         
         return nil
     }
+    
+    
+    
     
     //MARK: - Follow func
     
