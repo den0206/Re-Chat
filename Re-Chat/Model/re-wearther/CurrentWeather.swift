@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Alamofire
+
 //import SwiftyJSON
 
 // nest 0
@@ -24,21 +24,21 @@ struct WheatherData : Codable {
         
         
         
-        AF.request(KLOCATIONAPI_URL).responseJSON { (response) in
-            guard let data = response.data else {return}
-            let decorder : JSONDecoder = JSONDecoder()
-            
-            do {
-                let weather : WheatherData = try decorder.decode(WheatherData.self, from: data)
-                
-                print(weather.data[0].city)
-                
-            } catch {
-                print(error)
-            }
-            
-        }
-        
+//        AF.request(KLOCATIONAPI_URL).responseJSON { (response) in
+//            guard let data = response.data else {return}
+//            let decorder : JSONDecoder = JSONDecoder()
+//            
+//            do {
+//                let weather : WheatherData = try decorder.decode(WheatherData.self, from: data)
+//                
+//                print(weather.data[0].city)
+//                
+//            } catch {
+//                print(error)
+//            }
+//            
+//        }
+//        
         
     }
 }

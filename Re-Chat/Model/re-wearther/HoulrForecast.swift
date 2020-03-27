@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Alamofire
+
 
 struct HourlyDate : Codable {
     let data : [HourlyForecast]

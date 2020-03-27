@@ -77,7 +77,6 @@ class RecentController : UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         topSafeAreaHeight = view.safeAreaInsets.top
-        print(topSafeAreaHeight)
         
     }
     
@@ -204,9 +203,7 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath) as! RecentCell
         
         var recent : Dictionary<String, Any>
-        
-      
-            recent = filterChats[indexPath.row]
+        recent = filterChats[indexPath.row]
       
     
         cell.generateCell(recent: recent, indexPath: indexPath)
@@ -214,8 +211,24 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let recent = filterChats[indexPath.row]
+        
+        
+        let messageVC = MessageViewController()
+        messageVC.chatRoomId = (recent[kCHATROOMID] as? String)!
+        messageVC.memberIds = (recent[kMEMBERS] as? [String])!
+        messageVC.membersToPush = (recent[kMEMBERSTOPUSH] as? [String])!
+        
+        navigationController?.pushViewController(messageVC, animated: true)
+    }
+    
     
 }
+
+//MARK: - Search Bar Delegate
 
 extension RecentController : UISearchBarDelegate {
     
@@ -228,7 +241,7 @@ extension RecentController : UISearchBarDelegate {
                 return withUserName.lowercased().contains(searchText.lowercased())
             })
         } else {
-            
+            // return no filter
             filterChats = recentChats
         }
  

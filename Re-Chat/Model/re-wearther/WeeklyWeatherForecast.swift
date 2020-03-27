@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Alamofire
+
 
 struct WeeklyData : Codable {
     let data : [WeeklyWeatherForecast]

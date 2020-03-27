@@ -85,7 +85,7 @@ class TweetCell : UICollectionViewCell {
         backgroundColor = .white
         
         addSubview(profileImageView)
-        profileImageView.anchor(top : topAnchor, left: leftAnchor,paddongTop: 8,paddingLeft: 8)
+        profileImageView.anchor(top : topAnchor, left: leftAnchor,paddongTop: 16,paddingLeft: 8)
         
         let captionStack = UIStackView(arrangedSubviews: [infoLabel, captionLabel])
         captionStack.axis = .vertical
