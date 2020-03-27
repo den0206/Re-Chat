@@ -43,6 +43,8 @@
 		3AEE8D702424932000D7595D /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEE8D6F2424932000D7595D /* WeatherModel.swift */; };
 		3AF4B213242CD6EB0097CC46 /* RecentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF4B212242CD6EB0097CC46 /* RecentCell.swift */; };
 		3AF4B215242CDFDF0097CC46 /* MessageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF4B214242CDFDE0097CC46 /* MessageService.swift */; };
+		3AF5C5C8242EA3AD008F828F /* OutGoingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF5C5C7242EA3AD008F828F /* OutGoingMessage.swift */; };
+		3AF5C5CA242EA517008F828F /* MessageViewController.swift+Save&Load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF5C5C9242EA517008F828F /* MessageViewController.swift+Save&Load.swift */; };
 		3AF9A71D2418FC4E006C52B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF9A71C2418FC4E006C52B7 /* AppDelegate.swift */; };
 		3AF9A71F2418FC4E006C52B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF9A71E2418FC4E006C52B7 /* SceneDelegate.swift */; };
 		3AF9A7262418FC50006C52B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AF9A7252418FC50006C52B7 /* Assets.xcassets */; };
@@ -98,6 +100,8 @@
 		3AEE8D6F2424932000D7595D /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		3AF4B212242CD6EB0097CC46 /* RecentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentCell.swift; sourceTree = "<group>"; };
 		3AF4B214242CDFDE0097CC46 /* MessageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageService.swift; sourceTree = "<group>"; };
+		3AF5C5C7242EA3AD008F828F /* OutGoingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutGoingMessage.swift; sourceTree = "<group>"; };
+		3AF5C5C9242EA517008F828F /* MessageViewController.swift+Save&Load.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageViewController.swift+Save&Load.swift"; sourceTree = "<group>"; };
 		3AF9A7192418FC4E006C52B7 /* Re-Chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Re-Chat.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AF9A71C2418FC4E006C52B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AF9A71E2418FC4E006C52B7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,8 +149,8 @@
 			children = (
 				3AC4D284241C952600917988 /* User.swift */,
 				3A0F6A602425EBF8005FB05F /* Tweet.swift */,
-				3AAC78F9242E430E0048EDF0 /* Message.swift */,
 				3AFE5FFB241F9F3300D7D2DA /* NewsItems.swift */,
+				3AF5C5C6242EA38F008F828F /* Message */,
 				3AEB57662424831C00968ADB /* weather */,
 				3AEB5765242482F700968ADB /* re-wearther */,
 			);
@@ -168,6 +172,7 @@
 				3ADFCFCF241CD2830021B223 /* RecentController.swift */,
 				3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */,
 				3AAC78F7242E3FA40048EDF0 /* MessageViewController.swift */,
+				3AF5C5C9242EA517008F828F /* MessageViewController.swift+Save&Load.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -222,6 +227,15 @@
 				3AEE8D6F2424932000D7595D /* WeatherModel.swift */,
 			);
 			path = weather;
+			sourceTree = "<group>";
+		};
+		3AF5C5C6242EA38F008F828F /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				3AAC78F9242E430E0048EDF0 /* Message.swift */,
+				3AF5C5C7242EA3AD008F828F /* OutGoingMessage.swift */,
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 		3AF9A7102418FC4E006C52B7 = {
@@ -450,6 +464,7 @@
 				3A0F6A5F2425DC17005FB05F /* SideMenuHeader.swift in Sources */,
 				3A201B82242713B50058A81A /* UploadTweetViewModel.swift in Sources */,
 				3AB4FCD62425BF060060F028 /* ProfileFilterCell.swift in Sources */,
+				3AF5C5CA242EA517008F828F /* MessageViewController.swift+Save&Load.swift in Sources */,
 				3AFE5FFE241FA89700D7D2DA /* WebViewController.swift in Sources */,
 				3AF9A73824190398006C52B7 /* Extensions.swift in Sources */,
 				3AFC14EF241C7915000E15D9 /* FirebaseReference.swift in Sources */,
@@ -484,6 +499,7 @@
 				3A19CB7D241DEDD6003BB2DB /* ProfileController.swift in Sources */,
 				3AD3591B2426F441006D69BE /* TweetViewModel.swift in Sources */,
 				3AFC14EB241C7035000E15D9 /* AuthSearvice.swift in Sources */,
+				3AF5C5C8242EA3AD008F828F /* OutGoingMessage.swift in Sources */,
 				3AF9A7322418FCD6006C52B7 /* MainTabController.swift in Sources */,
 				3AEE8D6E242491C100D7595D /* WeatherData.swift in Sources */,
 				3AC8A4D8241CC34100460CE8 /* UsersTableViewController.swift in Sources */,
