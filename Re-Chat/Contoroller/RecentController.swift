@@ -17,6 +17,7 @@ class RecentController : UIViewController {
     
     var recentChats : [Dictionary<String, Any>] = [] {
         didSet {
+            searchRecents(searchText: "")
             tableView.reloadData()
         }
     }
@@ -31,50 +32,14 @@ class RecentController : UIViewController {
     
     //MARK: - Psrts
     
+    private var searchBar : UISearchBar!
+    var isBarShow = true
+    
     var tableView = UITableView()
     
-    private let searchOptionView : UIView = {
-        let view = UIView()
-        view.backgroundColor = .clear
-        
-        // underLine
-        
-        let underline = UIView()
-        underline.backgroundColor = .lightGray
-        
-        view.addSubview(underline)
-        underline.anchor(left :view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, height: 1)
-        return view
-    }()
-    
-    private let searchTextField : UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Search User name.."
-        tf.font = UIFont.systemFont(ofSize: 14)
-        tf.borderStyle = .roundedRect
-        tf.layer.borderColor = UIColor.lightGray.cgColor.copy(alpha: 0.9)
-        tf.layer.borderWidth = 0.3
-        tf.addTarget(self, action: #selector(valitation), for: .editingChanged)
-        
-        // padding
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: tf.frame.height))
-        tf.leftView = paddingView
-        tf.leftViewMode = .always
-        return tf
-    }()
-    
-    private let searchButton : UIButton = {
-        let button = UIButton(type: .system)
-        button.backgroundColor = .lightGray
-        button.setTitle("Search", for: .normal)
-        button.isEnabled = false
-        button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(searchTapped(_ :)), for: .touchUpInside)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        
-        
-        return button
-    }()
+    let searchBarHeight: CGFloat = 44
+    var topSafeAreaHeight: CGFloat = 0
+
     
     let newChatButton : UIButton = {
         let button = UIButton(type: .system)
@@ -100,19 +65,35 @@ class RecentController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        configureSearchBar()
         configuretableView()
         configureUI()
         
         fetchRecent()
         
-        print(User.currentUser()?.uid)
-        print(User.currentId())
         
-        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        topSafeAreaHeight = view.safeAreaInsets.top
+        print(topSafeAreaHeight)
         
     }
     
     //MARK: - configureUI sec
+    
+    private func configureSearchBar() {
+        
+        let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearchBar(_ :)))
+        navigationItem.rightBarButtonItem = searchButton
+        
+        searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: searchBarHeight)
+        searchBar.showsCancelButton = true
+        
+    }
     
     private func configuretableView() {
         
@@ -122,42 +103,32 @@ class RecentController : UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = 100
         tableView.separatorStyle = .none
+        tableView.frame = view.frame
+//        tableView.contentOffset = CGPoint(x: 0, y: searchBarHeight)
+        tableView.tableHeaderView = searchBar
+        // default open
+        tableView.contentOffset = CGPoint(x: 0, y: -self.topSafeAreaHeight)
+        
 
         tableView.tableFooterView = UIView()
         tableView.register(RecentCell.self, forCellReuseIdentifier: reuseIdentifer)
         
-        // search Controller
-        searchController.searchResultsUpdater = self
+        view.addSubview(tableView)
         
-        searchController.searchBar.searchTextField.text = searchTextField.text
-        
+       
         
        
     }
     
     
-    
-    
+
     
     private func configureUI() {
         navigationItem.title = "Recent"
+    
         
         view.backgroundColor = .white
         
-        view.addSubview(searchOptionView)
-        searchOptionView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor,width: view.frame.size.width,height: 75)
-        
-        searchOptionView.addSubview(searchTextField)
-        searchTextField.centerY(inView: searchOptionView)
-        searchTextField.delegate = self
-        searchTextField.anchor(left : searchOptionView.leftAnchor,  paddingLeft: 16,height: 36)
-        
-        searchOptionView.addSubview(searchButton)
-        searchButton.centerY(inView: searchTextField)
-        searchButton.anchor(left : searchTextField.rightAnchor,right: searchOptionView.rightAnchor,paddingLeft: 8,paddingRight: 8, width: 70, height: 30)
-        
-        view.addSubview(tableView)
-        tableView.anchor(top: searchOptionView.bottomAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
 
         view.addSubview(newChatButton)
         newChatButton.anchor(bottom : view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,paddiongBottom: 64, paddingRight: 16)
@@ -192,26 +163,28 @@ class RecentController : UIViewController {
         
     }
     
-    @objc func searchTapped(_ sender : UIButton) {
+    @objc func showSearchBar(_ sender : UIBarButtonItem) {
         
-        searchController.searchBar.searchTextField.text = searchTextField.text
-        print(searchController.searchBar.searchTextField.text)
-        
-    }
-    
-    
-    
-    @objc func valitation() {
-        guard searchTextField.hasText else {
-            searchButton.isEnabled = false
-            searchButton.backgroundColor = .lightGray
-            searchButton.setTitleColor(.white, for: .normal)
-            return
+        if isBarShow {
+            
+            // hide
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: [.curveLinear], animations: {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -self.searchBarHeight)
+            }, completion: nil)
+            
+        } else {
+            UIView.animate(withDuration: 0.1, delay: 0.0, options: [.curveLinear], animations: {
+                self.tableView.contentOffset = CGPoint(x: 0, y: -self.topSafeAreaHeight)
+            }, completion: nil)
         }
-        searchButton.isEnabled = true
-        searchButton.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1)
+        
+        isBarShow.toggle()
+        searchBar.text = ""
+        // reset
+        searchRecents(searchText: "")
         
     }
+    
     
     
 }
@@ -222,11 +195,7 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if searchTextField.text != "" {
-            return filterChats.count
-        } else {
-            return recentChats.count
-        }
+        return filterChats.count
         
        
     }
@@ -236,12 +205,9 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         
         var recent : Dictionary<String, Any>
         
-        if searchTextField.text != "" {
+      
             recent = filterChats[indexPath.row]
-        } else {
-            recent = recentChats[indexPath.row]
-        }
-        
+      
     
         cell.generateCell(recent: recent, indexPath: indexPath)
         
@@ -251,26 +217,40 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     
 }
 
-extension RecentController : UISearchResultsUpdating, UITextFieldDelegate {
+extension RecentController : UISearchBarDelegate {
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func searchRecents(searchText: String) {
         
-        searchController.searchBar.searchTextField.text = searchTextField.text
-        filterContentForText(searchText: searchController.searchBar.searchTextField.text!)
-        return true
+        if searchText != "" {
+            filterChats = recentChats.filter({ (dic) -> Bool in
+                let withUserName = dic[kWITHUSERFULLNAME] as! String
+                print(withUserName)
+                return withUserName.lowercased().contains(searchText.lowercased())
+            })
+        } else {
+            
+            filterChats = recentChats
+        }
+ 
     }
     
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContentForText(searchText: searchController.searchBar.text!)
+    // delegate method
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchRecents(searchText: searchText)
     }
     
-    func filterContentForText(searchText : String, scope : String = "All") {
-        
-        filterChats = recentChats.filter({ (recentChat) -> Bool in
-            return (recentChat[kWITHUSERFULLNAME] as! String).lowercased().contains(searchText.lowercased())
-        })
-        
-    }
-    
-    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+          searchBar.text = ""
+          view.endEditing(true)
+          filterChats = recentChats
+          
+      }
+
+      // Searchボタンが押されると呼ばれる
+      func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+          view.endEditing(true)
+          //検索する
+          searchRecents(searchText: searchBar.text! as String)
+      }
 }
