@@ -40,11 +40,44 @@ extension MessageViewController {
             // filter
             self.loadMessages = self.checkCorrectType(allMessages: allMessages)
             
-            print(self.loadMessages.count)
+            for message in self.loadMessages {
+                _ = self.appendMessage(messageDeictionary: message)
+            }
             
-            
+            // listen New Chat
+            self.listenNewChat()
         }
     
+    }
+    
+    func listenNewChat() {
+        
+        var lastMessageDate = "0"
+        
+        if loadMessages.count > 0 {
+            lastMessageDate = loadMessages.last![kDATE] as! String
+        }
+        
+        newChatListner = firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).whereField(kDATE, isGreaterThan: lastMessageDate).addSnapshotListener({ (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            
+            if !snapshot.isEmpty {
+                print("Listen!")
+                for diff in snapshot.documentChanges {
+                    if (diff.type == .added) {
+                        let dic = diff.document.data() as NSDictionary
+                        
+                        if let type = dic[kTYPE] {
+                            if self.legitType.contains(type as! String) {
+                                _ = self.appendMessage(messageDeictionary: dic)
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        
     }
 
     
@@ -69,5 +102,32 @@ extension MessageViewController {
         return tempMessages
     }
     
+    private func appendMessage(messageDeictionary : NSDictionary) -> Bool {
+        
+        let incomingMessage = IncomingMessage(_collectionView: self.messagesCollectionView)
+        
+        if isInComing(messageDictionary: messageDeictionary) {
+            // upodate read Status
+            
+        }
+        
+        let message = incomingMessage.createMessage(messageDictionary: messageDeictionary, chatRoomId: chatRoomId)
+        
+        if message != nil {
+            messagesLists.append(message!)
+        }
+        
+        return isInComing(messageDictionary: messageDeictionary)
+        
+        
+        
+    }
+    
+    private func isInComing(messageDictionary : NSDictionary) -> Bool {
+        
+        var inComing = (User.currentId() == messageDictionary[kSENDERID] as! String) ? false : true
+        
+        return inComing
+    }
     
 }

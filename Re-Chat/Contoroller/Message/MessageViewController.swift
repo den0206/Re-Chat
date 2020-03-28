@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 import MessageKit
 import InputBarAccessoryView
 
@@ -23,16 +24,31 @@ class MessageViewController :  MessagesViewController {
     
     //MARK: - Vars
     
-    var messagesLists : [Message] = []
     var loadMessages : [NSDictionary] = []
     
+    var messagesLists : [Message] = [] {
+        didSet {
+            messagesCollectionView.reloadData()
+            messagesCollectionView.scrollToBottom(animated: true)
+            
+        }
+    }
+    
+    // instant vars
     var chatRoomId : String!
     var memberIds : [String]!
     var membersToPush : [String]!
     
      let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
     
+    // fireStore listener
+    var newChatListner : ListenerRegistration?
+    
     //MARK: - life Cycle
+    
+    deinit {
+        newChatListner?.remove()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,17 +56,18 @@ class MessageViewController :  MessagesViewController {
         configureMessageKit()
         
         loadFirstMessage()
+        
     }
     
     
     private func configureMessageKit() {
-        messagesCollectionView.backgroundColor = .lightGray
         
-        messagesCollectionView.dataSource = self
+        messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
         
         messageInputBar.delegate = self
+        
         
     }
 }
@@ -59,6 +76,7 @@ class MessageViewController :  MessagesViewController {
 
 extension MessageViewController : MessagesDataSource {
     func currentSender() -> SenderType {
+        
         
         return Sender(senderId: User.currentId(), displayName: User.currentUser()!.fullname)
     }

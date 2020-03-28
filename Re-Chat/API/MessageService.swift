@@ -46,7 +46,7 @@ struct MessageSearvice {
     
     func firstLoadMessage(chatRoomId : String, completion :  @escaping([NSDictionary], _ lastDocument : DocumentSnapshot?) -> Void) {
         
-        firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).limit(to: 11).getDocuments { (snapshot, error) in
+        firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: false).limit(to: 11).getDocuments { (snapshot, error) in
             
             guard let snapshot = snapshot else {return}
             var sorted : [NSDictionary] = []
@@ -65,11 +65,8 @@ struct MessageSearvice {
                 
             }
             
-            
-            
-            
-            
         }
     }
+    
     
 }
