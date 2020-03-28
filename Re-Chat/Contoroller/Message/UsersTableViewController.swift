@@ -166,10 +166,15 @@ extension UsersTableViewController {
             user = users[indexPath.row]
         }
         
-        guard let currentUser = self.user else {return}
+        guard let currentUser = User.currentUser() else {return}
         
-        let chatRoomId = startPrivateChat(user1: currentUser, user2: user)
-       
+        // when check if block
+        let messageVC = MessageViewController()
+        messageVC.chatRoomId = startPrivateChat(user1: currentUser, user2: user)
+        messageVC.membersToPush = [User.currentId(), user.uid]
+        messageVC.memberIds = [User.currentId(), user.uid]
+        
+        navigationController?.pushViewController(messageVC, animated: true)
 
     }
 }

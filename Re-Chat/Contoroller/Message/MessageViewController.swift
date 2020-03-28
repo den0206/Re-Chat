@@ -24,6 +24,7 @@ class MessageViewController :  MessagesViewController {
     //MARK: - Vars
     
     var messagesLists : [Message] = []
+    var loadMessages : [Dictionary<String,Any>] = []
     
     var chatRoomId : String!
     var memberIds : [String]!
@@ -132,5 +133,26 @@ extension MessageViewController : InputBarAccessoryViewDelegate {
                 self.send_message(text: text, picture: nil, location: nil, video: nil, audio: nil)
             }
         }
+        
+        finishSendMessage()
+    }
+    
+    // finish Sending
+    func finishSendMessage() {
+        messageInputBar.inputTextView.text = String()
+        messageInputBar.invalidatePlugins()
+        
+        messageInputBar.sendButton.startAnimating()
+        messageInputBar.inputTextView.placeholder = "Sending..."
+        DispatchQueue.global(qos: .default).async {
+            // fake send request task
+            sleep(1)
+            DispatchQueue.main.async { [weak self] in
+                self?.messageInputBar.sendButton.stopAnimating()
+                self?.messageInputBar.inputTextView.placeholder = "Aa"
+                self?.messagesCollectionView.scrollToBottom(animated: true)
+            }
+        }
+        
     }
 }

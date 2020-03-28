@@ -12,6 +12,7 @@ import UIKit
 
 struct OutGoingMessage {
     
+    // avoid
    let messageDictionary : NSMutableDictionary
    
    
@@ -21,6 +22,7 @@ struct OutGoingMessage {
        
        messageDictionary = NSMutableDictionary(objects: [message, senderId,senderName,status,type], forKeys: [kMESSAGE as NSCopying, kSENDERID as NSCopying, kSENDERNAME as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
    }
+    
     
     func sendMessage(chatRoomid : String, messageDictionary : NSMutableDictionary, membersId : [String]) {
         
@@ -32,8 +34,12 @@ struct OutGoingMessage {
     
         
         for member in membersId {
-            print(member)
+            firebaseReference(.Message).document(member).collection(chatRoomid).document(messageId).setData(messageDictionary as! [String : Any])
         }
+        
+        // update LastMessage & Counter (Recent Func)
+        updateRecent(chatRoomId: chatRoomid, lastMessage: messageDictionary[kMESSAGE] as! String)
+        
         
     }
 }

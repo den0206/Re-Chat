@@ -104,3 +104,40 @@ func createRecentToFirestore(userId : String,chatRoomId : String,members : [Stri
     
     localReference.setData(recent)
 }
+
+
+//MARK: - user messages view Controller
+
+func updateRecent(chatRoomId : String, lastMessage : String) {
+    
+    firebaseReference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (snapshot, error) in
+        
+        guard let snapshot = snapshot else {return}
+        
+        if !snapshot.isEmpty {
+            for recent in snapshot.documents {
+                let currentRecent = recent.data()
+                
+                updateRecentToFireStore(recent: currentRecent, lastMessage: lastMessage)
+            }
+        }
+    }
+}
+
+func updateRecentToFireStore(recent : Dictionary<String, Any>, lastMessage : String) {
+    let date = dateFormatter().string(from: Date())
+    var counter = recent[kCOUNTER] as! Int
+    
+    // except currentUser Counter
+    if recent[kUSERID] as! String != User.currentId() {
+        counter += 1
+    }
+    
+    let values = [kLASTMESSAGE : lastMessage,
+                  kCOUNTER: counter,
+                  kDATE : date] as [String : Any]
+    
+    firebaseReference(.Recent).document(recent[kRECENTID] as! String).updateData(values)
+}
+
+
