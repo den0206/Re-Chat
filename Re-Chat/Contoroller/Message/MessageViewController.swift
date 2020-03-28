@@ -37,6 +37,7 @@ class MessageViewController :  MessagesViewController {
     var firstLoaded = false
     
     let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
+    private var acsesarrySheet : AccesarySheetLauncher!
     
     // fireStore listener
     var newChatListner : ListenerRegistration?
@@ -56,6 +57,7 @@ class MessageViewController :  MessagesViewController {
         super.viewDidLoad()
         
         configureMessageKit()
+        configureAccesaryView()
         
         loadFirstMessage()
         
@@ -219,6 +221,16 @@ extension MessageViewController : InputBarAccessoryViewDelegate {
         finishSendMessage()
     }
     
+    func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
+        
+        if text == "" {
+            showAudioButton()
+        } else {
+            
+            messageInputBar.setStackViewItems([messageInputBar.sendButton], forStack: .right, animated: true)
+        }
+    }
+    
     // finish Sending
     func finishSendMessage() {
         messageInputBar.inputTextView.text = String()
@@ -236,5 +248,68 @@ extension MessageViewController : InputBarAccessoryViewDelegate {
             }
         }
         
+    }
+}
+
+//MARK: - configure Accesary view
+
+extension MessageViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate, AccesarySheetLauncherDelegate {
+   
+    
+    private func configureAccesaryView() {
+        
+        // left button
+        let optionItem = InputBarButtonItem(type: .system)
+        optionItem.tintColor = .darkGray
+        optionItem.image = UIImage(named: "clip")
+        
+        optionItem.setSize(CGSize(width: 60, height: 30), animated: true)
+        optionItem.addTarget(self, action: #selector(showOption(_ :)), for: .touchUpInside)
+        messageInputBar.leftStackView.alignment = .center
+        messageInputBar.setLeftStackViewWidthConstant(to: 50, animated: true)
+        messageInputBar.setStackViewItems([optionItem], forStack: .left, animated: true)
+        
+        // right
+        showAudioButton()
+        
+        
+    }
+    
+    private func showAudioButton() {
+        let micItem = InputBarButtonItem(type: .system)
+        micItem.tintColor = .darkGray
+        micItem.image = UIImage(named: "mic")
+        
+        micItem.setSize(CGSize(width: 60, height: 30), animated: true)
+        micItem.addTarget(self, action: #selector(showOption(_ :)), for: .touchUpInside)
+        messageInputBar.leftStackView.alignment = .center
+        messageInputBar.setRightStackViewWidthConstant(to: 50, animated: true)
+        messageInputBar.setStackViewItems([micItem], forStack: .right, animated: true)
+    }
+    
+    
+    @objc func showOption(_ sender : InputBarButtonItem) {
+        messageInputBar.inputTextView.resignFirstResponder()
+        messageInputBar.isHidden = true
+        
+        acsesarrySheet = AccesarySheetLauncher()
+        acsesarrySheet.show()
+        acsesarrySheet.delegate = self
+    }
+    
+    // AccesarySheet Delegate
+    
+    func handleDismiss(view: AccesarySheetLauncher) {
+        UIView.animate(withDuration: 0.5) {
+            view.blackView.alpha = 0
+            self.messageInputBar.isHidden = false
+            view.tableview.frame.origin.y += 300
+        }
+    }
+    
+    
+    
+    @objc func showAudio(_ sender : InputBarButtonItem) {
+        print("Audio")
     }
 }

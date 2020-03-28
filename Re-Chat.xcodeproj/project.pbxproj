@@ -14,6 +14,8 @@
 		3A19CB81241DFD0E003BB2DB /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB80241DFD0E003BB2DB /* InputTextView.swift */; };
 		3A19CB83241E0560003BB2DB /* TweetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A19CB82241E0560003BB2DB /* TweetService.swift */; };
 		3A201B82242713B50058A81A /* UploadTweetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A201B81242713B50058A81A /* UploadTweetViewModel.swift */; };
+		3A213CF5242FF79F00FAB3D7 /* AccesarySheetLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A213CF4242FF79F00FAB3D7 /* AccesarySheetLauncher.swift */; };
+		3A213CF72430027A00FAB3D7 /* AccesarySheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A213CF62430027A00FAB3D7 /* AccesarySheetViewModel.swift */; };
 		3A326628242261FE00506D59 /* HoulrForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A326627242261FE00506D59 /* HoulrForecast.swift */; };
 		3A32662A2422750F00506D59 /* WeeklyWeatherForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3266292422750F00506D59 /* WeeklyWeatherForecast.swift */; };
 		3A4D1A38241BA5C200397225 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4D1A37241BA5C200397225 /* SignUpController.swift */; };
@@ -72,6 +74,8 @@
 		3A19CB80241DFD0E003BB2DB /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		3A19CB82241E0560003BB2DB /* TweetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetService.swift; sourceTree = "<group>"; };
 		3A201B81242713B50058A81A /* UploadTweetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadTweetViewModel.swift; sourceTree = "<group>"; };
+		3A213CF4242FF79F00FAB3D7 /* AccesarySheetLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccesarySheetLauncher.swift; sourceTree = "<group>"; };
+		3A213CF62430027A00FAB3D7 /* AccesarySheetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccesarySheetViewModel.swift; sourceTree = "<group>"; };
 		3A326627242261FE00506D59 /* HoulrForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoulrForecast.swift; sourceTree = "<group>"; };
 		3A3266292422750F00506D59 /* WeeklyWeatherForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyWeatherForecast.swift; sourceTree = "<group>"; };
 		3A4D1A37241BA5C200397225 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
@@ -175,7 +179,7 @@
 				3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */,
 				3AAC78F7242E3FA40048EDF0 /* MessageViewController.swift */,
 				3AF5C5C9242EA517008F828F /* MessageViewController.swift+Save&Load.swift */,
-				3AFE5FF8241F9CDF00D7D2DA /* News Group */,
+				3A213CF4242FF79F00FAB3D7 /* AccesarySheetLauncher.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -209,6 +213,7 @@
 				3AD3591A2426F441006D69BE /* TweetViewModel.swift */,
 				3AE7591C24259DEC00CA5793 /* ProfileHeaderViewModel.swift */,
 				3A201B81242713B50058A81A /* UploadTweetViewModel.swift */,
+				3A213CF62430027A00FAB3D7 /* AccesarySheetViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -282,10 +287,11 @@
 		3AF9A7302418FCA2006C52B7 /* Contoroller */ = {
 			isa = PBXGroup;
 			children = (
-				3A06E6CC241A6270005A5D24 /* Authentification */,
 				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
+				3A06E6CC241A6270005A5D24 /* Authentification */,
 				3AF9A7332418FE9F006C52B7 /* Feed */,
 				3AAC78F6242E2E6D0048EDF0 /* Message */,
+				3AFE5FF8241F9CDF00D7D2DA /* News Group */,
 				3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */,
 				3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */,
 				3AEB576324246C0200968ADB /* WeatherViewController.swift */,
@@ -506,7 +512,9 @@
 				3AF5C5C8242EA3AD008F828F /* OutGoingMessage.swift in Sources */,
 				3AF9A7322418FCD6006C52B7 /* MainTabController.swift in Sources */,
 				3AEE8D6E242491C100D7595D /* WeatherData.swift in Sources */,
+				3A213CF5242FF79F00FAB3D7 /* AccesarySheetLauncher.swift in Sources */,
 				3AC8A4D8241CC34100460CE8 /* UsersTableViewController.swift in Sources */,
+				3A213CF72430027A00FAB3D7 /* AccesarySheetViewModel.swift in Sources */,
 				3AF9A73A24190702006C52B7 /* ContainerController.swift in Sources */,
 				3AE7591D24259DEC00CA5793 /* ProfileHeaderViewModel.swift in Sources */,
 				3AB4FCD42425B4A40060F028 /* ProfileFilterView.swift in Sources */,
