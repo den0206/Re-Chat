@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-struct OutGoingMessage {
+class OutGoingMessage {
     
     // avoid
    let messageDictionary : NSMutableDictionary
@@ -41,5 +41,25 @@ struct OutGoingMessage {
         updateRecent(chatRoomId: chatRoomid, lastMessage: messageDictionary[kMESSAGE] as! String)
         
         
+    }
+    
+    // update Read Message
+    
+    class func updateMessage(messageId : String, chatRoomId : String, membersIds : [String]) {
+        
+        let readDate = dateFormatter().string(from: Date())
+        let value = [kSTATUS : kREAD,
+                     kREADDATE : readDate]
+        
+        for userId in membersIds {
+            firebaseReference(.Message).document(userId).collection(chatRoomId).document(messageId).getDocument { (snapshot, error) in
+                
+                guard let snapshot = snapshot else {return}
+                
+                if snapshot.exists {
+                    firebaseReference(.Message).document(userId).collection(chatRoomId).document(messageId).updateData(value)
+                }
+            }
+        }
     }
 }

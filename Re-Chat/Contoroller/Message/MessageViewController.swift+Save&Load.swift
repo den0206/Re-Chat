@@ -35,50 +35,46 @@ extension MessageViewController {
     
     func loadFirstMessage() {
         
-        MessageSearvice.shared.firstLoadMessage(chatRoomId: chatRoomId) { (allMessages, lastDocument) in
-            
-            // filter
-            self.loadMessages = self.checkCorrectType(allMessages: allMessages)
-            
-            for message in self.loadMessages {
-                _ = self.appendMessage(messageDeictionary: message)
-            }
-            
-            // listen New Chat
-            self.listenNewChat()
-        }
-    
-    }
-    
-    func listenNewChat() {
+        showPresentLoadindView(true)
         
-        var lastMessageDate = "0"
-        
-        if loadMessages.count > 0 {
-            lastMessageDate = loadMessages.last![kDATE] as! String
-        }
-        
-        newChatListner = firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).whereField(kDATE, isGreaterThan: lastMessageDate).addSnapshotListener({ (snapshot, error) in
+        newChatListner = firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).limit(to: 11).addSnapshotListener { (snapshot, error) in
             
             guard let snapshot = snapshot else {return}
             
             if !snapshot.isEmpty {
-                print("Listen!")
-                for diff in snapshot.documentChanges {
-                    if (diff.type == .added) {
-                        let dic = diff.document.data() as NSDictionary
-                        
-                        if let type = dic[kTYPE] {
-                            if self.legitType.contains(type as! String) {
-                                _ = self.appendMessage(messageDeictionary: dic)
-                            }
-                        }
-                    }
+                let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documentChanges)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [NSDictionary]
+                
+                for message in sorted {
+                    _ = self.appendMessage(messageDeictionary: message)
+                   
                 }
+                
+                // only first load
+                if !self.firstLoaded {
+                    self.lastDocument = snapshot.documents.last
+                    self.firstLoaded = true
+                }
+               
+                
+                DispatchQueue.main.async {
+                    self.messagesCollectionView.reloadData()
+                    self.messagesCollectionView.scrollToBottom(animated: true)
+                    self.showPresentLoadindView(false)
+                }
+                
+                 print(self.lastDocument?.data())
+               
+                
+
+                
+            } else {
+                self.showPresentLoadindView(false)
             }
-        })
+            
+        }
         
     }
+    
 
     
 }
@@ -107,8 +103,10 @@ extension MessageViewController {
         let incomingMessage = IncomingMessage(_collectionView: self.messagesCollectionView)
         
         if isInComing(messageDictionary: messageDeictionary) {
-            // upodate read Status
             
+            print("Celled")
+            // upodate read Status
+            OutGoingMessage.updateMessage(messageId: messageDeictionary[kMESSAGEID] as! String, chatRoomId: chatRoomId, membersIds: memberIds)
         }
         
         let message = incomingMessage.createMessage(messageDictionary: messageDeictionary, chatRoomId: chatRoomId)
@@ -129,5 +127,7 @@ extension MessageViewController {
         
         return inComing
     }
+    
+   
     
 }

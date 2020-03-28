@@ -14,10 +14,8 @@ import InputBarAccessoryView
 struct Sender : SenderType {
     
     var senderId: String
-    
     var displayName: String
-    
-    
+
 }
 
 class MessageViewController :  MessagesViewController {
@@ -25,24 +23,21 @@ class MessageViewController :  MessagesViewController {
     //MARK: - Vars
     
     var loadMessages : [NSDictionary] = []
-    
-    var messagesLists : [Message] = [] {
-        didSet {
-            messagesCollectionView.reloadData()
-            messagesCollectionView.scrollToBottom(animated: true)
-            
-        }
-    }
+    var messagesLists : [Message] = [] 
     
     // instant vars
     var chatRoomId : String!
     var memberIds : [String]!
     var membersToPush : [String]!
     
+    var loadedMessageCount = 0
+    var firstLoaded = false
+    
      let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
     
     // fireStore listener
     var newChatListner : ListenerRegistration?
+    var lastDocument : DocumentSnapshot? = nil
     
     //MARK: - life Cycle
     
@@ -52,7 +47,7 @@ class MessageViewController :  MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         configureMessageKit()
         
         loadFirstMessage()
@@ -67,6 +62,8 @@ class MessageViewController :  MessagesViewController {
         messagesCollectionView.messagesDisplayDelegate = self
         
         messageInputBar.delegate = self
+        
+        hideCurrentUserAvatar()
         
         
     }
@@ -88,6 +85,23 @@ extension MessageViewController : MessagesDataSource {
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         return messagesLists.count
     }
+    
+    func hideCurrentUserAvatar() {
+        let layout = messagesCollectionView.collectionViewLayout as? MessagesCollectionViewFlowLayout
+        layout?.sectionInset = UIEdgeInsets(top: 1, left: 8, bottom: 1, right: 8)
+        
+        // Hide the outgoing avatar and adjust the label alignment to line up with the messages
+        layout?.setMessageOutgoingAvatarSize(.zero)
+        layout?.setMessageOutgoingMessageTopLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
+        layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
+    }
+    
+    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        
+        return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
+    }
+    
+    
     
     
 }

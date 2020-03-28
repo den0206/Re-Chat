@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 private let dateFormat = "yyyyMMddHHmmss"
+  
+let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
 
 func dateFormatter() -> DateFormatter {
     
@@ -62,4 +65,24 @@ func timeElapsed(date: Date) -> String {
     }
     
     return elapsed!
+}
+
+func dictionaryFromSnapshots(snapshots : [DocumentChange]) -> [NSDictionary] {
+    
+    var allMassages : [NSDictionary] = []
+    
+    for diff in snapshots {
+        if (diff.type == .added) {
+            let dic = diff.document.data() as NSDictionary
+            if let type = dic[kTYPE] {
+                if legitType.contains(type as! String) {
+                    allMassages.append(dic)
+                }
+                
+            }
+            
+        }
+        
+    }
+    return allMassages
 }

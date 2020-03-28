@@ -175,6 +175,7 @@
 				3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */,
 				3AAC78F7242E3FA40048EDF0 /* MessageViewController.swift */,
 				3AF5C5C9242EA517008F828F /* MessageViewController.swift+Save&Load.swift */,
+				3AFE5FF8241F9CDF00D7D2DA /* News Group */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -285,7 +286,6 @@
 				3AF9A7312418FCD6006C52B7 /* MainTabController.swift */,
 				3AF9A7332418FE9F006C52B7 /* Feed */,
 				3AAC78F6242E2E6D0048EDF0 /* Message */,
-				3AFE5FF8241F9CDF00D7D2DA /* News Group */,
 				3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */,
 				3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */,
 				3AEB576324246C0200968ADB /* WeatherViewController.swift */,

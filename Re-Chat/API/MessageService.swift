@@ -57,6 +57,31 @@ struct MessageSearvice {
                     let dictionary = doc.data() as NSDictionary
                     sorted.append(dictionary)
                 }
+               
+                let lastDocument = snapshot.documents.last
+                
+                completion(sorted, lastDocument)
+                
+                
+            }
+            
+        }
+    }
+    
+    func fetchMessages(chatRoomId : String, completion :  @escaping([NSDictionary], _ lastDocument : DocumentSnapshot?) -> Void) -> ListenerRegistration? {
+        
+      return firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: false).limit(to: 11).addSnapshotListener { (snapshot, error) in
+            
+            
+            guard let snapshot = snapshot else {return}
+            var sorted : [NSDictionary] = []
+            
+            if !snapshot.isEmpty {
+                
+                for doc in snapshot.documents {
+                    let dictionary = doc.data() as NSDictionary
+                    sorted.append(dictionary)
+                }
                 
                 let lastDocument = snapshot.documents.last
                 
@@ -66,6 +91,7 @@ struct MessageSearvice {
             }
             
         }
+        
     }
     
     
