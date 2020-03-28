@@ -23,8 +23,11 @@ class MessageViewController :  MessagesViewController {
     //MARK: - Vars
     
     var loadMessages : [NSDictionary] = []
-    var messagesLists : [Message] = [] 
-    
+    var messagesLists : [Message] = [] {
+        didSet {
+            messagesCollectionView.reloadData()
+        }
+    }
     // instant vars
     var chatRoomId : String!
     var memberIds : [String]!
@@ -37,7 +40,7 @@ class MessageViewController :  MessagesViewController {
     
     // fireStore listener
     var newChatListner : ListenerRegistration?
-    var lastDocument : DocumentSnapshot? = nil {
+    var lastDocument : DocumentSnapshot?  {
         didSet {
             configureRefreshController()
         }
@@ -51,12 +54,15 @@ class MessageViewController :  MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         configureMessageKit()
         
         loadFirstMessage()
         
+        
     }
+    
+    //MARK: - configure UI
     
     
     private func configureMessageKit() {
@@ -68,15 +74,23 @@ class MessageViewController :  MessagesViewController {
         messageInputBar.delegate = self
         
         hideCurrentUserAvatar()
+        configureInputView()
         
         
     }
     
+    private func configureInputView() {
+        messageInputBar.sendButton.tintColor = .darkGray
+        messageInputBar.backgroundView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        messageInputBar.inputTextView.backgroundColor = .white
+    }
+    
     private func configureRefreshController () {
-  
+        if messagesLists.count >= 11 {
             messagesCollectionView.addSubview(refreshController)
             refreshController.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
-
+        }
+        
     }
     
     @objc func refresh(_ sender : UIRefreshControl) {
@@ -84,7 +98,7 @@ class MessageViewController :  MessagesViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             
             self.fetchMoreMessage()
-            self.messagesCollectionView.reloadData()
+            
             
             self.refreshController.endRefreshing()
             
@@ -120,13 +134,22 @@ extension MessageViewController : MessagesDataSource {
         layout?.setMessageOutgoingMessageBottomLabelAlignment(LabelAlignment(textAlignment: .right, textInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)))
     }
     
+    func cellTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        
+        if indexPath.section % 3 == 0 {
+            
+            return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 10), NSAttributedString.Key.foregroundColor: UIColor.darkGray])
+        }
+        return nil
+    }
+    
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
         
         return NSAttributedString(string: MessageKitDateFormatter.shared.string(from: message.sentDate), attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
     }
     
-    
-    
+    // TODO: - Add Read Status
+
     
 }
 

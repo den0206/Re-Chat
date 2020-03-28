@@ -58,7 +58,7 @@ extension MessageViewController {
                
                 
                 DispatchQueue.main.async {
-                    self.messagesCollectionView.reloadData()
+//                    self.messagesCollectionView.reloadData()
                     self.messagesCollectionView.scrollToBottom(animated: true)
                     self.showPresentLoadindView(false)
                 }
@@ -76,14 +76,14 @@ extension MessageViewController {
         
         guard let lastDocument = self.lastDocument else {return}
         
-        firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).start(afterDocument: lastDocument).limit(to: 3).getDocuments { (snasphot, error) in
+        firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).start(afterDocument: lastDocument).limit(to: 5).getDocuments { (snasphot, error) in
             
             guard let snapshot = snasphot else {return}
             
             if !snapshot.isEmpty {
-                 let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documentChanges)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: false)]) as! [NSDictionary]
+                 let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documentChanges)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [NSDictionary]
                 
-                for message in sorted {
+                for message in sorted.reversed() {
                     let incomingMessage = IncomingMessage(_collectionView: self.messagesCollectionView)
                     
                     if self.isInComing(messageDictionary: message) {
@@ -95,7 +95,7 @@ extension MessageViewController {
                     let message = incomingMessage.createMessage(messageDictionary: message, chatRoomId: self.chatRoomId)
                     
                     if message != nil {
-                        self.messagesLists = [message!] + self.messagesLists
+                        self.messagesLists.insert(message!, at: 0)
                     }
                     
                     
