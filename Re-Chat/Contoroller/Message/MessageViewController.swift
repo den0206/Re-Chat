@@ -30,14 +30,18 @@ class MessageViewController :  MessagesViewController {
     var memberIds : [String]!
     var membersToPush : [String]!
     
-    var loadedMessageCount = 0
+    let refreshController = UIRefreshControl()
     var firstLoaded = false
     
-     let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
+    let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
     
     // fireStore listener
     var newChatListner : ListenerRegistration?
-    var lastDocument : DocumentSnapshot? = nil
+    var lastDocument : DocumentSnapshot? = nil {
+        didSet {
+            configureRefreshController()
+        }
+    }
     
     //MARK: - life Cycle
     
@@ -66,6 +70,26 @@ class MessageViewController :  MessagesViewController {
         hideCurrentUserAvatar()
         
         
+    }
+    
+    private func configureRefreshController () {
+  
+            messagesCollectionView.addSubview(refreshController)
+            refreshController.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
+
+    }
+    
+    @objc func refresh(_ sender : UIRefreshControl) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            
+            self.fetchMoreMessage()
+            self.messagesCollectionView.reloadData()
+            
+            self.refreshController.endRefreshing()
+            
+            
+        }
     }
 }
 

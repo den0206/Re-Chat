@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 
 extension MessageViewController {
@@ -62,10 +63,6 @@ extension MessageViewController {
                     self.showPresentLoadindView(false)
                 }
                 
-                 print(self.lastDocument?.data())
-               
-                
-
                 
             } else {
                 self.showPresentLoadindView(false)
@@ -75,36 +72,54 @@ extension MessageViewController {
         
     }
     
+    func fetchMoreMessage() {
+        
+        guard let lastDocument = self.lastDocument else {return}
+        
+        firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).start(afterDocument: lastDocument).limit(to: 3).getDocuments { (snasphot, error) in
+            
+            guard let snapshot = snasphot else {return}
+            
+            if !snapshot.isEmpty {
+                 let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documentChanges)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: false)]) as! [NSDictionary]
+                
+                for message in sorted {
+                    let incomingMessage = IncomingMessage(_collectionView: self.messagesCollectionView)
+                    
+                    if self.isInComing(messageDictionary: message) {
+                        
+                        // upodate read Status
+                        OutGoingMessage.updateMessage(messageId: message[kMESSAGEID] as! String, chatRoomId:self.chatRoomId, membersIds: self.memberIds)
+                    }
+                    
+                    let message = incomingMessage.createMessage(messageDictionary: message, chatRoomId: self.chatRoomId)
+                    
+                    if message != nil {
+                        self.messagesLists = [message!] + self.messagesLists
+                    }
+                    
+                    
+                }
+            
+                    self.lastDocument = snapshot.documents.last
 
+            }
+        }
+    }
+    
     
 }
 
 //MARK: - Helpers
 
 extension MessageViewController {
-    private func checkCorrectType(allMessages: [NSDictionary]) -> [NSDictionary] {
-        var tempMessages = allMessages
-        
-        for message in tempMessages {
-            if message[kTYPE]  != nil {
-                if !self.legitType.contains(message[kTYPE] as! String) {
-                    tempMessages.remove(at: tempMessages.firstIndex(of: message)!)
-                }
-            } else {
-                tempMessages.remove(at: tempMessages.firstIndex(of: message)!)
-            }
-        }
-        
-        return tempMessages
-    }
-    
+   
     private func appendMessage(messageDeictionary : NSDictionary) -> Bool {
         
         let incomingMessage = IncomingMessage(_collectionView: self.messagesCollectionView)
         
         if isInComing(messageDictionary: messageDeictionary) {
             
-            print("Celled")
             // upodate read Status
             OutGoingMessage.updateMessage(messageId: messageDeictionary[kMESSAGEID] as! String, chatRoomId: chatRoomId, membersIds: memberIds)
         }
@@ -116,8 +131,7 @@ extension MessageViewController {
         }
         
         return isInComing(messageDictionary: messageDeictionary)
-        
-        
+     
         
     }
     
@@ -128,6 +142,14 @@ extension MessageViewController {
         return inComing
     }
     
+    func isLastSectionVisble() -> Bool{
+        
+        guard !messagesLists.isEmpty else {return false}
+        
+        let lastInexPath = IndexPath(item: 0, section: messagesLists.count - 1)
+        
+        return messagesCollectionView.indexPathsForVisibleItems.contains(lastInexPath)
+    }
    
     
 }
