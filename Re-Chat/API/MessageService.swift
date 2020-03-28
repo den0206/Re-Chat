@@ -42,4 +42,34 @@ struct MessageSearvice {
         }
     }
     
+    //MARK: - Message
+    
+    func firstLoadMessage(chatRoomId : String, completion :  @escaping([NSDictionary], _ lastDocument : DocumentSnapshot?) -> Void) {
+        
+        firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).limit(to: 11).getDocuments { (snapshot, error) in
+            
+            guard let snapshot = snapshot else {return}
+            var sorted : [NSDictionary] = []
+            
+            if !snapshot.isEmpty {
+                
+                for doc in snapshot.documents {
+                    let dictionary = doc.data() as NSDictionary
+                    sorted.append(dictionary)
+                }
+                
+                let lastDocument = snapshot.documents.last
+                
+                completion(sorted, lastDocument)
+                
+                
+            }
+            
+            
+            
+            
+            
+        }
+    }
+    
 }

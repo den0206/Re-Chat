@@ -8,9 +8,12 @@
 
 import UIKit
 
+
 extension MessageViewController {
     
-    //MARK: - Send Out Going
+    //MARK: - Save Area
+    
+    //Send Out Going
     
     func send_message(text : String?, picture : String?, location : String?, video : NSURL?, audio : String?) {
         
@@ -27,5 +30,44 @@ extension MessageViewController {
         
         
     }
+    
+    //MARK: - Load Area
+    
+    func loadFirstMessage() {
+        
+        MessageSearvice.shared.firstLoadMessage(chatRoomId: chatRoomId) { (allMessages, lastDocument) in
+            
+            // filter
+            self.loadMessages = self.checkCorrectType(allMessages: allMessages)
+            
+            print(self.loadMessages.count)
+            
+            
+        }
+    
+    }
+
+    
+}
+
+//MARK: - Helpers
+
+extension MessageViewController {
+    private func checkCorrectType(allMessages: [NSDictionary]) -> [NSDictionary] {
+        var tempMessages = allMessages
+        
+        for message in tempMessages {
+            if message[kTYPE]  != nil {
+                if !self.legitType.contains(message[kTYPE] as! String) {
+                    tempMessages.remove(at: tempMessages.firstIndex(of: message)!)
+                }
+            } else {
+                tempMessages.remove(at: tempMessages.firstIndex(of: message)!)
+            }
+        }
+        
+        return tempMessages
+    }
+    
     
 }

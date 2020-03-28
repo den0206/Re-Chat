@@ -24,19 +24,22 @@ class MessageViewController :  MessagesViewController {
     //MARK: - Vars
     
     var messagesLists : [Message] = []
-    var loadMessages : [Dictionary<String,Any>] = []
+    var loadMessages : [NSDictionary] = []
     
     var chatRoomId : String!
     var memberIds : [String]!
     var membersToPush : [String]!
+    
+     let legitType = [kAUDIO, kVIDEO, kLOCATION, kTEXT, kPICTURE]
     
     //MARK: - life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(chatRoomId!)
         configureMessageKit()
+        
+        loadFirstMessage()
     }
     
     
