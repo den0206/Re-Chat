@@ -9,7 +9,7 @@
 import UIKit
 
 
-enum AccesarySheetOptions : CaseIterable {
+enum AccesarySheetOptions : Int, CaseIterable {
     case camera
     case photo
     case video

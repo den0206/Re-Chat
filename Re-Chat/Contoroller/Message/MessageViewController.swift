@@ -254,6 +254,7 @@ extension MessageViewController : InputBarAccessoryViewDelegate {
 //MARK: - configure Accesary view
 
 extension MessageViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate, AccesarySheetLauncherDelegate {
+
    
     
     private func configureAccesaryView() {
@@ -298,6 +299,22 @@ extension MessageViewController : UIImagePickerControllerDelegate, UINavigationC
     }
     
     // AccesarySheet Delegate
+    
+    func didSelect(option: AccesarySheetOptions) {
+        
+        switch option {
+      
+        case .camera:
+            print("Camera")
+        case .photo:
+            print("Photo")
+        case .video:
+            print("Video")
+        case .location:
+            print("Location")
+        }
+    }
+    
     
     func handleDismiss(view: AccesarySheetLauncher) {
         UIView.animate(withDuration: 0.5) {

@@ -10,7 +10,11 @@ import UIKit
 
 protocol AccesarySheetLauncherDelegate : class {
     func handleDismiss(view : AccesarySheetLauncher)
+    
+    func didSelect(option : AccesarySheetOptions)
 }
+
+private let reuseIdentifer = "AccesaryCell"
 
 class AccesarySheetLauncher : NSObject {
     
@@ -72,6 +76,8 @@ class AccesarySheetLauncher : NSObject {
         tableview.layer.cornerRadius = 5
         tableview.isScrollEnabled = false
         
+        tableview.register(AccesarySheetCell.self, forCellReuseIdentifier: reuseIdentifer)
+        
         
     }
     //MARK: - Show options
@@ -84,11 +90,24 @@ class AccesarySheetLauncher : NSObject {
         window.addSubview(blackView)
         blackView.frame = window.frame
         
+        window.addSubview(tableview)
+        let height = CGFloat(AccesarySheetOptions.allCases.count * 60) + 100
+        self.tableViewHeight = height
+        tableview.frame = CGRect(x: 0, y: window.frame.height , width: window.frame.width, height: height)
+        
         
         
         UIView.animate(withDuration: 0.5) {
             self.blackView.alpha = 1
+            self.showTableView(true)
         }
+    }
+    
+    func showTableView(_ shouldShow : Bool) {
+        guard let window = window else { return }
+        guard let height = tableViewHeight else { return }
+        let y = shouldShow ? window.frame.height - height : window.frame.height
+        tableview.frame.origin.y = y
     }
     
     
@@ -107,8 +126,35 @@ extension AccesarySheetLauncher : UITableViewDataSource,UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifer, for: indexPath) as! AccesarySheetCell
+        
+        cell.option = AccesarySheetOptions(rawValue: indexPath.row)
+        return cell
+        
     }
+    
+   
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        
+        return footerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let option = AccesarySheetOptions(rawValue: indexPath.row) else {return}
+        
+        delegate?.didSelect(option: option)
+        
+    }
+    
+    
     
     
 }
