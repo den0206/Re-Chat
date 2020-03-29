@@ -16,7 +16,7 @@ extension MessageViewController {
     
     //Send Out Going
     
-    func send_message(text : String?, picture : String?, location : String?, video : NSURL?, audio : String?) {
+    func send_message(text : String?, picture : UIImage?, location : String?, video : NSURL?, audio : String?) {
         
         var outGoingMessage : OutGoingMessage?
         guard let currentUser = User.currentUser() else {return}
@@ -25,6 +25,31 @@ extension MessageViewController {
             outGoingMessage = OutGoingMessage(message: text, senderId: currentUser.uid, senderName: currentUser.fullname, status: kDELIVERED, type: kTEXT)
         }
         
+        // pic
+        
+        if let pic = picture {
+            
+            uploadImage(image: pic, chatRoomId: chatRoomId, view: self.navigationController!.view) { (imageLink, error) in
+                
+                if error != nil {
+                    self.showAlert(title: "Error", message: error!.localizedDescription)
+                    return
+                }
+                
+                if imageLink != nil {
+                    let text = "画像が送信されました"
+                    
+                    outGoingMessage = OutGoingMessage(message: text, pictureLink: imageLink!, senderId: currentUser.uid, senderName: currentUser.fullname, status: kDELIVERED, type: kPICTURE)
+                    
+                    // to fire Store
+                    outGoingMessage?.sendMessage(chatRoomid: self.chatRoomId, messageDictionary: outGoingMessage!.messageDictionary, membersId: self.memberIds)
+                    self.finishSendMessage()
+                    
+                }
+            }
+            
+            return
+        }
         
         // set firestore text & Location Type
         outGoingMessage?.sendMessage(chatRoomid: chatRoomId, messageDictionary: outGoingMessage!.messageDictionary, membersId: memberIds)
@@ -83,21 +108,23 @@ extension MessageViewController {
             if !snapshot.isEmpty {
                  let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documentChanges)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [NSDictionary]
                 
-                for message in sorted.reversed() {
+                for messageDic in sorted.reversed() {
                     let incomingMessage = IncomingMessage(_collectionView: self.messagesCollectionView)
                     
-                    if self.isInComing(messageDictionary: message) {
+                    if self.isInComing(messageDictionary: messageDic) {
                         
                         // upodate read Status
-                        OutGoingMessage.updateMessage(messageId: message[kMESSAGEID] as! String, chatRoomId:self.chatRoomId, membersIds: self.memberIds)
+                        OutGoingMessage.updateMessage(messageId: messageDic[kMESSAGEID] as! String, chatRoomId:self.chatRoomId, membersIds: self.memberIds)
                     }
                     
-                    let message = incomingMessage.createMessage(messageDictionary: message, chatRoomId: self.chatRoomId)
+                    let message = incomingMessage.createMessage(messageDictionary: messageDic, chatRoomId: self.chatRoomId)
                     
                     if message != nil {
                         self.messagesLists.insert(message!, at: 0)
+                        self.objectMessages.insert(messageDic, at: 0)
                     }
                     
+                    print(self.messagesLists.count, self.objectMessages.count)
                     
                 }
             
@@ -128,6 +155,7 @@ extension MessageViewController {
         
         if message != nil {
             messagesLists.append(message!)
+            objectMessages.append(messageDeictionary)
         }
         
         return isInComing(messageDictionary: messageDeictionary)

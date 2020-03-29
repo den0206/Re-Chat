@@ -23,6 +23,7 @@ class MessageViewController :  MessagesViewController {
     //MARK: - Vars
     
     var loadMessages : [NSDictionary] = []
+    var objectMessages : [NSDictionary] = []
     var messagesLists : [Message] = [] {
         didSet {
             messagesCollectionView.reloadData()
@@ -40,12 +41,18 @@ class MessageViewController :  MessagesViewController {
     private var acsesarrySheet : AccesarySheetLauncher!
     
     // fireStore listener
+    
     var newChatListner : ListenerRegistration?
     var lastDocument : DocumentSnapshot?  {
         didSet {
             configureRefreshController()
         }
     }
+    
+    /// Avatars
+    var withUsers : [User] = []
+    var avatarItems : NSMutableDictionary?
+    var avatarImageDictionary : NSMutableDictionary?
     
     //MARK: - life Cycle
     
@@ -58,6 +65,9 @@ class MessageViewController :  MessagesViewController {
         
         configureMessageKit()
         configureAccesaryView()
+        
+        self.avatarItems = [:]
+        getCustomTitle()
         
         loadFirstMessage()
         
@@ -74,6 +84,8 @@ class MessageViewController :  MessagesViewController {
         messagesCollectionView.messagesDisplayDelegate = self
         
         messageInputBar.delegate = self
+        
+        maintainPositionOnKeyboardFrameChanged = true
         
         hideCurrentUserAvatar()
         configureInputView()
@@ -95,12 +107,23 @@ class MessageViewController :  MessagesViewController {
         
     }
     
+    private func getCustomTitle() {
+        
+        guard let memberIds = memberIds else {return}
+        
+        UserSearvice.shared.fetchWithUsers(userIds: memberIds) { (usersArray) in
+    
+            self.withUsers = usersArray
+            print(self.withUsers)
+        }
+        
+    }
+    
     @objc func refresh(_ sender : UIRefreshControl) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             
             self.fetchMoreMessage()
-            
             
             self.refreshController.endRefreshing()
             
@@ -151,6 +174,28 @@ extension MessageViewController : MessagesDataSource {
     }
     
     // TODO: - Add Read Status
+    
+    func messageBottomLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        
+        let messageDictionary = objectMessages[indexPath.section]
+        let status : NSAttributedString
+        let atributeStringColor = [NSAttributedString.Key.foregroundColor : UIColor.lightGray]
+        
+        if isFromCurrentSender(message: message) {
+            switch messageDictionary[kSTATUS] as! String{
+            case kDELIVERED:
+                status = NSAttributedString(string: kDELIVERED, attributes:  [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2), NSAttributedString.Key.foregroundColor : UIColor.lightGray] )
+            case kREAD :
+                status = NSAttributedString(string: kREAD, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1), NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+            default:
+                status = NSAttributedString(string: "✔︎", attributes:  [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2)])
+            }
+            
+            return status
+        }
+        
+        return nil
+    }
 
     
 }
@@ -165,7 +210,7 @@ extension MessageViewController : MessagesLayoutDelegate {
     }
     
     func cellBottomLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
-        return 0
+        return 10
     }
     
     func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
@@ -302,14 +347,16 @@ extension MessageViewController : UIImagePickerControllerDelegate, UINavigationC
     
     func didSelect(option: AccesarySheetOptions) {
         
+        let camera = Camera(delegate_: self)
+        
         switch option {
       
         case .camera:
-            print("Camera")
+            camera.PresentPhotoCamera(target: self, canEdit: false)
         case .photo:
-            print("Photo")
+            camera.PresentPhotoLibrary(target: self, canEdit: true)
         case .video:
-            print("Video")
+            camera.PresentVideoLibrary(target: self, canEdit: false)
         case .location:
             print("Location")
         }
@@ -321,6 +368,22 @@ extension MessageViewController : UIImagePickerControllerDelegate, UINavigationC
             view.blackView.alpha = 0
             self.messageInputBar.isHidden = false
             view.tableview.frame.origin.y += 300
+        }
+    }
+    
+    //MARK: - Image picker delgate
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        // dismiss actionSheet
+        handleDismiss(view: self.acsesarrySheet)
+        
+        self.dismiss(animated: true) {
+            let pic = info[.editedImage] as? UIImage
+            let video = info[.mediaURL] as? NSURL
+            
+            self.send_message(text: nil, picture: pic, location: nil, video: video, audio: nil)
+
         }
     }
     

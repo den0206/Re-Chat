@@ -8,6 +8,93 @@
 
 import Foundation
 import UIKit
+import FirebaseStorage
+import MBProgressHUD
+
+//MARK: - downloaders use MessageVC
+
+let storage = Storage.storage()
+
+// image
+
+func uploadImage(image : UIImage, chatRoomId : String, view : UIView, completion : @escaping(_ imageLink : String?, _ error : Error?) -> Void) {
+    
+    let MB = MBProgressHUD.showAdded(to: view, animated: true)
+    MB.mode = .determinateHorizontalBar
+    
+    let dateString = dateFormatter().string(from: Date())
+    let photoFileName = "PictureMessages/" + User.currentId() + "/" + chatRoomId + "/" + dateString + ".jpg"
+    
+    let storageRef = storage.reference(forURL: kFILEREFERENCE).child(photoFileName)
+    
+    // encode image data
+    let imageData = image.jpegData(compressionQuality: 0.3)
+    var task : StorageUploadTask!
+    
+    task = storageRef.putData(imageData!, metadata: nil, completion: { (metadata, error) in
+        
+        task.removeAllObservers()
+        MB.hide(animated: true)
+        
+        if error != nil {
+            print(error!.localizedDescription)
+            completion(nil, error)
+            return
+        }
+        
+        storageRef.downloadURL { (url, error) in
+            
+            guard let downloadUrl = url else {
+                completion(nil, error)
+                return}
+            
+            completion(downloadUrl.absoluteString, nil)
+        }
+        
+        
+    })
+    
+    task.observe(StorageTaskStatus.progress) { (snapshot) in
+        MB.progress = Float((snapshot.progress?.completedUnitCount)!) / Float((snapshot.progress?.totalUnitCount)!)
+        
+        
+    }
+}
+
+func downLoadImageFromString(imageLink : String) -> UIImage?{
+    let imageUrl = NSURL(string: imageLink)
+    let imageFileName = (imageLink.components(separatedBy: "%").last!).components(separatedBy: "?").first!
+    
+    // check Exist
+    if fileExistPath(path: imageLink) {
+        
+        if let componentsFile = UIImage(contentsOfFile: fileInDocumentDictionary(filename: imageFileName)) {
+            return componentsFile
+        } else {
+            return nil
+        }
+    } else {
+        let nsData = NSData(contentsOf: imageUrl! as URL)
+        
+        if nsData != nil {
+            // add To documentsUrl
+            var docURL = getDocumentUrl()
+            
+            docURL = docURL.appendingPathComponent(imageFileName, isDirectory: false)
+            nsData!.write(to: docURL, atomically: true)
+            
+            let imageToReturn = UIImage(data: nsData! as Data)
+            return imageToReturn
+            
+        } else {
+            print("No Image Database")
+            return nil
+        }
+    }
+
+    
+}
+
 
 //MARK: - Decode Image
 

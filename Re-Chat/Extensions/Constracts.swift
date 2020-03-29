@@ -76,4 +76,8 @@ public let kREAD = "read"
 public let kREADDATE = "readDate"
 public let kDELETED = "deleted"
 
+public let kFILEREFERENCE = "gs://re-chat-b2a18.appspot.com"
+public let kMAXDURATION = 120.0
+public let kAUDIOMAXDURATION = 120.0
+
 

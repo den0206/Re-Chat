@@ -72,6 +72,38 @@ struct UserSearvice {
         }
     }
     
+    func fetchWithUsers(userIds : [String], completion :  @escaping(_ withUsers : [User]) -> Void) {
+        var count = 0
+        var usersArray : [User] = []
+        
+        for userId in userIds {
+            firebaseReference(.User).document(userId).getDocument { (snapshot, error) in
+                
+                guard let snapshot = snapshot else {return}
+                
+                if snapshot.exists {
+                    let dic = snapshot.data()
+                    let user = User(uid: userId, dictionary: dic!)
+                
+                    count += 1
+                    
+                    if user.uid != User.currentId() {
+                        usersArray.append(user)
+                    }
+                    
+                    completion(usersArray)
+                    
+                    //
+                } else {
+                    completion(usersArray)
+                }
+                
+               
+               
+            }
+        }
+    }
+    
     
     
     func checkUsetIsFollow(uid : String, completion :  @escaping(Bool) -> Void) {

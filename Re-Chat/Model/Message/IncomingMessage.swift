@@ -31,6 +31,8 @@ struct IncomingMessage {
       
         case kTEXT :
             message = textMessage(messageDictionary: messageDictionary, chatRoomId: chatRoomId)
+        case kPICTURE :
+            message = pictureMessage(messageDictionary: messageDictionary, chatRoomId: chatRoomId)
         default :
             print("Typeがわからない")
         }
@@ -45,6 +47,8 @@ struct IncomingMessage {
     }
     
     //MARK: - create each message Type
+    
+    // text
     
     func textMessage(messageDictionary : NSDictionary, chatRoomId : String) -> Message {
         
@@ -69,5 +73,37 @@ struct IncomingMessage {
         return Message(text: text, sender: Sender(senderId: userid, displayName: name), messageId: messageId, date: date)
         
     }
+    
+    // picture
+    
+    func pictureMessage(messageDictionary : NSDictionary, chatRoomId : String) -> Message? {
+        
+        let name = messageDictionary[kSENDERNAME] as! String
+        let userid = messageDictionary[kSENDERID] as! String
+        let messageId = messageDictionary[kMESSAGEID] as! String
+        
+        var date : Date!
+        
+        if let created = messageDictionary[kDATE] {
+            if (created as! String).count !=  14 {
+                date = Date()
+            } else {
+                date = dateFormatter().date(from: created as! String)
+            }
+        } else {
+            date = Date()
+            
+        }
+        
+        let image = downLoadImageFromString(imageLink: messageDictionary[kPICTURE] as! String)
+        
+        if image != nil {
+            return Message(image: image!, sender: Sender(senderId: userid, displayName: name), messageId: messageId, date: date)
+        }
+        
+        return nil
+        
+    }
+    
     
 }

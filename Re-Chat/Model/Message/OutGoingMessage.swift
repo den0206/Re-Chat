@@ -21,7 +21,25 @@ class OutGoingMessage {
    init(message : String, senderId : String, senderName : String, status : String, type : String) {
        
        messageDictionary = NSMutableDictionary(objects: [message, senderId,senderName,status,type], forKeys: [kMESSAGE as NSCopying, kSENDERID as NSCopying, kSENDERNAME as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
-   }
+    }
+    
+    // pic
+    
+    init(message : String, pictureLink : String, senderId : String, senderName : String, status : String, type : String) {
+        
+        messageDictionary = NSMutableDictionary(objects: [message,pictureLink,senderId,senderName,status,type], forKeys: [kMESSAGE as NSCopying,kPICTURE as NSCopying,kSENDERID as NSCopying, kSENDERNAME as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
+        
+    }
+    
+    // video
+    
+    init(message : String, videoLink : String, thumbnail : NSData, senderId : String, senderName : String, status : String, type : String) {
+        
+        // encode Thumbnail
+        let picThumb = thumbnail.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+        
+        messageDictionary = NSMutableDictionary(objects: [message,videoLink,picThumb, senderId,senderName,status,type], forKeys: [kMESSAGE as NSCopying,kVIDEO as NSCopying,kTHUMBNAIL as NSCopying,kSENDERID as NSCopying, kSENDERNAME as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
+    }
     
     
     func sendMessage(chatRoomid : String, messageDictionary : NSMutableDictionary, membersId : [String]) {
