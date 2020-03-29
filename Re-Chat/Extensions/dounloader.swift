@@ -110,6 +110,13 @@ func imageFromData(pictureData : String, withBlock : (_ image : UIImage?) -> Voi
 }
 
 
+func dataImageFromString(picString : String, withBlock : (_ image : Data?) -> Void) {
+    let imageData = NSData(base64Encoded: picString, options: NSData.Base64DecodingOptions(rawValue: 0))
+    
+    withBlock(imageData as Data?)
+}
+
+
 func downloadImageFromData(picturedata : String) -> UIImage?{
     let imageFileName = (picturedata.components(separatedBy: "%").last!).components(separatedBy: "?").first!
     

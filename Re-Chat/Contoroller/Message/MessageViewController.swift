@@ -51,7 +51,11 @@ class MessageViewController :  MessagesViewController {
     
     /// Avatars
     var withUsers : [User] = []
-    var avatarItems : NSMutableDictionary?
+    var avatarItems : NSMutableDictionary? {
+        didSet {
+            messagesCollectionView.reloadData()
+        }
+    }
     var avatarImageDictionary : NSMutableDictionary?
     
     //MARK: - life Cycle
@@ -114,9 +118,56 @@ class MessageViewController :  MessagesViewController {
         UserSearvice.shared.fetchWithUsers(userIds: memberIds) { (usersArray) in
     
             self.withUsers = usersArray
-            print(self.withUsers)
+            
+            // always Show avatar
+            for user in self.withUsers {
+                self.avatarImageFrom(user: user)
+            }
+            
+            
+            
         }
         
+    }
+    
+    private func avatarImageFrom(user : User) {
+        
+        if user.profileImage != "" {
+            dataImageFromString(picString: user.profileImage) { (imageData) in
+                
+                if imageData == nil {
+                    return
+                }
+                
+                if self.avatarImageDictionary != nil {
+                    self.avatarImageDictionary!.removeObject(forKey: user.uid)
+                    self.avatarImageDictionary!.setObject(imageData!, forKey: user.uid as NSCopying)
+                } else {
+                    self.avatarImageDictionary = [user.uid : imageData!]
+                }
+                
+                self.createAvatarItem(avatarDictionary: avatarImageDictionary)
+            }
+            
+        }
+        
+    }
+    
+    private func createAvatarItem(avatarDictionary : NSMutableDictionary?) {
+        let defaultAvatar = Avatar(image: UIImage(named: "avatarPlaceholder"), initials: "?")
+        
+        if avatarDictionary != nil {
+            
+            for userId in memberIds {
+                if let avataImageData = avatarDictionary![userId] {
+                    let avatarItem = Avatar(image: UIImage(data: avataImageData as! Data), initials: "?")
+                    
+                    self.avatarItems!.setValue(avatarItem, forKey: userId)
+                } else {
+                    self.avatarItems!.setValue(defaultAvatar, forKey: userId)
+                }
+            }
+        }
     }
     
     @objc func refresh(_ sender : UIRefreshControl) {
@@ -196,6 +247,25 @@ extension MessageViewController : MessagesDataSource {
         
         return nil
     }
+    
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+       
+           let message = messagesLists[indexPath.section]
+           var avatar : Avatar
+           
+           if avatarItems != nil {
+               
+               if let avatarData = avatarItems!.object(forKey: message.sender.senderId) {
+                   
+                   avatar = avatarData as! Avatar
+                   avatarView.set(avatar: avatar)
+               }
+                
+           } else {
+               avatar = Avatar(image: UIImage(named: "avatarPlaceholder") , initials: "?")
+               avatarView.set(avatar: avatar)
+           }
+       }
 
     
 }
