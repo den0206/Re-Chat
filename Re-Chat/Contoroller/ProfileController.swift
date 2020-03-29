@@ -76,7 +76,13 @@ class ProfileController : UICollectionViewController {
         super.viewWillAppear(true)
         
         navigationController?.navigationBar.isHidden = true
-        navigationController?.navigationBar.barStyle = .black
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        navigationController?.navigationBar.isHidden = false
+        
     }
     //MARK: - Hekpers
     

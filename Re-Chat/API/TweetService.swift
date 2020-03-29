@@ -279,6 +279,31 @@ struct TweetService {
         }
     }
     
+    func fetchReply(tweetId : String, completion :  @escaping([Tweet]) -> Void) {
+        firebaseReference(.Tweet).document(tweetId).collection(kRETWEETS).getDocuments { (snapshot, error) in
+            
+            var replyTweets = [Tweet]()
+            
+            guard let snapshot = snapshot else {return}
+            
+            if !snapshot.isEmpty {
+                for doc in snapshot.documents {
+                    let dictionary = doc.data()
+                    let tweetId = dictionary[kTWEETID] as! String
+                    let userId = dictionary[kUSERID] as! String
+                    
+                    UserSearvice.shared.userIdToUser(uid: userId) { (user) in
+                        let tweet = Tweet(user: user, tweetId: tweetId, dictionary: dictionary)
+                        
+                        replyTweets.append(tweet)
+                        completion(replyTweets)
+                        
+                    }
+                }
+            }
+        }
+    }
+    
     
     
 }

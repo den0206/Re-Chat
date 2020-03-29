@@ -236,6 +236,14 @@ extension FeedController {
         
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let tweet = tweets[indexPath.item]
+        
+        let tweetVC = TweetViewController(tweet: tweet)
+        navigationController?.pushViewController(tweetVC, animated: true)
+    }
+    
     //MARK: - For pagination
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

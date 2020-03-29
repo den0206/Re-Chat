@@ -24,6 +24,8 @@
 		3AAC78FA242E430E0048EDF0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AAC78F9242E430E0048EDF0 /* Message.swift */; };
 		3AB4FCD42425B4A40060F028 /* ProfileFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4FCD32425B4A40060F028 /* ProfileFilterView.swift */; };
 		3AB4FCD62425BF060060F028 /* ProfileFilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AB4FCD52425BF060060F028 /* ProfileFilterCell.swift */; };
+		3ABA63732430D13D00A22496 /* TweetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABA63722430D13D00A22496 /* TweetViewController.swift */; };
+		3ABA63752430D56600A22496 /* TweetHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ABA63742430D56600A22496 /* TweetHeader.swift */; };
 		3AC4D285241C952600917988 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4D284241C952600917988 /* User.swift */; };
 		3AC4D287241CAE2300917988 /* dounloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC4D286241CAE2300917988 /* dounloader.swift */; };
 		3AC8A4D8241CC34100460CE8 /* UsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */; };
@@ -86,6 +88,8 @@
 		3AAC78F9242E430E0048EDF0 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		3AB4FCD32425B4A40060F028 /* ProfileFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFilterView.swift; sourceTree = "<group>"; };
 		3AB4FCD52425BF060060F028 /* ProfileFilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFilterCell.swift; sourceTree = "<group>"; };
+		3ABA63722430D13D00A22496 /* TweetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetViewController.swift; sourceTree = "<group>"; };
+		3ABA63742430D56600A22496 /* TweetHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TweetHeader.swift; sourceTree = "<group>"; };
 		3AC4D284241C952600917988 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3AC4D286241CAE2300917988 /* dounloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dounloader.swift; sourceTree = "<group>"; };
 		3AC8A4D7241CC34100460CE8 /* UsersTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersTableViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +200,7 @@
 				3A19CB80241DFD0E003BB2DB /* InputTextView.swift */,
 				3A0F6A5E2425DC17005FB05F /* SideMenuHeader.swift */,
 				3AD359182426EC68006D69BE /* TweetCell.swift */,
+				3ABA63742430D56600A22496 /* TweetHeader.swift */,
 				3AF4B212242CD6EB0097CC46 /* RecentCell.swift */,
 				3AD590A0243025CA00069F31 /* AccesarySheetCell.swift */,
 				3AE759182425926800CA5793 /* Profile */,
@@ -301,6 +306,7 @@
 				3A19CB7C241DEDD6003BB2DB /* ProfileController.swift */,
 				3A19CB7E241DF5AC003BB2DB /* UploadTweetController.swift */,
 				3AEB576324246C0200968ADB /* WeatherViewController.swift */,
+				3ABA63722430D13D00A22496 /* TweetViewController.swift */,
 			);
 			path = Contoroller;
 			sourceTree = "<group>";
@@ -478,6 +484,7 @@
 				3A326628242261FE00506D59 /* HoulrForecast.swift in Sources */,
 				3A0F6A5F2425DC17005FB05F /* SideMenuHeader.swift in Sources */,
 				3A201B82242713B50058A81A /* UploadTweetViewModel.swift in Sources */,
+				3ABA63732430D13D00A22496 /* TweetViewController.swift in Sources */,
 				3AB4FCD62425BF060060F028 /* ProfileFilterCell.swift in Sources */,
 				3AF5C5CA242EA517008F828F /* MessageViewController.swift+Save&Load.swift in Sources */,
 				3AFE5FFE241FA89700D7D2DA /* WebViewController.swift in Sources */,
@@ -518,6 +525,7 @@
 				3AD3591B2426F441006D69BE /* TweetViewModel.swift in Sources */,
 				3AFC14EB241C7035000E15D9 /* AuthSearvice.swift in Sources */,
 				3AF5C5C8242EA3AD008F828F /* OutGoingMessage.swift in Sources */,
+				3ABA63752430D56600A22496 /* TweetHeader.swift in Sources */,
 				3AF9A7322418FCD6006C52B7 /* MainTabController.swift in Sources */,
 				3AEE8D6E242491C100D7595D /* WeatherData.swift in Sources */,
 				3A213CF5242FF79F00FAB3D7 /* AccesarySheetLauncher.swift in Sources */,

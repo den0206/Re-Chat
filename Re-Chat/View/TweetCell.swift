@@ -119,18 +119,6 @@ class TweetCell : UICollectionViewCell {
         guard let tweet = tweet else {return}
         captionLabel.text = tweet.caption
         
-//        tweet.checkTweetDidlike { (didlike) in
-//            if didlike {
-//                tweet.didLike = true
-//                self.likeButton.tintColor = .red
-//                self.likeButton.setImage(#imageLiteral(resourceName: "like_filled"), for: .normal)
-//            } else {
-//                tweet.didLike = false
-//                self.likeButton.tintColor = .lightGray
-//                self.likeButton.setImage(#imageLiteral(resourceName: "like_unselected"), for: .normal)
-//            }
-//        }
-        
         let vm = TweetViewModel(tweet: tweet)
         
         profileImageView.image = downloadImageFromData(picturedata: vm.profileImageString)
