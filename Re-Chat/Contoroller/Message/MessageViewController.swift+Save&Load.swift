@@ -54,6 +54,27 @@ extension MessageViewController {
         // set firestore text & Location Type
         outGoingMessage?.sendMessage(chatRoomid: chatRoomId, messageDictionary: outGoingMessage!.messageDictionary, membersId: memberIds)
         
+        // video
+        
+        if let video = video {
+            let videoData = NSData(contentsOfFile: video.path!)
+            let thumbnailData = videoThmbnail(video: video).jpegData(compressionQuality: 0.3)
+            
+            uploadVideo(video: videoData!, chatRoomId: chatRoomId, view: self.navigationController!.view) { (videoLink) in
+                
+                if videoLink != nil {
+                    let text = "ビデオが送信されました"
+                    
+                    outGoingMessage = OutGoingMessage(message: text, videoLink: videoLink!, thumbnail: thumbnailData! as NSData, senderId: currentUser.uid, senderName: currentUser.fullname, status: kDELIVERED, type: kVIDEO)
+                    
+                    outGoingMessage?.sendMessage(chatRoomid: self.chatRoomId, messageDictionary: outGoingMessage!.messageDictionary, membersId: self.memberIds)
+                    self.finishSendMessage()
+                }
+            }
+            
+            return
+        }
+        
         
     }
     

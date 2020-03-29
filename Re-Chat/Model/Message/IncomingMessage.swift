@@ -33,6 +33,8 @@ struct IncomingMessage {
             message = textMessage(messageDictionary: messageDictionary, chatRoomId: chatRoomId)
         case kPICTURE :
             message = pictureMessage(messageDictionary: messageDictionary, chatRoomId: chatRoomId)
+        case kVIDEO :
+            message = videoMessage(messageDictionary: messageDictionary, chatRoomId: chatRoomId)
         default :
             print("Typeがわからない")
         }
@@ -103,6 +105,57 @@ struct IncomingMessage {
         
         return nil
         
+    }
+    
+    /// video
+    
+    func videoMessage(messageDictionary : NSDictionary, chatRoomId : String) -> Message? {
+        
+        let name = messageDictionary[kSENDERNAME] as! String
+        let userid = messageDictionary[kSENDERID] as! String
+        let messageId = messageDictionary[kMESSAGEID] as! String
+        
+        var date : Date!
+        
+        if let created = messageDictionary[kDATE] {
+            if (created as! String).count !=  14 {
+                date = Date()
+            } else {
+                date = dateFormatter().date(from: created as! String)
+            }
+        } else {
+            date = Date()
+            
+        }
+        
+        let videoUrl = NSURL(fileURLWithPath: messageDictionary[kVIDEO] as! String)
+        let thumbnail = downloadImageFromData(picturedata: messageDictionary[kTHUMBNAIL] as! String)
+        
+        var videoItem = MockVideoItem(withFileUrl: videoUrl, thumbnail: thumbnail!)
+        
+        downloadVideo(videoLink: messageDictionary[kVIDEO] as! String) { (_ , fileName) in
+            
+            let url = NSURL(fileURLWithPath: fileInDocumentDictionary(filename: fileName))
+            videoItem = MockVideoItem(withFileUrl: url, thumbnail: thumbnail!)
+        }
+        
+        
+        
+        if videoItem.fileUrl != nil && videoItem.image != nil {
+            return Message(media: videoItem, sender: Sender(senderId: userid, displayName: name), messageId: messageId, date: date)
+        } else {
+            return nil
+            
+            
+        }
+    }
+    
+    func returnVideoMessage(name: String, userId : String, messageId : String, date : Date, videoItem : MockVideoItem) -> Message? {
+        if videoItem.fileUrl != nil && videoItem.image != nil {
+            return Message(media: videoItem, sender: Sender(senderId: userId, displayName: name), messageId: messageId, date: date)
+        } else {
+            return nil
+        }
     }
     
     

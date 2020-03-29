@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FirebaseStorage
+import AVFoundation
 import MBProgressHUD
 
 //MARK: - downloaders use MessageVC
@@ -94,6 +95,79 @@ func downLoadImageFromString(imageLink : String) -> UIImage?{
 
     
 }
+
+// video
+
+func uploadVideo(video : NSData, chatRoomId : String, view : UIView, completion :  @escaping(_ videoLink : String?) -> Void) {
+    
+    let MB = MBProgressHUD.showAdded(to: view, animated: true)
+       MB.mode = .determinateHorizontalBar
+    
+    let dateString = dateFormatter().string(from: Date())
+    let videoFileName = "VideoMessages/" + User.currentId() + "/" + chatRoomId + "/" + dateString + ".mov"
+    
+    let strogeRef = storage.reference(forURL: kFILEREFERENCE).child(videoFileName)
+    var task : StorageUploadTask!
+    
+    task = strogeRef.putData(video as Data, metadata: nil, completion: { (metaData, error) in
+        
+        task?.removeAllObservers()
+        MB.hide(animated: true)
+        
+        if error != nil {
+            print(error!.localizedDescription)
+            return
+        }
+        
+        strogeRef.downloadURL { (url, error) in
+            
+            guard let downloadUrl = url else {
+                completion(nil)
+                return}
+            
+            completion(downloadUrl.absoluteString)
+        }
+    })
+    
+    task.observe(StorageTaskStatus.progress) { (snapshot) in
+        MB.progress = Float((snapshot.progress?.completedUnitCount)!) / Float((snapshot.progress?.totalUnitCount)!)
+    }
+    
+}
+
+func downloadVideo(videoLink: String, completion :  @escaping(_ isReadyTpPlay :Bool, _ videoFileName : String) -> Void) {
+    
+    let videoURL = NSURL(string: videoLink)
+    let videoFileName = (videoLink.components(separatedBy: "%").last!).components(separatedBy: "?").first!
+    
+    if fileExistPath(path: videoFileName) {
+        completion(true, videoFileName)
+    } else {
+        
+        let downloadQue = DispatchQueue(label: "videoDownloadQueue")
+        downloadQue.async {
+            
+            let data =  NSData(contentsOf: videoURL! as URL)
+            
+            if data != nil {
+                var docUrl = getDocumentUrl()
+                
+                docUrl = docUrl.appendingPathComponent(videoFileName, isDirectory: false)
+                data!.write(to: docUrl, atomically: true)
+                
+                DispatchQueue.main.async {
+                    completion(true , videoFileName)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    print("No Video In DB")
+                }
+            }
+        }
+    }
+}
+
+
 
 
 //MARK: - Decode Image
@@ -182,4 +256,27 @@ func fileExistPath(path : String) -> Bool {
     
     return exist
     
+}
+
+func videoThmbnail(video: NSURL) -> UIImage {
+    
+    let asset = AVURLAsset(url: video as URL, options: nil)
+    
+    let imageGenerator = AVAssetImageGenerator(asset: asset)
+    imageGenerator.appliesPreferredTrackTransform = true
+    
+    let time = CMTime(seconds: 0.5, preferredTimescale: 1000)
+    var actualTime = CMTime.zero
+    
+    var image : CGImage?
+    
+    do {
+        image = try imageGenerator.copyCGImage(at: time, actualTime: &actualTime)
+    } catch let error as NSError {
+        print(error.localizedDescription)
+    }
+    
+    let thunmbnail = UIImage(cgImage: image!)
+    
+    return thunmbnail
 }
