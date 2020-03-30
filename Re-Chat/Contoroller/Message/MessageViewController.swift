@@ -25,8 +25,11 @@ class MessageViewController :  MessagesViewController {
     var loadMessages : [NSDictionary] = []
     var objectMessages : [NSDictionary] = []
     var messagesLists : [Message] = [] {
+      
         didSet {
+            
             messagesCollectionView.reloadData()
+            
         }
     }
     // instant vars
@@ -66,6 +69,7 @@ class MessageViewController :  MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
         
         configureMessageKit()
         configureAccesaryView()
@@ -75,6 +79,8 @@ class MessageViewController :  MessagesViewController {
         
         loadFirstMessage()
         
+
+        
         
     }
     
@@ -82,6 +88,8 @@ class MessageViewController :  MessagesViewController {
     
     
     private func configureMessageKit() {
+        
+        showPresentLoadindView(true)
         
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self

@@ -82,7 +82,8 @@ extension TweetViewController {
         
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifer, for: indexPath) as! TweetHeader
         
-        header.backgroundColor = .red
+        header.tweet = tweet
+        
         return header
     }
 }
@@ -94,7 +95,7 @@ extension TweetViewController : UICollectionViewDelegateFlowLayout {
         let viewmodel = TweetViewModel(tweet: tweet)
         let captionSize = viewmodel.size(forWidth: view.frame.width).height
         
-        return CGSize(width: view.frame.width, height: captionSize + 260)
+        return CGSize(width: view.frame.width, height: captionSize + 230)
     }
     
     // cell size(like TableView)
