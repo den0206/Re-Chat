@@ -140,4 +140,7 @@ func updateRecentToFireStore(recent : Dictionary<String, Any>, lastMessage : Str
     firebaseReference(.Recent).document(recent[kRECENTID] as! String).updateData(values)
 }
 
+func deleteRecent(recentictionary : Dictionary<String, Any>) {
+    firebaseReference(.Recent).document(recentictionary[kRECENTID] as! String).delete()
+}
 

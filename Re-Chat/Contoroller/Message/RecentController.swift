@@ -204,8 +204,8 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         
         var recent : Dictionary<String, Any>
         recent = filterChats[indexPath.row]
-      
-    
+        
+        
         cell.generateCell(recent: recent, indexPath: indexPath)
         
         return cell
@@ -213,7 +213,6 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        tableView.deselectRow(at: indexPath, animated: true)
         
         let recent = filterChats[indexPath.row]
         
@@ -223,7 +222,32 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         messageVC.memberIds = (recent[kMEMBERS] as? [String])!
         messageVC.membersToPush = (recent[kMEMBERSTOPUSH] as? [String])!
         
-        navigationController?.pushViewController(messageVC, animated: true)
+        // avoid delay...
+        DispatchQueue.main.async {
+            self.navigationController?.pushViewController(messageVC, animated: true)
+        }
+        
+        
+        
+    }
+    
+    // swipe action
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let tempRecent = filterChats[indexPath.row]
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
+            
+            // same time reload
+            self.filterChats.remove(at: indexPath.row)
+            deleteRecent(recentictionary: tempRecent)
+      
+            completion(true)
+        }
+        
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
     }
     
     
