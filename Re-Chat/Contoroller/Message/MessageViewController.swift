@@ -94,6 +94,7 @@ class MessageViewController :  MessagesViewController {
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
+        messagesCollectionView.messageCellDelegate = self
         
         messageInputBar.delegate = self
         
@@ -117,6 +118,38 @@ class MessageViewController :  MessagesViewController {
             refreshController.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
         }
         
+    }
+    
+    //MARK: - LONG Tapped
+    
+    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        
+        let message = messagesLists[indexPath.section]
+        
+        switch action {
+        case NSSelectorFromString("delete:"):
+            
+            if message.sender.senderId == User.currentId() {
+                 return true
+            } else {
+                return super.collectionView(collectionView, canPerformAction: action, forItemAt: indexPath, withSender: sender)
+            }
+           
+        default:
+            return super.collectionView(collectionView, canPerformAction: action, forItemAt: indexPath, withSender: sender)
+        }
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        let message = messagesLists[indexPath.section]
+        let messageId = objectMessages[indexPath.section][kMESSAGEID] as! String
+        
+        if action == NSSelectorFromString("delete:") {
+            /// delete
+            print("Delete")
+        } else {
+            super.collectionView(collectionView, performAction: action, forItemAt: indexPath, withSender: sender)
+        }
     }
     
     private func getCustomTitle() {
@@ -191,11 +224,26 @@ class MessageViewController :  MessagesViewController {
     }
 }
 
+extension MessageCollectionViewCell {
+
+    override open func delete(_ sender: Any?) {
+        
+        // Get the collectionView
+        if let collectionView = self.superview as? UICollectionView {
+            // Get indexPath
+            if let indexPath = collectionView.indexPath(for: self) {
+                // Trigger action
+                collectionView.delegate?.collectionView?(collectionView, performAction: NSSelectorFromString("delete:"), forItemAt: indexPath, withSender: sender)
+            }
+        }
+    }
+}
+
+
 //MARK: - Message Datasorce
 
 extension MessageViewController : MessagesDataSource {
     func currentSender() -> SenderType {
-        
         
         return Sender(senderId: User.currentId(), displayName: User.currentUser()!.fullname)
     }
@@ -238,7 +286,6 @@ extension MessageViewController : MessagesDataSource {
         
         let messageDictionary = objectMessages[indexPath.section]
         let status : NSAttributedString
-        let atributeStringColor = [NSAttributedString.Key.foregroundColor : UIColor.lightGray]
         
         if isFromCurrentSender(message: message) {
             switch messageDictionary[kSTATUS] as! String{
@@ -327,6 +374,29 @@ extension MessageViewController : MessagesDisplayDelegate {
     }
     
 
+}
+
+//MARK: - Message Cell Delegate
+
+extension MessageViewController : MessageCellDelegate {
+    
+    func didTapMessage(in cell: MessageCollectionViewCell) {
+        
+        guard let indexPath = messagesCollectionView.indexPath(for: cell) else { return }
+        guard let messagesDataSource = messagesCollectionView.messagesDataSource else { return }
+        let message = messagesDataSource.messageForItem(at: indexPath, in: messagesCollectionView)
+        print(message)
+        
+        switch message.kind {
+        
+        case .photo(_):
+            print("Photo")
+        case .video(_):
+            print("Video")
+        default :
+            break
+        }
+    }
 }
 
 //MARK: - inpurbar delegate

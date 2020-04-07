@@ -239,6 +239,9 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, completion) in
             
+//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//            self.tableView.reloadData()
+            
             // same time reload
             self.filterChats.remove(at: indexPath.row)
             deleteRecent(recentictionary: tempRecent)

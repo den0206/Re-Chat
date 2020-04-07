@@ -114,7 +114,8 @@ extension UIViewController {
             blackView.tag = 1
             
             let indicator = UIActivityIndicatorView()
-            indicator.style = .whiteLarge
+            indicator.color = .white
+            indicator.style = .large
             indicator.center = blackView.center
             
             let label = UILabel()

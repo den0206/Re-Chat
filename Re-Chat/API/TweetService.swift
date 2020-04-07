@@ -228,7 +228,7 @@ struct TweetService {
             guard let snapshot = snapshot else {
                 
                 // set index
-                print(error?.localizedDescription)
+                print(error!.localizedDescription)
                 return}
             
             if !snapshot.isEmpty {
