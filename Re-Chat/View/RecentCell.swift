@@ -46,6 +46,7 @@ class RecentCell : UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         backgroundColor = .clear
+        selectionStyle = .default
         
         addSubview(profileImageView)
         profileImageView.centerY(inView: self)

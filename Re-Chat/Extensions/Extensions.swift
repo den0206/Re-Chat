@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 extension UIView {
     
@@ -97,6 +98,24 @@ extension UIColor {
 }
 
 extension UIViewController {
+    
+    static let hud = JGProgressHUD(style: .dark)
+     
+    func showLoading(_ show : Bool, text : String? = "Loading") {
+        
+        view.endEditing(true)
+        UIViewController.hud.textLabel.text = text
+        
+        if show {
+            UIViewController.hud.show(in: view)
+        } else {
+            UIViewController.hud.dismiss()
+        }
+    }
+    
+    
+    
+    
     func showAlert(title : String, message : String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))

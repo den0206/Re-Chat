@@ -113,9 +113,7 @@ class RecentController : UIViewController {
         tableView.register(RecentCell.self, forCellReuseIdentifier: reuseIdentifer)
         
         view.addSubview(tableView)
-        
-       
-        
+  
        
     }
     
@@ -124,11 +122,9 @@ class RecentController : UIViewController {
     
     private func configureUI() {
         navigationItem.title = "Recent"
-    
-        
+  
         view.backgroundColor = .white
-        
-
+    
         view.addSubview(newChatButton)
         newChatButton.anchor(bottom : view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor,paddiongBottom: 64, paddingRight: 16)
         
@@ -141,7 +137,9 @@ class RecentController : UIViewController {
     func fetchRecent() {
         guard let uid = currentUser?.uid else { return}
         
+        showLoading(true)
         recentListner = MessageSearvice.shared.fetchRecent(userId: uid) { (recents) in
+            self.showLoading(false)
             self.recentChats = recents
         }
  
@@ -204,8 +202,7 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         
         var recent : Dictionary<String, Any>
         recent = filterChats[indexPath.row]
-        
-        
+   
         cell.generateCell(recent: recent, indexPath: indexPath)
         
         return cell
@@ -213,7 +210,8 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        
+       showLoading(true)
+  
         let recent = filterChats[indexPath.row]
         
         
@@ -224,6 +222,7 @@ extension RecentController : UITableViewDelegate,UITableViewDataSource {
         
         // avoid delay...
         DispatchQueue.main.async {
+            
             self.navigationController?.pushViewController(messageVC, animated: true)
         }
         

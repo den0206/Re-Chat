@@ -27,7 +27,6 @@ class FeedController : UICollectionViewController {
     
     var followingIds = [User.currentId()] {
         didSet {
-            
             // after set followingIds get relation Tweets
             fetchFirstFeeds()
         }
@@ -118,6 +117,8 @@ class FeedController : UICollectionViewController {
     
     func getFollowing(){
         
+        showLoading(true
+        )
         followingListner = UserSearvice.shared.fetchFollowingIDs(uid: User.currentId(), completion: { (following) in
             
             self.followingIds = following
@@ -131,6 +132,7 @@ class FeedController : UICollectionViewController {
         
         TweetService.shared.getFeeds(userIds: self.followingIds, limit: 8, lastDocument: nil) { (tweets, lastDoc) in
             
+            self.showLoading(false)
             self.tweets = tweets.sorted(by: {$0.timestamp > $1.timestamp})
             self.lastDocument = lastDoc
             
@@ -266,7 +268,7 @@ extension FeedController : UICollectionViewDelegateFlowLayout{
         let captionSize = vm.size(forWidth: view.frame.width).height
         
 //        print(captionSize)
-        return CGSize(width: view.frame.width, height: captionSize + 72)
+        return CGSize(width: view.frame.width, height: captionSize + 100)
     }
     
 }

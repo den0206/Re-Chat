@@ -81,9 +81,7 @@ extension MessageViewController {
     //MARK: - Load Area
     
     func loadFirstMessage() {
-        
-       
-        
+     
         newChatListner = firebaseReference(.Message).document(User.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).limit(to: 11).addSnapshotListener { (snapshot, error) in
             
             guard let snapshot = snapshot else {return}
@@ -98,18 +96,19 @@ extension MessageViewController {
                 
                 // only first load
                 if !self.firstLoaded {
+                    
                     self.lastDocument = snapshot.documents.last
                     self.firstLoaded = true
                 }
                 
                 DispatchQueue.main.async {
                     self.messagesCollectionView.scrollToLastItem()
-                    self.showPresentLoadindView(false)
+                    self.showLoading(false)
                 }
                 
                 
             } else {
-                 self.showPresentLoadindView(false)
+                 self.showLoading(false)
             }
             
         }
@@ -146,9 +145,12 @@ extension MessageViewController {
                     print(self.messagesLists.count, self.objectMessages.count)
                     
                 }
-            
-                    self.lastDocument = snapshot.documents.last
-
+                
+                self.lastDocument = snapshot.documents.last
+                self.showLoading(false)
+                
+            } else {
+                self.showLoading(false)
             }
         }
     }

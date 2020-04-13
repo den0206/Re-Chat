@@ -69,7 +69,6 @@ class MessageViewController :  MessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
         
         configureMessageKit()
         configureAccesaryView()
@@ -89,7 +88,7 @@ class MessageViewController :  MessagesViewController {
     
     private func configureMessageKit() {
         
-        showPresentLoadindView(true)
+        
         
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -118,6 +117,22 @@ class MessageViewController :  MessagesViewController {
             refreshController.addTarget(self, action: #selector(refresh(_ :)), for: .valueChanged)
         }
         
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        var visibleRect = CGRect()
+        
+        visibleRect.origin = self.messagesCollectionView.contentOffset
+        visibleRect.size = self.messagesCollectionView.bounds.size
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        
+        guard let indexPath = self.messagesCollectionView.indexPathForItem(at: visiblePoint) else { return }
+        
+        print(" \(indexPath)")
+        if indexPath.section == 2 {
+            showLoading(true)
+            self.fetchMoreMessage()
+        }
     }
     
     //MARK: - LONG Tapped
